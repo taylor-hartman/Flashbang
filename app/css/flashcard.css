@@ -1,0 +1,251 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: monospace;
+}
+
+a {
+  text-decoration: none;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.main-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+#prompt {
+  margin-top: -3.5%;
+}
+
+#main-separator {
+  width: 85%;
+  border-top: 2px solid #393e41;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+#back-btn {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+#back-btn svg {
+  fill: #393e41;
+}
+
+#options-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+#options-btn svg {
+  fill: #393e41;
+}
+
+#options-menu {
+  position: absolute;
+  top: 30px;
+  right: 8px;
+  width: 25%;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  border-radius: 3px;
+  background: lightgrey;
+  color: #393e41;
+  padding: 0.1rem 0 0.4rem 0.5rem;
+  font-size: 1.3rem;
+}
+
+#options-menu .row-container {
+  margin-top: 3px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  direction: row;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#options-menu .separator {
+  width: 96%;
+  margin-left: -1px;
+  border-top: 1px solid #393e41;
+  margin-top: 3px;
+  margin-bottom: 5px;
+}
+
+/* The container */
+.checkbox-container {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1.2rem;
+  width: 1.2rem;
+  background-color: #eee;
+  border-radius: 3px;
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #2196f3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+  left: 0.38rem;
+  top: 0.18rem;
+  width: 0.24rem;
+  height: 0.48rem;
+  border: solid white;
+  border-width: 0 0.2rem 0.2rem 0;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+#flashcard-container h2 {
+  color: #393e41;
+}
+
+#flashcard-container #bottom-text {
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+}
+
+#flashcard-container #answer-input {
+  width: 40vw;
+  margin-top: 6vh;
+  border: 2px solid #393e41;
+  border-radius: 3px;
+  padding: 0.3rem;
+  font-size: 1.4rem;
+  text-align: center;
+  font-weight: bold;
+  color: #393e41;
+}
+
+#flashcard-container #answer-input:focus {
+  outline: none;
+}
+
+#flashcard-container #status-block {
+  position: absolute;
+  margin-top: calc(6vh + 3px);
+  margin-left: calc( -1 * (6vh + 3px));
+  height: 2rem;
+  width: 2rem;
+  display: inline-block;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 2rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #393e41;
+  background: #b2cc3e;
+}
+
+#flashcard-container #iwr-btn-container {
+  width: 100vw;
+  margin-top: 3px;
+}
+
+#flashcard-container #iwr-btn {
+  position: absolute;
+  right: 30vw;
+  background: none;
+  color: #8151af;
+  border: none;
+  font-weight: bold;
+}
+
+#flashcard-container #iwr-btn:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#flashcard-container .typed-answer {
+  width: 40%;
+  border: 2px solid #393e41;
+  border-top: none;
+  border-radius: 3px;
+  padding: 0.3rem;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.hide {
+  visibility: hidden;
+}

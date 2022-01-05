@@ -1,0 +1,117 @@
+@import "variables";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    // cursor: default;
+}
+
+.new-bunch-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 25vh;
+    padding-bottom: 25vh;
+}
+
+input {
+    outline: none;
+    border: none;
+}
+
+#title-input {
+    border-bottom: 2px solid $dark;
+    width: 100%;
+    font-size: 2rem;
+    margin-bottom: 5px;
+    color: $dark;
+}
+
+.pair {
+    display: flex;
+    margin: 0.5rem 0 0.8rem 0;
+
+    p {
+        padding: 0.3rem;
+        color: $dark;
+    }
+
+    .input-holder {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-right: 1rem;
+
+        input {
+            border-bottom: 1px solid $dark;
+            padding: 0.3rem;
+            font-size: 1.2rem;
+            width: 46%;
+        }
+    }
+
+    .spacer {
+        width: 3rem;
+    }
+}
+
+#submit-add-bar {
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+        background: transparent;
+        border: 2px solid $dark;
+        border-radius: 3px;
+        padding: 0.3rem;
+        color: $dark;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #plus {
+        width: 2rem;
+        height: 2rem;
+        svg {
+            fill: $dark;
+            width: 1rem;
+            height: 1rem;
+        }
+    }
+}
+
+#back-btn {
+    svg {
+        fill: $dark;
+    }
+    position: fixed;
+    top: 5px;
+    left: 5px;
+}
+
+#import-btn {
+    svg {
+        fill: $dark;
+    }
+    position: fixed;
+    top: 5px;
+    right: 5px;
+}
+
+form {
+    width: 70%;
+}

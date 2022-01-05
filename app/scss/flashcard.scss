@@ -1,0 +1,242 @@
+@import "variables";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+a {
+    text-decoration: none;
+    // cursor: default;
+}
+
+h2 {
+    font-size: $card-font-size;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-container {
+    width: 100vw;
+    height: 100vh;
+    // margin-top: -3.5%;
+}
+
+#prompt {
+    margin-top: -3.5%;
+}
+
+#main-separator {
+    width: 85%;
+    border-top: 2px solid $dark;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#back-btn {
+    svg {
+        fill: $dark;
+    }
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+#options-btn {
+    svg {
+        fill: $dark;
+    }
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+#options-menu {
+    position: absolute;
+    top: 30px;
+    right: 8px;
+    width: 25%;
+    height: fit-content;
+    border-radius: 3px;
+    background: lightgrey;
+    color: $dark;
+    padding: 0.1rem 0 0.4rem 0.5rem;
+    font-size: 1.3rem;
+
+    .row-container {
+        margin-top: 3px;
+        display: flex;
+        direction: row;
+        align-content: center;
+        justify-content: space-between;
+    }
+
+    .separator {
+        width: 96%;
+        margin-left: -1px;
+        border-top: 1px solid $dark;
+        margin-top: 3px;
+        margin-bottom: 5px;
+    }
+}
+
+//----------Checkbox Stuff----------
+/* The container */
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.2rem;
+    width: 1.2rem;
+    background-color: #eee;
+    border-radius: 3px;
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox-container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox-container input:checked ~ .checkmark {
+    background-color: #2196f3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+    left: 0.38rem;
+    top: 0.18rem;
+    width: 0.24rem;
+    height: 0.48rem;
+    border: solid white;
+    border-width: 0 0.2rem 0.2rem 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+//-----------end checkbox stuff-------------
+
+#flashcard-container {
+    h2 {
+        color: $dark;
+    }
+
+    #bottom-text {
+        position: absolute;
+        bottom: 10px;
+        text-align: center;
+    }
+
+    #answer-input {
+        width: 40vw;
+        margin-top: 6vh;
+        border: 2px solid $dark;
+        border-radius: 3px;
+        padding: 0.3rem;
+        font-size: $card-font-size;
+        text-align: center;
+        font-weight: bold;
+        color: $dark;
+        &:focus {
+            outline: none;
+        }
+    }
+
+    #status-block {
+        position: absolute;
+        margin-top: calc(6vh + 3px); //margin + border of answer-inpit
+        margin-left: calc(
+            -1 * (6vh + 3px)
+        ); // neagtive margin + border of answer-inpit
+        height: 2rem; //1.4 + 0.3 * 2 from #answer-input
+        width: 2rem;
+        display: inline-block;
+        border-radius: 3px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 2rem; //set equal to height of this item to center text vertically
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: $dark;
+        background: $correct-green;
+    }
+
+    //idfk why i cant do this without container
+    #iwr-btn-container {
+        width: 100vw;
+        margin-top: 3px;
+    }
+
+    #iwr-btn {
+        position: absolute;
+        right: 30vw;
+        background: none;
+        color: $dark-purple;
+        border: none;
+        font-weight: bold;
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+
+    .typed-answer {
+        width: 40%;
+        border: 2px solid $dark;
+        border-top: none;
+        border-radius: 3px;
+        padding: 0.3rem;
+        font-size: $card-font-size;
+        text-align: center;
+    }
+}
+
+.hide {
+    visibility: hidden;
+}

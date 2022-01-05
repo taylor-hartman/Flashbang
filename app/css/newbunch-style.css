@@ -1,0 +1,140 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: monospace;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+a {
+  text-decoration: none;
+}
+
+.new-bunch-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding-top: 25vh;
+  padding-bottom: 25vh;
+}
+
+input {
+  outline: none;
+  border: none;
+}
+
+#title-input {
+  border-bottom: 2px solid #393e41;
+  width: 100%;
+  font-size: 2rem;
+  margin-bottom: 5px;
+  color: #393e41;
+}
+
+.pair {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0.5rem 0 0.8rem 0;
+}
+
+.pair p {
+  padding: 0.3rem;
+  color: #393e41;
+}
+
+.pair .input-holder {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-right: 1rem;
+}
+
+.pair .input-holder input {
+  border-bottom: 1px solid #393e41;
+  padding: 0.3rem;
+  font-size: 1.2rem;
+  width: 46%;
+}
+
+.pair .spacer {
+  width: 3rem;
+}
+
+#submit-add-bar {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#submit-add-bar button {
+  background: transparent;
+  border: 2px solid #393e41;
+  border-radius: 3px;
+  padding: 0.3rem;
+  color: #393e41;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#submit-add-bar #plus {
+  width: 2rem;
+  height: 2rem;
+}
+
+#submit-add-bar #plus svg {
+  fill: #393e41;
+  width: 1rem;
+  height: 1rem;
+}
+
+#back-btn {
+  position: fixed;
+  top: 5px;
+  left: 5px;
+}
+
+#back-btn svg {
+  fill: #393e41;
+}
+
+#import-btn {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+}
+
+#import-btn svg {
+  fill: #393e41;
+}
+
+form {
+  width: 70%;
+}

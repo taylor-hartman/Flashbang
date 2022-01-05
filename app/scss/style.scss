@@ -1,0 +1,239 @@
+@import "variables";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+a {
+    text-decoration: none;
+    // cursor: default;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-container {
+    margin-top: calc(#{$hex-row-margin} / 2);
+    width: 100vw;
+    height: 100vh;
+}
+
+.hex-btn {
+    width: $hex-btn-width;
+    height: $hex-btn-width;
+    margin-left: $hex-btn-container-margin; //fixes container being bigger than hexagon
+    margin-right: $hex-btn-container-margin; //fixes container being bigger than hexagon
+
+    .hex-center {
+        top: $border-btn-thickness;
+        left: $border-btn-thickness;
+        width: calc(100% - (#{$border-btn-thickness} * 2));
+        height: calc(100% - (#{$border-btn-thickness} * 2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.hex-btn#settings-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    svg {
+        fill: $dark;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.hex-btn#new-bunch-btn {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    svg {
+        fill: $dark;
+    }
+}
+
+.hex-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $hex-row-margin;
+}
+
+.hex-container {
+    width: $hex-width;
+    height: $hex-width;
+    margin-left: $hex-container-margin; //fixes container being bigger than hexagon
+    margin-right: $hex-container-margin; //fixes container being bigger than hexagon
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hex {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%; /* width * 0.866 */
+    background: $dark;
+    box-sizing: border-box;
+    text-align: center;
+    clip-path: polygon(
+        6.7% 25%,
+        6.7% 75%,
+        50% 100%,
+        93.3% 75%,
+        93.3% 25%,
+        50% 0%
+    );
+    -webkit-clip-path: polygon(
+        6.7% 25%,
+        6.7% 75%,
+        50% 100%,
+        93.3% 75%,
+        93.3% 25%,
+        50% 0%
+    );
+    -moz-clip-path: polygon(
+        6.7% 25%,
+        6.7% 75%,
+        50% 100%,
+        93.3% 75%,
+        93.3% 25%,
+        50% 0%
+    );
+}
+
+//used for hover event
+.hex-center {
+    position: absolute;
+    background-color: $primary-blue;
+    top: $border-thickness;
+    left: $border-thickness;
+    width: calc(100% - (#{$border-thickness} * 2));
+    height: calc(100% - (#{$border-thickness} * 2));
+    clip-path: polygon(
+        6.7% 25%,
+        6.7% 75%,
+        50% 100%,
+        93.3% 75%,
+        93.3% 25%,
+        50% 0%
+    );
+    -webkit-clip-path: polygon(
+        6.7% 25%,
+        6.7% 75%,
+        50% 100%,
+        93.3% 75%,
+        93.3% 25%,
+        50% 0%
+    );
+    -moz-clip-path: polygon(
+        6.7% 25%,
+        6.7% 75%,
+        50% 100%,
+        93.3% 75%,
+        93.3% 25%,
+        50% 0%
+    );
+}
+
+.hex-content {
+    position: absolute;
+    margin-top: 25%;
+    margin-left: 6.7%;
+    width: 86.6%;
+    height: 50%;
+    color: black;
+    text-align: center;
+
+    h3 {
+        font-size: 1.3rem;
+        color: $dark;
+    }
+    p {
+        font-size: 1rem;
+        margin-top: 0.5rem;
+        color: $dark;
+    }
+}
+
+.hex-center:hover {
+    background: $primary-pink;
+}
+
+//--------stuff for toast--------
+// #bottom-text {
+//     position: absolute;
+//     bottom: 10px;
+//     text-align: center;
+//     padding: 3px 8px;
+//     border-radius: 3px;
+// }
+
+// .green {
+//     background: $correct-green;
+// }
+// -------------------------------
+
+.scroll-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    // width: 24px;
+    // height: 24px;
+    top: calc(50% - 24px);
+    svg {
+        fill: $dark;
+    }
+}
+
+.scroll-btn:hover {
+    cursor: pointer;
+    svg {
+        fill: $darker;
+    }
+}
+
+#scroll-forward {
+    right: 1rem;
+}
+
+#scroll-back {
+    left: 1rem;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+//Stuff for when there are no bunches
+
+.no-bunches-hex-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    h3 {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    svg {
+        fill: #393e41;
+    }
+}

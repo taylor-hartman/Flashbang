@@ -1,0 +1,25 @@
+$primary-pink: #f1b1f9;
+$primary-blue: #37d7fb;
+$primary-purple: #a586ed;
+$dark-pink: #ea8df6;
+$dark-blue: #0fcffa;
+$dark-purple: #8151af;
+$dark: #393e41;
+$darker: #242627;
+$correct-green: #b2cc3e;
+$incorrect-red: #ea4848;
+
+//TODO must stay at 1.4 rn because status button doesnt work at other sizes
+$card-font-size: 1.4rem;
+
+$hex-width: 150px;
+$hex-side: $hex-width / 1.73;
+$border-thickness: 5px;
+$hex-row-margin: $hex-width * -0.255 - (0.707 * $border-thickness);
+$hex-container-margin: $hex-width * -0.068 - ($border-thickness / 2);
+
+$hex-btn-width: 50px;
+$hex-btn-side: $hex-btn-width / 1.73;
+$border-btn-thickness: 3px;
+$hex-btn-row-margin: $hex-btn-width * -0.255 - (0.707 * $border-btn-thickness);
+$hex-btn-container-margin: $hex-btn-width * -0.068 - ($border-btn-thickness / 2);
