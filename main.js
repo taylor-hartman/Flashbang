@@ -7,6 +7,7 @@ const fs = require("fs");
 process.env.NODE_ENV = "development";
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false;
+// const isDev = false;
 const isMac = process.platform === "darwin" ? true : false;
 
 let mainWindow;
@@ -14,7 +15,7 @@ let mainWindow;
 function createMainWindow() {
     mainWindow = new BrowserWindow({
         title: "Flashbang",
-        width: isDev ? 900 : 675,
+        width: isDev ? 900 : 650,
         height: 450,
         icon: "./assets/icons/icon.png",
         resizable: false,
@@ -32,6 +33,7 @@ function createMainWindow() {
     }
 
     mainWindow.loadFile("./app/index.html");
+    app.commandLine.appendSwitch("--enable-features", "OverlayScrollbar");
 }
 
 app.on("ready", () => {

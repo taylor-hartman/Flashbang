@@ -4,6 +4,11 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-family: monospace;
+  color: #393e41;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
 }
 
 html,
@@ -125,16 +130,165 @@ input {
   fill: #393e41;
 }
 
-#import-btn {
+#top-right-btn {
   position: fixed;
   top: 5px;
   right: 5px;
 }
 
-#import-btn svg {
+#top-right-btn svg {
   fill: #393e41;
 }
 
 form {
-  width: 70%;
+  width: 70vw;
+}
+
+#import-form {
+  position: fixed;
+  width: 75vw;
+  height: 75vh;
+  top: 12.5vh;
+  left: 12.5vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 6px;
+  background: white;
+}
+
+#import-form textarea {
+  font-size: 1.1rem;
+  border-radius: 6px;
+  padding: 0.1rem;
+  border: 2px solid #393e41;
+  resize: none;
+}
+
+#import-form textarea:focus {
+  outline: none;
+}
+
+#import-form #import-text {
+  width: 80%;
+  height: 60%;
+}
+
+#import-form .horizontal-container {
+  width: 80%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2%;
+}
+
+#import-form .input-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#import-form .input-container input {
+  width: 60px;
+  text-align: center;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  border: 2px solid #393e41;
+  padding: 0.1rem;
+}
+
+#import-form #import-close-btn {
+  position: absolute;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 1.8em;
+  height: 1.8rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: none;
+  border: none;
+}
+
+#import-form #import-close-btn svg {
+  fill: #393e41;
+}
+
+#import-form #import-submit-btn {
+  width: 30%;
+  margin-top: 3%;
+  background: none;
+  border-radius: 3px;
+  border: #393e41 2px solid;
+  padding: 0.1rem 0;
+  outline: none;
+}
+
+#import-form #info-icon {
+  fill: #393e41;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #393e41;
+  border-radius: 50%;
+  margin-left: 0.2rem;
+}
+
+#import-form .input-and-icon-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#import-form #import-info-menu {
+  position: absolute;
+  color: #393e41;
+  margin-left: 0.2rem;
+  font-size: 1rem;
+  width: 20vw;
+}
+
+.hide {
+  visibility: hidden;
 }

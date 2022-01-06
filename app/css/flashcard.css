@@ -79,7 +79,7 @@ h2 {
   height: -moz-fit-content;
   height: fit-content;
   border-radius: 3px;
-  background: lightgrey;
+  border: 2px solid #393e41;
   color: #393e41;
   padding: 0.1rem 0 0.4rem 0.5rem;
   font-size: 1.3rem;
