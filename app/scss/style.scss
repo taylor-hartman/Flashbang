@@ -67,6 +67,15 @@ a {
     a {
         margin: 0 0.3rem;
     }
+
+    .delete-btn {
+        &:hover {
+            cursor: pointer;
+        }
+        svg {
+            pointer-events: none;
+        }
+    }
 }
 
 //These values are all dif on the horizontal bc the svgs r centered weird

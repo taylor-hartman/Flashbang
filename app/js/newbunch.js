@@ -46,10 +46,16 @@ form.addEventListener("submit", (e) => {
     e.preventDefault();
     const bunch = makeBunch();
     if (editing) {
-        ipcRenderer.send("bunch:save", bunch, title);
+        if (title != oldTitle) {
+            ipcRenderer.send("bunch:setAll", bunch, oldTitle); //passes in the old title so the
+            // ipcRenderer.send("bunch:delete", oldTitle);
+        } else {
+            ipcRenderer.send("bunch:save", bunch, title); //ok
+        }
     } else {
+        //ok
         ipcRenderer.send("bunch:save", bunch, title);
-        ipcRenderer.send("bunch:setAll", bunch);
+        ipcRenderer.send("bunch:setAll", bunch, title);
     }
     ipcRenderer.send("returnToIndex");
 });
@@ -57,7 +63,12 @@ form.addEventListener("submit", (e) => {
 document.getElementById("back-btn").addEventListener("click", (e) => {
     e.preventDefault();
     const bunch = makeBunch();
-    ipcRenderer.send("bunch:save", bunch, title);
+    if (editing && title != oldTitle) {
+        ipcRenderer.send("bunch:setAll", bunch, oldTitle);
+        // ipcRenderer.send("bunch:delete", oldTitle);
+    } else {
+        ipcRenderer.send("bunch:save", bunch, title); //ok
+    }
     ipcRenderer.send("returnToIndex");
 });
 
@@ -83,11 +94,19 @@ var title;
 try {
     const url = document.location.href;
     title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
-    title = title.replace("%20", " ");
+    title = title.replaceAll("%20", " ");
 } catch {
     title = ".new_bunch";
 }
 const editing = title !== ".new_bunch";
+const oldTitle = title;
+
+document.getElementById("title-input").addEventListener("change", () => {
+    if (editing) {
+        title = document.getElementById("title-input").value;
+        console.log("cbdi");
+    }
+});
 
 ipcRenderer.send("bunch:get", title);
 

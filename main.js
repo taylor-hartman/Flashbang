@@ -39,9 +39,9 @@ function createMainWindow() {
 app.on("ready", () => {
     createMainWindow();
 
-    mainWindow.webContents.on("dom-ready", () => {
-        sendBunchData(); //TODO could be optimized by putting someowhere else
-    });
+    // mainWindow.webContents.on("dom-ready", () => {
+    //     sendBunchData(); //TODO could be optimized by putting someowhere else
+    // });
 
     const mainMenu = Menu.buildFromTemplate(menu);
     Menu.setApplicationMenu(mainMenu);
@@ -90,27 +90,26 @@ app.on("activate", () => {
     }
 });
 
-ipcMain.on("bunch:setAll", (e, bunch) => {
+ipcMain.on("bunch:setAll", (e, bunch, fileTitle) => {
     var count = 0;
     const userDataPath = app.getPath("userData");
     var title;
     title = bunch.title + "";
-    //TODO i dont think we need this
-    title = title.replace("%20", " ");
     var filePath = userDataPath + "/bunches/" + title + ".json";
     while (fs.existsSync(filePath)) {
+        //checks to see if title is taken
         count += 1;
         filePath = userDataPath + "/bunches/" + title + count + ".json";
     }
     title += count === 0 ? "" : count;
 
     const store = new Store({
-        fileName: ".new_bunch",
+        fileName: fileTitle,
     });
     store.set("title", title);
 
-    const oldPath = userDataPath + "/bunches/.new_bunch.json";
-    fs.rename(oldPath, filePath, () => {}); //TODO rewrite bunch tiutle in file
+    const oldPath = userDataPath + "/bunches/" + fileTitle + ".json";
+    fs.rename(oldPath, filePath, () => {});
 });
 
 ipcMain.on("bunch:save", (e, bunch, fileTitle) => {
@@ -119,6 +118,19 @@ ipcMain.on("bunch:save", (e, bunch, fileTitle) => {
     });
     store.setAll(bunch);
 });
+
+ipcMain.on("bunch:delete", (e, fileName) => {
+    const userDataPath = app.getPath("userData");
+    var filePath = userDataPath + "/bunches/" + fileName + ".json";
+    fs.unlink(filePath, () => {});
+});
+
+ipcMain.on("bunch:get", (e, title) => {
+    const store = new Store({ fileName: title });
+    e.reply("bunch:get", store.getAll());
+});
+
+ipcMain.on("bunchdata:get", sendBunchData);
 
 //used to format index page
 //TODO this should not exist and if it does exist it should be in index .js not here
@@ -157,53 +169,10 @@ function sendBunchData() {
     }
 }
 
-// function sendNumBunches() {
-//     const userDataPath = app.getPath("userData");
-//     if (fs.existsSync(userDataPath + "/bunches")) {
-//         const bunchesDir = userDataPath + "/bunches";
-//         fs.readdir(bunchesDir, (error, files) => {
-//             mainWindow.webContents.send("bunchnum:get", files.length);
-//         });
-//     } else {
-//         mainWindow.webContents.send("bunchnum:get", 0); //return 0 if bunches directory dne
-//     }
-// }
-
 function returnToIndexPage() {
-    sendBunchData();
+    // sendBunchData();
     mainWindow.loadFile("./app/index.html");
 }
-
-///---------FlashCard Requests-----------
-//used to get data in flashcards
-ipcMain.on("bunch:get", (e, title) => {
-    // const userDataPath = app.getPath("userData");
-    // var filePath = userDataPath + "/bunches/" + title + ".json";
-    // filePath = filePath.replace("%20", " ");
-    // //TODO it seems more parsing might need to be done here
-    // if (fs.existsSync(filePath)) {
-    //     try {
-    //         const jsonString = fs.readFileSync(filePath);
-    //         const bunch = JSON.parse(jsonString);
-    //         e.reply("bunch:get", bunch);
-    //     } catch {
-    //         (error) => {
-    //             console.log(error);
-    //         };
-    //     }
-    // } else {
-    //     e.reply("bunch:get", []); //return [] if bunches directory dne
-    // }
-
-    const store = new Store({ fileName: title });
-    e.reply("bunch:get", store.getAll());
-});
-
-ipcMain.on("pairs:set", (e, title) => {
-    const userDataPath = app.getPath("userData");
-    var filePath = userDataPath + "/bunches/" + title + ".json";
-    filePath = filePath.replace("%20", " ");
-});
 
 //-------Settings----------
 const storeSettings = new StoreSettings();

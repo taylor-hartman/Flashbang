@@ -17,7 +17,7 @@ window.onload = () => {
     //requests pairs data from main
     const url = document.location.href;
     var title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
-    title = title.replace("%20", " ");
+    title = title.replaceAll("%20", " ");
     //reuquests settings data from main
     //NOTE Settings must be gotten before pairs
     ipcRenderer.send("settings:getAll");

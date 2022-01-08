@@ -2,6 +2,10 @@ const ipcRenderer = require("electron").ipcRenderer;
 var pageNumber = 0;
 var bunches, bunchCount;
 
+window.onload = () => {
+    ipcRenderer.send("bunchdata:get");
+};
+
 document
     .getElementById("scroll-forward")
     .addEventListener("click", scrollForward);
@@ -10,34 +14,33 @@ document.getElementById("scroll-back").addEventListener("click", scrollBack);
 
 var editShown = false;
 document.getElementById("edit-bunch-btn").addEventListener("click", () => {
+    editShown = !editShown;
+    updateEditIcons();
+});
+
+function updateEditIcons() {
     const iconContainers = document.getElementsByClassName(
         "edit-icons-container"
     );
-    if (!editShown) {
+    if (editShown) {
         //if not shown then show
         for (x = 0; x < iconContainers.length; x++) {
             iconContainers[x].classList.remove("hide");
             iconContainers[x]
                 .getElementsByClassName("delete-btn")[0]
                 .addEventListener("click", deleteBunch);
-            iconContainers[x]
-                .getElementsByClassName("edit-btn")[0]
-                .addEventListener("click", editBunch);
         }
     } else {
         for (x = 0; x < iconContainers.length; x++) {
             iconContainers[x].classList.add("hide");
         }
     }
-    editShown = !editShown;
-});
-
-function deleteBunch() {
-    console.log("deleted");
 }
 
-function editBunch() {
-    console.log("edited");
+function deleteBunch(e) {
+    const fileTitle = e.target.getAttribute("file-title");
+    ipcRenderer.send("bunch:delete", fileTitle);
+    ipcRenderer.send("bunchdata:get");
 }
 
 ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
@@ -66,6 +69,7 @@ function makeIndexPage() {
     generateHTML(bunchCount - 7 * pageNumber < 7 ? bunchCount % 7 : 7);
     populateHexs(bunches.slice(pageNumber * 7, (pageNumber + 1) * 7));
     scrollButtonControl();
+    updateEditIcons();
 }
 
 //pass by reference
@@ -276,15 +280,20 @@ function insertElement(row, index, bunch) {
     rows[row]
         .getElementsByClassName("hex-content")
         [index].querySelector("p").innerText = bunch.numTerms + " Terms";
-    //inserts links with query selectors
+    //inserts links with query strings
     rows[row]
         .getElementsByClassName("hex-center")
         [index].setAttribute("href", `flashcard.html?title=${bunch.title}`);
-    //add edit query selectors
+    //add edit query strings
     rows[row]
         .getElementsByClassName("edit-icons-container")
         [index].querySelector(".edit-btn")
         .setAttribute("href", `newbunch.html?title=${bunch.title}`);
+    //add delete strings
+    rows[row]
+        .getElementsByClassName("edit-icons-container")
+        [index].querySelector(".delete-btn")
+        .setAttribute("file-title", `${bunch.title}`);
 }
 
 function scrollButtonControl() {

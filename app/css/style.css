@@ -84,6 +84,14 @@ a {
   margin: 0 0.3rem;
 }
 
+.edit-icons-container .delete-btn:hover {
+  cursor: pointer;
+}
+
+.edit-icons-container .delete-btn svg {
+  pointer-events: none;
+}
+
 #settings-btn {
   position: absolute;
   bottom: 5px;
