@@ -33,17 +33,17 @@ a {
 }
 
 .hex-btn {
-  width: 50px;
-  height: 50px;
-  margin-left: -4.9px;
-  margin-right: -4.9px;
+  width: 45px;
+  height: 45px;
+  margin-left: -4.06px;
+  margin-right: -4.06px;
 }
 
 .hex-btn .hex-center {
-  top: 3px;
-  left: 3px;
-  width: calc(100% - (3px * 2));
-  height: calc(100% - (3px * 2));
+  top: 2px;
+  left: 2px;
+  width: calc(100% - (2px * 2));
+  height: calc(100% - (2px * 2));
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -55,13 +55,7 @@ a {
           justify-content: center;
 }
 
-.hex-btn#settings-btn {
-  position: absolute;
-  bottom: 5px;
-  right: 10px;
-}
-
-.hex-btn#settings-btn svg {
+.btn svg {
   fill: #393e41;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -74,14 +68,44 @@ a {
           align-items: center;
 }
 
-.hex-btn#new-bunch-btn {
+.edit-icons-container {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: absolute;
+  bottom: calc(25% - 20px);
+}
+
+.edit-icons-container a {
+  margin: 0 0.3rem;
+}
+
+#settings-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 8px;
+}
+
+#new-bunch-btn {
   position: absolute;
   top: 5px;
+  left: 7px;
+}
+
+#edit-bunch-btn {
+  position: absolute;
+  bottom: 5px;
   left: 10px;
 }
 
-.hex-btn#new-bunch-btn svg {
-  fill: #393e41;
+#search-bunch-btn {
+  position: absolute;
+  top: 5px;
+  right: 8px;
 }
 
 .hex-row {
@@ -148,6 +172,19 @@ a {
   height: 50%;
   color: black;
   text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .hex-content h3 {

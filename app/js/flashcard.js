@@ -133,9 +133,8 @@ ipcRenderer.on("bunch:get", (e, bunch) => {
 
 function updateHTML() {
     if (document.getElementById("ask-flashcard").checked) {
-        document.getElementById(
-            "flashcard-container"
-        ).innerHTML = `<h2 id="prompt"></h2>
+        document.getElementById("flashcard-container").innerHTML = `
+        <h2 id="prompt"></h2>
        <div class="hide" id="main-separator"></div>
        <h2 class="hide" id="answer"></h2>
        <p class="hide" id="bottom-text">Press Space to Reveal Answer</p>`;
@@ -225,19 +224,21 @@ function keyListener(e) {
     if (document.getElementById("ask-flashcard").checked) {
         answersManager(key);
     } else if (document.getElementById("ask-typed").checked) {
-        typedAnswersManager(key);
+        typedAnswersManager(e);
     }
 }
 
-function typedAnswersManager(key) {
+function typedAnswersManager(e) {
     if (!answerShown) {
-        if (key === "Enter") {
+        if (e.key === "Enter") {
             typedShowAnswer();
         }
     } else {
-        if (key === "Enter") {
+        if (e.key === "Enter") {
             clearTimeout(correctTimeout);
             resetPage();
+        } else if (e.metaKey && e.key === "d") {
+            iWasRight();
         }
     }
 }

@@ -42,28 +42,26 @@ document.getElementById("plus").addEventListener("click", (e) => {
 
 const form = document.getElementById("new-bunch-form");
 
-// form.addEventListener("change", (e) => {
-//     const bunch = makeBunch();
-//     ipcRenderer.send("bunch:save", bunch);
-// });
-
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     const bunch = makeBunch();
-    ipcRenderer.send("bunch:save", bunch);
-    ipcRenderer.send("bunch:setAll", bunch);
+    if (editing) {
+        ipcRenderer.send("bunch:save", bunch, title);
+    } else {
+        ipcRenderer.send("bunch:save", bunch, title);
+        ipcRenderer.send("bunch:setAll", bunch);
+    }
     ipcRenderer.send("returnToIndex");
 });
 
 document.getElementById("back-btn").addEventListener("click", (e) => {
     e.preventDefault();
     const bunch = makeBunch();
-    ipcRenderer.send("bunch:save", bunch);
+    ipcRenderer.send("bunch:save", bunch, title);
     ipcRenderer.send("returnToIndex");
 });
 
-// window.onbeforeunload = () => {};
-
+//--------load bunches data--------
 function makeBunch() {
     const prompts = form.getElementsByClassName("prompt");
     const answers = form.getElementsByClassName("answer");
@@ -81,9 +79,19 @@ function makeBunch() {
     return bunch;
 }
 
-ipcRenderer.send("bunch:get", ".new_bunch");
+var title;
+try {
+    const url = document.location.href;
+    title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
+    title = title.replace("%20", " ");
+} catch {
+    title = ".new_bunch";
+}
+const editing = title !== ".new_bunch";
+
+ipcRenderer.send("bunch:get", title);
+
 ipcRenderer.on("bunch:get", (e, bunch) => {
-    console.log(bunch);
     pairs = JSON.parse(JSON.stringify(bunch.pairs));
     document.getElementById("title-input").value = bunch.title;
     generatePairs();

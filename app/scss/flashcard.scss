@@ -14,6 +14,8 @@ a {
 
 h2 {
     font-size: $card-font-size;
+    text-align: center;
+    width: 83%;
 }
 
 ::-webkit-scrollbar {
@@ -73,6 +75,7 @@ h2 {
     color: $dark;
     padding: 0.1rem 0 0.4rem 0.5rem;
     font-size: 1.3rem;
+    background: $background;
 
     .row-container {
         margin-top: 3px;
@@ -192,8 +195,8 @@ h2 {
         position: absolute;
         margin-top: calc(6vh + 3px); //margin + border of answer-inpit
         margin-left: calc(
-            -1 * (6vh + 3px)
-        ); // neagtive margin + border of answer-inpit
+            -1 * (6vh + 5px)
+        ); // neagtive margin + border of answer-input, then added 2 px so not touching border
         height: 2rem; //1.4 + 0.3 * 2 from #answer-input
         width: 2rem;
         display: inline-block;

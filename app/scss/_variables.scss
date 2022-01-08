@@ -8,6 +8,7 @@ $dark: #393e41;
 $darker: #242627;
 $correct-green: #b2cc3e;
 $incorrect-red: #ea4848;
+$background: #ffffff;
 
 //TODO must stay at 1.4 rn because status button doesnt work at other sizes
 $card-font-size: 1.4rem;
@@ -18,8 +19,8 @@ $border-thickness: 5px;
 $hex-row-margin: $hex-width * -0.255 - (0.707 * $border-thickness);
 $hex-container-margin: $hex-width * -0.068 - ($border-thickness / 2);
 
-$hex-btn-width: 50px;
+$hex-btn-width: 45px;
 $hex-btn-side: $hex-btn-width / 1.73;
-$border-btn-thickness: 3px;
+$border-btn-thickness: 2px;
 $hex-btn-row-margin: $hex-btn-width * -0.255 - (0.707 * $border-btn-thickness);
 $hex-btn-container-margin: $hex-btn-width * -0.068 - ($border-btn-thickness / 2);

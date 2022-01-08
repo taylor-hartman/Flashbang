@@ -12,6 +12,8 @@ a {
 
 h2 {
   font-size: 1.4rem;
+  text-align: center;
+  width: 83%;
 }
 
 ::-webkit-scrollbar {
@@ -83,6 +85,7 @@ h2 {
   color: #393e41;
   padding: 0.1rem 0 0.4rem 0.5rem;
   font-size: 1.3rem;
+  background: #ffffff;
 }
 
 #options-menu .row-container {
@@ -203,7 +206,7 @@ h2 {
 #flashcard-container #status-block {
   position: absolute;
   margin-top: calc(6vh + 3px);
-  margin-left: calc( -1 * (6vh + 3px));
+  margin-left: calc( -1 * (6vh + 5px));
   height: 2rem;
   width: 2rem;
   display: inline-block;

@@ -15,8 +15,8 @@ let mainWindow;
 function createMainWindow() {
     mainWindow = new BrowserWindow({
         title: "Flashbang",
-        width: isDev ? 900 : 650,
-        height: 450,
+        width: isDev ? 875 : 625,
+        height: 425,
         icon: "./assets/icons/icon.png",
         resizable: false,
         backgroundColor: "white",
@@ -50,7 +50,24 @@ app.on("ready", () => {
 const menu = [
     ...(isMac ? [{ role: "appMenu" }] : []),
     {
-        role: "fileMenu",
+        label: "Edit",
+        submenu: [
+            { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+            {
+                label: "Redo",
+                accelerator: "Shift+CmdOrCtrl+Z",
+                selector: "redo:",
+            },
+            { type: "separator" },
+            { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+            { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+            { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+            {
+                label: "Select All",
+                accelerator: "CmdOrCtrl+A",
+                selector: "selectAll:",
+            },
+        ],
     },
     ...(isDev
         ? [
@@ -75,8 +92,6 @@ app.on("activate", () => {
 
 ipcMain.on("bunch:setAll", (e, bunch) => {
     var count = 0;
-    console.log("in user main setal ");
-    console.log(bunch);
     const userDataPath = app.getPath("userData");
     var title;
     title = bunch.title + "";
@@ -98,9 +113,9 @@ ipcMain.on("bunch:setAll", (e, bunch) => {
     fs.rename(oldPath, filePath, () => {}); //TODO rewrite bunch tiutle in file
 });
 
-ipcMain.on("bunch:save", (e, bunch) => {
+ipcMain.on("bunch:save", (e, bunch, fileTitle) => {
     const store = new Store({
-        fileName: ".new_bunch",
+        fileName: fileTitle,
     });
     store.setAll(bunch);
 });

@@ -42,10 +42,7 @@ a {
     }
 }
 
-.hex-btn#settings-btn {
-    position: absolute;
-    bottom: 5px;
-    right: 10px;
+.btn {
     svg {
         fill: $dark;
         display: flex;
@@ -54,13 +51,47 @@ a {
     }
 }
 
-.hex-btn#new-bunch-btn {
+//for baby hex inside big hex can delete
+// .hex-btn-internal {
+//     position: absolute;
+//     bottom: 0;
+// }
+
+.edit-icons-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: calc(25% - 20px);
+
+    a {
+        margin: 0 0.3rem;
+    }
+}
+
+//These values are all dif on the horizontal bc the svgs r centered weird
+#settings-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 8px;
+}
+
+#new-bunch-btn {
     position: absolute;
     top: 5px;
+    left: 7px;
+}
+
+#edit-bunch-btn {
+    position: absolute;
+    bottom: 5px;
     left: 10px;
-    svg {
-        fill: $dark;
-    }
+}
+
+#search-bunch-btn {
+    position: absolute;
+    top: 5px;
+    right: 8px;
 }
 
 .hex-row {
@@ -156,6 +187,10 @@ a {
     height: 50%;
     color: black;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 
     h3 {
         font-size: 1.3rem;
