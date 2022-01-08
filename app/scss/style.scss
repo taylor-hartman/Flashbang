@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: monospace;
+    color: $dark;
 }
 
 a {
@@ -74,6 +75,39 @@ a {
         }
         svg {
             pointer-events: none;
+        }
+    }
+}
+
+#delete-menu {
+    position: absolute;
+    width: 80%;
+    height: 15%;
+    left: 10%;
+    bottom: 0;
+    background: $background;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    #delete-btns-container {
+        margin-top: 1.5vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+
+        button {
+            &:hover {
+                cursor: pointer;
+                background: $btn-hover-color;
+            }
+            background: none;
+            border: solid $dark 2px;
+            border-radius: 3px;
+            width: 10%;
+            padding: 0.1rem;
         }
     }
 }

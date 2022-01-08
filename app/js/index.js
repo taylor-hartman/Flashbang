@@ -37,11 +37,37 @@ function updateEditIcons() {
     }
 }
 
+//-----------------------Delete Bunches---------------------------
+var fileTitle;
 function deleteBunch(e) {
-    const fileTitle = e.target.getAttribute("file-title");
+    fileTitle = e.target.getAttribute("file-title");
+    const deleteMenuText = document
+        .getElementById("delete-menu")
+        .querySelector("h3");
+    deleteMenuText.innerText = `Do you really want to delete "${fileTitle}"?`;
+
+    document.getElementById("delete-menu").classList.remove("hide");
+    // document.getElementById("no-delete").classList.remove("hide");
+    // document.getElementById("yes-delete").classList.remove("hide");
+}
+
+document.getElementById("yes-delete").addEventListener("click", () => {
     ipcRenderer.send("bunch:delete", fileTitle);
     ipcRenderer.send("bunchdata:get");
-}
+    // document.getElementById("delete-menu").querySelector("h3").innerText =
+    //     "Successfully Deleted";
+    // document.getElementById("no-delete").classList.add("hide");
+    // document.getElementById("yes-delete").classList.add("hide");
+    // setTimeout(() => {
+    //     document.getElementById("delete-menu").classList.add("hide");
+    // }, 1500);
+    document.getElementById("delete-menu").classList.add("hide");
+});
+
+document.getElementById("no-delete").addEventListener("click", () => {
+    document.getElementById("delete-menu").classList.add("hide");
+});
+//-----------------------------------------------
 
 ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
     //TODO redundant conversion before and after get

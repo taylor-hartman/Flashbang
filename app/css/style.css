@@ -4,6 +4,7 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-family: monospace;
+  color: #393e41;
 }
 
 a {
@@ -90,6 +91,54 @@ a {
 
 .edit-icons-container .delete-btn svg {
   pointer-events: none;
+}
+
+#delete-menu {
+  position: absolute;
+  width: 80%;
+  height: 15%;
+  left: 10%;
+  bottom: 0;
+  background: #ffffff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#delete-menu #delete-btns-container {
+  margin-top: 1.5vh;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+#delete-menu #delete-btns-container button {
+  background: none;
+  border: solid #393e41 2px;
+  border-radius: 3px;
+  width: 10%;
+  padding: 0.1rem;
+}
+
+#delete-menu #delete-btns-container button:hover {
+  cursor: pointer;
+  background: lightgrey;
 }
 
 #settings-btn {

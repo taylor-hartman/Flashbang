@@ -47,13 +47,12 @@ form.addEventListener("submit", (e) => {
     const bunch = makeBunch();
     if (editing) {
         if (title != oldTitle) {
-            ipcRenderer.send("bunch:setAll", bunch, oldTitle); //passes in the old title so the
-            // ipcRenderer.send("bunch:delete", oldTitle);
+            ipcRenderer.send("bunch:save", bunch, oldTitle);
+            ipcRenderer.send("bunch:setAll", bunch, oldTitle); //passes in the old title, because set all renames the old file to the current bunch.title
         } else {
-            ipcRenderer.send("bunch:save", bunch, title); //ok
+            ipcRenderer.send("bunch:save", bunch, title);
         }
     } else {
-        //ok
         ipcRenderer.send("bunch:save", bunch, title);
         ipcRenderer.send("bunch:setAll", bunch, title);
     }
@@ -64,10 +63,10 @@ document.getElementById("back-btn").addEventListener("click", (e) => {
     e.preventDefault();
     const bunch = makeBunch();
     if (editing && title != oldTitle) {
+        ipcRenderer.send("bunch:save", bunch, oldTitle);
         ipcRenderer.send("bunch:setAll", bunch, oldTitle);
-        // ipcRenderer.send("bunch:delete", oldTitle);
     } else {
-        ipcRenderer.send("bunch:save", bunch, title); //ok
+        ipcRenderer.send("bunch:save", bunch, title);
     }
     ipcRenderer.send("returnToIndex");
 });
@@ -104,7 +103,6 @@ const oldTitle = title;
 document.getElementById("title-input").addEventListener("change", () => {
     if (editing) {
         title = document.getElementById("title-input").value;
-        console.log("cbdi");
     }
 });
 
