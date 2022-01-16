@@ -165,6 +165,32 @@ a {
   right: 8px;
 }
 
+#search-bunch-btn:hover {
+  cursor: pointer;
+}
+
+#search-input {
+  position: absolute;
+  top: 8px;
+  right: 34px;
+  text-align: left;
+  padding: 0.1rem;
+  min-width: 50px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  border: none;
+  border-bottom: solid 1px #393e41;
+}
+
+#search-input:focus {
+  outline: none;
+}
+
+#no-matches {
+  text-align: center;
+}
+
 .hex-row {
   display: -webkit-box;
   display: -ms-flexbox;

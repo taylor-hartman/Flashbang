@@ -92,13 +92,29 @@ input {
         }
     }
 
-    #plus {
-        width: 2rem;
-        height: 2rem;
-        svg {
-            fill: $dark;
-            width: 1rem;
-            height: 1rem;
+    #btn-holder {
+        display: flex;
+        flex-direction: row;
+
+        #edit-pairs {
+            width: 2rem;
+            height: 2rem;
+            margin-right: 0.5rem;
+            svg {
+                fill: $dark;
+                width: 2rem;
+                height: 2rem;
+            }
+        }
+
+        #plus {
+            width: 2rem;
+            height: 2rem;
+            svg {
+                fill: $dark;
+                width: 1rem;
+                height: 1rem;
+            }
         }
     }
 }
@@ -232,6 +248,23 @@ form {
     }
 }
 
+.pair-delete-btn {
+    // margin-top: 3px;
+    // padding-top: 2px;
+    height: 24px;
+    svg {
+        fill: $dark;
+        pointer-events: none;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 .hide {
     visibility: hidden;
+}
+
+.undisplay {
+    display: none;
 }

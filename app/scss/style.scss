@@ -135,6 +135,29 @@ a {
     position: absolute;
     top: 5px;
     right: 8px;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#search-input {
+    position: absolute;
+    top: 8px;
+    right: 34px;
+    text-align: left;
+    padding: 0.1rem;
+    min-width: 50px;
+    // border-radius: 20px;
+    width: fit-content;
+    border: none;
+    border-bottom: solid 1px $dark;
+    &:focus {
+        outline: none;
+    }
+}
+
+#no-matches {
+    text-align: center;
 }
 
 .hex-row {

@@ -114,12 +114,34 @@ input {
   background: lightgrey;
 }
 
-#submit-add-bar #plus {
+#submit-add-bar #btn-holder {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+#submit-add-bar #btn-holder #edit-pairs {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+}
+
+#submit-add-bar #btn-holder #edit-pairs svg {
+  fill: #393e41;
   width: 2rem;
   height: 2rem;
 }
 
-#submit-add-bar #plus svg {
+#submit-add-bar #btn-holder #plus {
+  width: 2rem;
+  height: 2rem;
+}
+
+#submit-add-bar #btn-holder #plus svg {
   fill: #393e41;
   width: 1rem;
   height: 1rem;
@@ -275,6 +297,23 @@ form {
   width: 20vw;
 }
 
+.pair-delete-btn {
+  height: 24px;
+}
+
+.pair-delete-btn svg {
+  fill: #393e41;
+  pointer-events: none;
+}
+
+.pair-delete-btn:hover {
+  cursor: pointer;
+}
+
 .hide {
   visibility: hidden;
+}
+
+.undisplay {
+  display: none;
 }

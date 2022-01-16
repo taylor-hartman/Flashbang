@@ -1,6 +1,26 @@
 const ipcRenderer = require("electron").ipcRenderer;
 var pairs;
 
+var editingPairs = false;
+document.getElementById("edit-pairs").addEventListener("click", (e) => {
+    editingPairs = !editingPairs;
+    const deletePairBtns = document.getElementsByClassName("pair-delete-btn");
+
+    if (editingPairs) {
+        for (x = 0; x < deletePairBtns.length; x++) {
+            deletePairBtns[x].classList.remove("undisplay");
+            deletePairBtns[x].addEventListener("click", (e) => {
+                //e.target is possible because of pointer-events: none; on svg in css file
+                e.target.parentElement.parentElement.remove();
+            });
+        }
+    } else {
+        for (x = 0; x < deletePairBtns.length; x++) {
+            deletePairBtns[x].classList.add("undisplay");
+        }
+    }
+});
+
 document.getElementById("plus").addEventListener("click", (e) => {
     e.preventDefault();
     var indicies = document.getElementsByClassName("index");
@@ -31,7 +51,21 @@ document.getElementById("plus").addEventListener("click", (e) => {
             name=""
             id=""
         />
+        <a class="pair-delete-btn undisplay">
+                <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+        </a>
         </div>`;
+
+    if (editingPairs) {
+        const deleteBtn = newPair.getElementsByClassName("pair-delete-btn")[0];
+
+        deleteBtn.classList.remove("undisplay");
+
+        deleteBtn.addEventListener("click", (e) => {
+            //e.target is possible because of pointer-events: none; on svg in css file
+            e.target.parentElement.parentElement.remove();
+        });
+    }
 
     document.getElementById("pair-container").appendChild(newPair);
 
@@ -42,6 +76,7 @@ document.getElementById("plus").addEventListener("click", (e) => {
 
 const form = document.getElementById("new-bunch-form");
 
+//Bunchesa re saved either when submitting or when pressing the back button. aka at any exit of the page throughh buttons
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     const bunch = makeBunch();
@@ -138,6 +173,9 @@ function generatePairs() {
                 id="",
                 value="${pairs[x].answer}"
             />
+            <a class="pair-delete-btn undisplay">
+                <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+            </a>
             </div>`;
         document.getElementById("pair-container").appendChild(newPair);
     }

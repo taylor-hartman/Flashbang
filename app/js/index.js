@@ -68,7 +68,48 @@ document.getElementById("no-delete").addEventListener("click", () => {
     document.getElementById("delete-menu").classList.add("hide");
 });
 //-----------------------------------------------
+//------------------Search Stuff--------------------------
+var searchInputShown = false;
+document.getElementById("search-bunch-btn").addEventListener("click", () => {
+    searchInputShown = !searchInputShown;
+    if (searchInputShown) {
+        //show it
+        document.getElementById("search-input").classList.remove("hide");
+        document.getElementById("search-input").focus();
+    } else {
+        //hide it
+        document.getElementById("search-input").classList.add("hide");
+    }
+});
 
+document.getElementById("search-input").addEventListener("input", () => {
+    //TODO hide input when appropriate
+    //TODO cant have multiple pages rn
+    const value = document.getElementById("search-input").value;
+    var matchingBunches = [];
+    for (x = 0; x < bunchCount; x++) {
+        if (bunches[x].title.toLowerCase().includes(value.toLowerCase())) {
+            matchingBunches.push(bunches[x]);
+        }
+    }
+    if (matchingBunches.length === 0) {
+        const main = document.querySelector(".main-container");
+        main.innerHTML = `<h2 id="no-matches">No Matches Found</h2>`;
+    } else {
+        sortByDate(matchingBunches);
+        generateHTML(
+            matchingBunches.length - 7 * pageNumber < 7
+                ? matchingBunches.length % 7
+                : 7
+        );
+        populateHexs(
+            matchingBunches.slice(pageNumber * 7, (pageNumber + 1) * 7)
+        );
+    }
+    console.log(matchingBunches);
+});
+
+//-----------------------------------------------
 ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
     //TODO redundant conversion before and after get
     bunches = JSON.parse(JSON.stringify(bunchesData));
