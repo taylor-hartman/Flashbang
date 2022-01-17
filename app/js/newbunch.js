@@ -5,6 +5,10 @@ var pairs;
 var editingPairs = false;
 document.getElementById("edit-pairs").addEventListener("click", (e) => {
     editingPairs = !editingPairs;
+    adjustEditing();
+});
+
+function adjustEditing() {
     const deletePairBtns = document.getElementsByClassName("pair-delete-btn");
 
     if (editingPairs) {
@@ -13,6 +17,7 @@ document.getElementById("edit-pairs").addEventListener("click", (e) => {
             deletePairBtns[x].addEventListener("click", (e) => {
                 //e.target is possible because of pointer-events: none; on svg in css file
                 e.target.parentElement.parentElement.remove();
+                refactorIndicies();
             });
         }
     } else {
@@ -20,18 +25,12 @@ document.getElementById("edit-pairs").addEventListener("click", (e) => {
             deletePairBtns[x].classList.add("undisplay");
         }
     }
-});
+}
 
 document.getElementById("plus").addEventListener("click", (e) => {
     e.preventDefault();
     var indicies = document.getElementsByClassName("index");
-    var idNum = indicies[indicies.length - 1].innerText;
-    try {
-        idNum = parseInt(idNum);
-        idNum += 1;
-    } catch (error) {
-        console.log(error);
-    }
+    var idNum = indicies.length + 1;
 
     var newPair = document.createElement("div");
     newPair.classList.add("pair");
@@ -85,16 +84,12 @@ document.getElementById("clear-btn").addEventListener("click", (e) => {
 });
 
 document.getElementById("yes-delete").addEventListener("click", () => {
-    pairs = [
-        { prompt: "", answer: "" },
-        { prompt: "", answer: "" },
-        { prompt: "", answer: "" },
-    ];
+    pairs = [];
     document.getElementById("title-input").value = "";
     if (editing) {
         title = document.getElementById("title-input").value;
     }
-    generatePairs();
+    generatePairsHTML();
     document.getElementById("delete-menu").classList.add("hide");
 });
 
@@ -135,6 +130,7 @@ document.getElementById("back-btn").addEventListener("click", (e) => {
     }
     ipcRenderer.send("returnToIndex");
 });
+
 function makeBunch() {
     const prompts = form.getElementsByClassName("prompt");
     const answers = form.getElementsByClassName("answer");
@@ -145,11 +141,18 @@ function makeBunch() {
         pairs: [],
     };
 
+    var redacted = 0;
     for (x = 0; x < prompts.length; x++) {
-        //TODO remove blank pairs
         var prompt = prompts[x].value;
         var answer = answers[x].value;
-        bunch.pairs[x] = { prompt: prompt.trim(), answer: answer.trim() };
+        if (prompt !== "" && answer !== "") {
+            bunch.pairs[x - redacted] = {
+                prompt: prompt.trim(),
+                answer: answer.trim(),
+            };
+        } else {
+            redacted += 1;
+        }
     }
 
     return bunch;
@@ -178,11 +181,20 @@ ipcRenderer.send("bunch:get", title);
 ipcRenderer.on("bunch:get", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs));
     document.getElementById("title-input").value = bunch.title;
-    generatePairs();
+    generatePairsHTML();
 });
 
-function generatePairs() {
+function generatePairsHTML() {
     document.getElementById("pair-container").innerHTML = "";
+    //default pairs val is []. clear sets to this default. in order to display inputs when nothing there these next lines.
+    //all blank pairs are removed when importing and in make bunch
+    if (pairs.length === 0) {
+        pairs = [
+            { prompt: "", answer: "" },
+            { prompt: "", answer: "" },
+            { prompt: "", answer: "" },
+        ];
+    }
     for (x = 0; x < pairs.length; x++) {
         var newPair = document.createElement("div");
         newPair.classList.add("pair");
@@ -249,6 +261,19 @@ document.getElementById("top-right-btn").addEventListener("click", () => {
             d="M12 4c-4.419 0-8 3.582-8 8s3.581 8 8 8 8-3.582 8-8-3.581-8-8-8zm3.707 10.293c.391.391.391 1.023 0 1.414-.195.195-.451.293-.707.293s-.512-.098-.707-.293l-2.293-2.293-2.293 2.293c-.195.195-.451.293-.707.293s-.512-.098-.707-.293c-.391-.391-.391-1.023 0-1.414l2.293-2.293-2.293-2.293c-.391-.391-.391-1.023 0-1.414s1.023-.391 1.414 0l2.293 2.293 2.293-2.293c.391-.391 1.023-.391 1.414 0s.391 1.023 0 1.414l-2.293 2.293 2.293 2.293z"
         />
         </svg>`;
+
+        editingPairs = false;
+        adjustEditing();
+
+        //saves bunch (taken from back button event save)
+        //HACK: janky maybe fix bc ipcMain send back bunch every save even when leave page
+        const bunch = makeBunch();
+        if (editing && title != oldTitle) {
+            ipcRenderer.send("bunch:save", bunch, oldTitle);
+            ipcRenderer.send("bunch:setAll", bunch, oldTitle);
+        } else {
+            ipcRenderer.send("bunch:save", bunch, title);
+        }
     }
     importMenuOpen = !importMenuOpen;
 });
@@ -256,9 +281,11 @@ document.getElementById("top-right-btn").addEventListener("click", () => {
 document.getElementById("import-submit-btn").addEventListener("click", (e) => {
     e.preventDefault();
     parseImport();
-    generatePairs();
+    removeBlanks();
+    generatePairsHTML();
 
     //close import menu
+    document.getElementById("import-text").value = "";
     document.getElementById("import-form").classList.add("hide");
     document
         .getElementsByClassName("new-bunch-container")[0]
@@ -305,7 +332,27 @@ function parseImport() {
         pair["answer"] = pairArray[1].trim();
         importPairs.push(pair);
     }
-    console.log(importPairs);
     pairs = pairs.concat(importPairs);
-    console.log(pairs);
+}
+
+//TODO fix this should not be editing pairs, rather i think html
+function removeBlanks() {
+    var splicedCount = 0;
+    const oglength = pairs.length;
+    for (x = 0; x < oglength; x++) {
+        if (
+            pairs[x - splicedCount].prompt === "" &&
+            pairs[x - splicedCount].answer === ""
+        ) {
+            pairs.splice(x - splicedCount, 1);
+            splicedCount += 1;
+        }
+    }
+}
+
+function refactorIndicies() {
+    const indicies = document.getElementsByClassName("index");
+    for (x = 0; x < indicies.length; x++) {
+        indicies[x].innerText = x + 1;
+    }
 }

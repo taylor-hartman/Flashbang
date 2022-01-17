@@ -4,7 +4,27 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-family: monospace;
-  color: #393e41;
+  color: var(--text, #393e41);
+}
+
+::-webkit-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+:-ms-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+::-ms-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+::placeholder {
+  color: var(--placeholder, #697277);
+}
+
+svg {
+  fill: var(--highlight, #393e41);
 }
 
 ::-webkit-scrollbar {
@@ -17,6 +37,10 @@ body {
   width: 100vw;
   min-height: 100vh;
   position: relative;
+}
+
+body {
+  background: var(--background, #fff);
 }
 
 a {
@@ -37,14 +61,14 @@ a {
 input {
   outline: none;
   border: none;
+  background: none;
 }
 
 #title-input {
-  border-bottom: 2px solid #393e41;
+  border-bottom: 2px solid var(--highlight, #393e41);
   width: 100%;
   font-size: 2rem;
   margin-bottom: 5px;
-  color: #393e41;
 }
 
 .pair {
@@ -56,7 +80,6 @@ input {
 
 .pair p {
   padding: 0.3rem;
-  color: #393e41;
 }
 
 .pair .input-holder {
@@ -74,7 +97,7 @@ input {
 }
 
 .pair .input-holder input {
-  border-bottom: 1px solid #393e41;
+  border-bottom: 1px solid var(--highlight, #393e41);
   padding: 0.3rem;
   font-size: 1.2rem;
   width: 46%;
@@ -95,10 +118,9 @@ input {
 
 #submit-add-bar button {
   background: none;
-  border: 2px solid #393e41;
+  border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
   padding: 0.3rem;
-  color: #393e41;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -108,11 +130,12 @@ input {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  color: var(--highlight, #393e41);
 }
 
 #submit-add-bar button:hover {
   cursor: pointer;
-  background: lightgrey;
+  background: var(--btn-hover, #697277);
 }
 
 #submit-add-bar .btn-holder {
@@ -136,7 +159,6 @@ input {
 }
 
 #submit-add-bar #edit-pairs svg {
-  fill: #393e41;
   width: 2rem;
   height: 2rem;
 }
@@ -147,7 +169,6 @@ input {
 }
 
 #submit-add-bar #plus svg {
-  fill: #393e41;
   width: 1rem;
   height: 1rem;
 }
@@ -158,18 +179,10 @@ input {
   left: 5px;
 }
 
-#back-btn svg {
-  fill: #393e41;
-}
-
 #top-right-btn {
   position: fixed;
   top: 5px;
   right: 5px;
-}
-
-#top-right-btn svg {
-  fill: #393e41;
 }
 
 #top-right-btn:hover {
@@ -200,15 +213,15 @@ form {
       -ms-flex-align: center;
           align-items: center;
   border-radius: 6px;
-  background: white;
 }
 
 #import-form textarea {
   font-size: 1.1rem;
   border-radius: 6px;
   padding: 0.1rem;
-  border: 2px solid #393e41;
+  border: 2px solid var(--highlight, #393e41);
   resize: none;
+  background: none;
 }
 
 #import-form textarea:focus {
@@ -259,7 +272,7 @@ form {
   text-align: center;
   font-size: 1.1rem;
   border-radius: 6px;
-  border: 2px solid #393e41;
+  border: 2px solid var(--highlight, #393e41);
   padding: 0.1rem;
 }
 
@@ -268,16 +281,15 @@ form {
   margin-top: 3%;
   background: none;
   border-radius: 3px;
-  border: #393e41 2px solid;
+  border: 2px solid var(--highlight, #393e41);
   padding: 0.1rem 0;
   outline: none;
 }
 
 #import-form #info-icon {
-  fill: #393e41;
   width: 1.5rem;
   height: 1.5rem;
-  border: 2px solid #393e41;
+  border: 2px solid var(--highlight, #393e41);
   border-radius: 50%;
   margin-left: 0.2rem;
 }
@@ -296,7 +308,6 @@ form {
 
 #import-form #import-info-menu {
   position: absolute;
-  color: #393e41;
   margin-left: 0.2rem;
   font-size: 1rem;
   width: 20vw;
@@ -307,7 +318,6 @@ form {
 }
 
 .pair-delete-btn svg {
-  fill: #393e41;
   pointer-events: none;
 }
 
@@ -321,7 +331,7 @@ form {
   height: 15vh;
   left: 10vw;
   bottom: 0px;
-  background: #ffffff;
+  background: #fff;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -352,7 +362,7 @@ form {
 
 #delete-menu #delete-btns-container button {
   background: none;
-  border: solid #393e41 2px;
+  border: solid 2px var(--highlight, #393e41);
   border-radius: 3px;
   width: 10%;
   padding: 0.1rem;
@@ -360,7 +370,7 @@ form {
 
 #delete-menu #delete-btns-container button:hover {
   cursor: pointer;
-  background: lightgrey;
+  background: var(--btn-hover, #697277);
 }
 
 .hide {

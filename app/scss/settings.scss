@@ -1,0 +1,139 @@
+@import "variables";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monospace;
+    color: var(--text, $text);
+}
+
+body {
+    background: var(--background, $background);
+    // width: 100vw;
+    // min-height: 100vh;
+    // position: relative;
+}
+
+::placeholder {
+    color: var(--placeholder, $placeholder);
+}
+
+svg {
+    fill: var(--highlight, $highlight);
+}
+
+input {
+    background: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+#back-btn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10vh;
+    padding-bottom: 25vh;
+
+    .section {
+        width: 80vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        h2 {
+            width: 100%;
+            text-align: left;
+            border-bottom: 2px solid var(--highlight, $highlight);
+            color: var(--highlight, $highlight);
+        }
+
+        .theme-holder {
+            margin-top: 3vh;
+            width: 70vw;
+            display: grid;
+            grid-template-columns: auto auto auto auto auto;
+            grid-auto-rows: 8vw;
+            column-gap: 7.5vw;
+            row-gap: 5vh;
+        }
+
+        .palette {
+            width: 8vw;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            .color-box {
+                width: 8vw; //(50px for standard rem)
+                height: 8vw;
+                position: relative;
+                border-radius: 50%;
+                border: 2px solid var(--highlight, $highlight);
+                width: 100%;
+                height: 100%;
+                transform: rotate(-45deg);
+                overflow: hidden;
+                pointer-events: none;
+            }
+
+            .color {
+                position: absolute;
+                width: calc(8vw - 1.5px);
+                height: calc(4vw - 1.5px);
+            }
+
+            .one {
+                top: 0;
+            }
+
+            .two {
+                bottom: 0;
+            }
+
+            p {
+                text-align: center;
+                pointer-events: none;
+            }
+        }
+    }
+}
+
+#light {
+    .one {
+        background: $background;
+    }
+    .two {
+        background: $primary;
+    }
+}
+
+#dark {
+    .one {
+        background: $dark-background;
+    }
+    .two {
+        background: $dark-primary;
+    }
+}
+
+#mint {
+    .one {
+        background: $mint-background;
+    }
+    .two {
+        background: $mint-primary;
+    }
+}

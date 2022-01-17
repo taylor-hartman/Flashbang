@@ -1,0 +1,12 @@
+@import "variables";
+
+:root {
+    --text: #{$mint-text};
+    --highlight: #{$mint-highlight};
+    --primary: #{$mint-primary};
+    --secondary: #{$mint-secondary};
+    --background: #{$mint-background};
+
+    --placeholder: #{$mint-placeholder};
+    --btn-hover: #{$mint-btn-hover};
+}

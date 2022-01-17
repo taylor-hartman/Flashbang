@@ -1,0 +1,12 @@
+@import "variables";
+
+:root {
+    --text: #{$text};
+    --highlight: #{$highlight};
+    --primary: #{$primary};
+    --secondary: #{$secondary};
+    --background: #{$background};
+
+    --placeholder: #{$placeholder};
+    --btn-hover: #{$btn-hover};
+}

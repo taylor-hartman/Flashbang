@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'"
+        />
+        <div id="theme-stylesheets"></div>
+        <link rel="stylesheet" href="css/settings.css" id="base-stylesheet" />
+        <title>Document</title>
+    </head>
+    <body>
+        <a href="index.html" id="back-btn">
+            <svg
+                width="24px"
+                height="24px"
+                viewBox="0 0 24 24"
+                version="1.2"
+                baseProfile="tiny"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"
+                />
+            </svg>
+        </a>
+        <div class="main-container">
+            <div class="section">
+                <h2>Theme</h2>
+                <div class="theme-holder">
+                    <a class="palette" id="light">
+                        <div class="color-box">
+                            <div class="color one"></div>
+                            <div class="color two"></div>
+                        </div>
+                        <p>Light</p>
+                    </a>
+                    <a class="palette" id="dark">
+                        <div class="color-box">
+                            <div class="color one"></div>
+                            <div class="color two"></div>
+                        </div>
+                        <p>Dark</p>
+                    </a>
+                    <a class="palette" id="mint">
+                        <div class="color-box">
+                            <div class="color one"></div>
+                            <div class="color two"></div>
+                        </div>
+                        <p>Mint</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <script src="js/settings.js"></script>
+    </body>
+</html>

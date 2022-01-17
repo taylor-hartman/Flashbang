@@ -1,0 +1,12 @@
+@import "variables";
+
+:root {
+    --text: #{$dark-text};
+    --highlight: #{$dark-highlight};
+    --primary: #{$dark-primary};
+    --secondary: #{$dark-secondary};
+    --background: #{$dark-background};
+
+    --placeholder: #{$dark-placeholder};
+    --btn-hover: #{$dark-btn-hover};
+}

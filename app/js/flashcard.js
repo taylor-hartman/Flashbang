@@ -340,7 +340,7 @@ function resetPage() {
         } else if (document.getElementById("ask-typed").checked) {
             const input = document.getElementById("answer-input");
             input.readOnly = false;
-            input.style.border = `2px solid ${dark}`;
+            input.style.border = `2px solid var(--highlight, #393e41)`;
             input.focus();
             input.value = "";
             input.style.textDecoration = "none";

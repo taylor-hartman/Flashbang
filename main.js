@@ -19,7 +19,7 @@ function createMainWindow() {
         height: 425,
         icon: "./assets/icons/icon.png",
         resizable: false,
-        backgroundColor: "white",
+        // backgroundColor: "white",
         // titleBarStyle: "hidden",
         webPreferences: {
             nodeIntegration: true,
@@ -110,6 +110,7 @@ ipcMain.on("bunch:setAll", (e, bunch, fileTitle) => {
 
     const oldPath = userDataPath + "/bunches/" + fileTitle + ".json";
     fs.rename(oldPath, filePath, () => {});
+    e.reply("bunch:get", store.getAll());
 });
 
 ipcMain.on("bunch:save", (e, bunch, fileTitle) => {
@@ -117,6 +118,7 @@ ipcMain.on("bunch:save", (e, bunch, fileTitle) => {
         fileName: fileTitle,
     });
     store.setAll(bunch);
+    e.reply("bunch:get", store.getAll()); //TODO idk if this should rlly be here (used for import button)
 });
 
 ipcMain.on("bunch:delete", (e, fileName) => {
@@ -127,7 +129,7 @@ ipcMain.on("bunch:delete", (e, fileName) => {
 
 ipcMain.on("bunch:get", (e, title) => {
     const store = new Store({ fileName: title });
-    e.reply("bunch:get", store.getAll());
+    e.reply("bunch:get", store.getAll()); //TODO idk if this should rlly be here (used for import button)
 });
 
 ipcMain.on("bunchdata:get", sendBunchData);

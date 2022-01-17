@@ -5,7 +5,16 @@
     padding: 0;
     box-sizing: border-box;
     font-family: monospace;
-    color: $dark;
+    color: var(--text, $text);
+}
+
+//TODO idfk how this works but it do
+::placeholder {
+    color: var(--placeholder, $placeholder);
+}
+
+svg {
+    fill: var(--highlight, $highlight);
 }
 
 ::-webkit-scrollbar {
@@ -18,6 +27,10 @@ body {
     width: 100vw;
     min-height: 100vh;
     position: relative;
+}
+
+body {
+    background: var(--background, $background);
 }
 
 a {
@@ -35,14 +48,14 @@ a {
 input {
     outline: none;
     border: none;
+    background: none;
 }
 
 #title-input {
-    border-bottom: 2px solid $dark;
+    border-bottom: 2px solid var(--highlight, $highlight);
     width: 100%;
     font-size: 2rem;
     margin-bottom: 5px;
-    color: $dark;
 }
 
 .pair {
@@ -51,7 +64,6 @@ input {
 
     p {
         padding: 0.3rem;
-        color: $dark;
     }
 
     .input-holder {
@@ -62,7 +74,7 @@ input {
         padding-right: 1rem;
 
         input {
-            border-bottom: 1px solid $dark;
+            border-bottom: 1px solid var(--highlight, $highlight);
             padding: 0.3rem;
             font-size: 1.2rem;
             width: 46%;
@@ -80,16 +92,16 @@ input {
 
     button {
         background: none;
-        border: 2px solid $dark;
+        border: 2px solid var(--highlight, $highlight);
         border-radius: 3px;
         padding: 0.3rem;
-        color: $dark;
         display: flex;
         justify-content: center;
         align-items: center;
+        color: var(--highlight, $highlight);
         &:hover {
             cursor: pointer;
-            background: $btn-hover-color;
+            background: var(--btn-hover, $btn-hover);
         }
     }
 
@@ -107,7 +119,6 @@ input {
         height: 2rem;
         margin-right: 0.5rem;
         svg {
-            fill: $dark;
             width: 2rem;
             height: 2rem;
         }
@@ -117,7 +128,6 @@ input {
         width: 2rem;
         height: 2rem;
         svg {
-            fill: $dark;
             width: 1rem;
             height: 1rem;
         }
@@ -125,18 +135,12 @@ input {
 }
 
 #back-btn {
-    svg {
-        fill: $dark;
-    }
     position: fixed;
     top: 5px;
     left: 5px;
 }
 
 #top-right-btn {
-    svg {
-        fill: $dark;
-    }
     &:hover {
         cursor: pointer;
     }
@@ -160,14 +164,14 @@ form {
     justify-content: center;
     align-items: center;
     border-radius: 6px;
-    background: white;
 
     textarea {
         font-size: 1.1rem;
         border-radius: 6px;
         padding: 0.1rem;
-        border: 2px solid $dark;
+        border: 2px solid var(--highlight, $highlight);
         resize: none;
+        background: none;
         &:focus {
             outline: none;
         }
@@ -197,7 +201,7 @@ form {
             text-align: center;
             font-size: 1.1rem;
             border-radius: 6px;
-            border: 2px solid $dark;
+            border: 2px solid var(--highlight, $highlight);
             padding: 0.1rem;
         }
     }
@@ -207,16 +211,15 @@ form {
         margin-top: 3%;
         background: none;
         border-radius: 3px;
-        border: $dark 2px solid;
+        border: 2px solid var(--highlight, $highlight);
         padding: 0.1rem 0;
         outline: none;
     }
 
     #info-icon {
-        fill: $dark;
         width: 1.5rem;
         height: 1.5rem;
-        border: 2px solid $dark;
+        border: 2px solid var(--highlight, $highlight);
         border-radius: 50%;
         margin-left: 0.2rem;
     }
@@ -229,7 +232,6 @@ form {
 
     #import-info-menu {
         position: absolute;
-        color: $dark;
         margin-left: 0.2rem;
         font-size: 1rem;
         width: 20vw;
@@ -241,7 +243,6 @@ form {
     // padding-top: 2px;
     height: 24px;
     svg {
-        fill: $dark;
         pointer-events: none;
     }
     &:hover {
@@ -271,10 +272,10 @@ form {
         button {
             &:hover {
                 cursor: pointer;
-                background: $btn-hover-color;
+                background: var(--btn-hover, $btn-hover);
             }
             background: none;
-            border: solid $dark 2px;
+            border: solid 2px var(--highlight, $highlight);
             border-radius: 3px;
             width: 10%;
             padding: 0.1rem;

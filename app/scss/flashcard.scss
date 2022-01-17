@@ -5,6 +5,23 @@
     padding: 0;
     box-sizing: border-box;
     font-family: monospace;
+    color: var(--text, $text);
+}
+
+body {
+    background: var(--background, $background);
+}
+
+::placeholder {
+    color: var(--placeholder, $placeholder);
+}
+
+svg {
+    fill: var(--highlight, $highlight);
+}
+
+input {
+    background: none;
 }
 
 a {
@@ -41,24 +58,18 @@ h2 {
 
 #main-separator {
     width: 85%;
-    border-top: 2px solid $dark;
+    border-top: 2px solid var(--highlight, $highlight);
     margin-top: 8px;
     margin-bottom: 8px;
 }
 
 #back-btn {
-    svg {
-        fill: $dark;
-    }
     position: absolute;
     top: 5px;
     left: 5px;
 }
 
 #options-btn {
-    svg {
-        fill: $dark;
-    }
     position: absolute;
     top: 5px;
     right: 5px;
@@ -71,11 +82,9 @@ h2 {
     width: 25%;
     height: fit-content;
     border-radius: 3px;
-    border: 2px solid $dark;
-    color: $dark;
+    border: 2px solid var(--highlight, $highlight);
     padding: 0.1rem 0 0.4rem 0.5rem;
     font-size: 1.3rem;
-    background: $background;
 
     .row-container {
         margin-top: 3px;
@@ -88,7 +97,7 @@ h2 {
     .separator {
         width: 96%;
         margin-left: -1px;
-        border-top: 1px solid $dark;
+        border-top: 1px solid var(--highlight, $highlight);
         margin-top: 3px;
         margin-bottom: 5px;
     }
@@ -125,18 +134,18 @@ h2 {
     left: 0;
     height: 1.2rem;
     width: 1.2rem;
-    background-color: #eee;
+    background-color: var(--secondary, $secondary);
     border-radius: 3px;
 }
 
 /* On mouse-over, add a grey background color */
 .checkbox-container:hover input ~ .checkmark {
-    background-color: #ccc;
+    background-color: var(--primary, $primary);
 }
 
 /* When the checkbox is checked, add a blue background */
 .checkbox-container input:checked ~ .checkmark {
-    background-color: #2196f3;
+    background-color: var(--highlight, $highlight);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -157,7 +166,7 @@ h2 {
     top: 0.18rem;
     width: 0.24rem;
     height: 0.48rem;
-    border: solid white;
+    border: solid var(--primary, $primary);
     border-width: 0 0.2rem 0.2rem 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -166,26 +175,22 @@ h2 {
 //-----------end checkbox stuff-------------
 
 #flashcard-container {
-    h2 {
-        color: $dark;
-    }
-
     #bottom-text {
         position: absolute;
         bottom: 10px;
         text-align: center;
+        color: var(--highlight, $highlight);
     }
 
     #answer-input {
         width: 40vw;
         margin-top: 6vh;
-        border: 2px solid $dark;
+        border: 2px solid var(--highlight, $highlight);
         border-radius: 3px;
         padding: 0.3rem;
         font-size: $card-font-size;
         text-align: center;
         font-weight: bold;
-        color: $dark;
         &:focus {
             outline: none;
         }
@@ -206,7 +211,6 @@ h2 {
         line-height: 2rem; //set equal to height of this item to center text vertically
         font-size: 1.6rem;
         font-weight: bold;
-        color: $dark;
         background: $correct-green;
     }
 
@@ -220,7 +224,7 @@ h2 {
         position: absolute;
         right: 30vw;
         background: none;
-        color: $dark-purple;
+        color: var(--highlight, $highlight);
         border: none;
         font-weight: bold;
         &:hover {
@@ -231,7 +235,7 @@ h2 {
 
     .typed-answer {
         width: 40%;
-        border: 2px solid $dark;
+        border: 2px solid var(--highlight, $highlight);
         border-top: none;
         border-radius: 3px;
         padding: 0.3rem;

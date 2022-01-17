@@ -8,8 +8,32 @@ $dark: #393e41;
 $darker: #242627;
 $correct-green: #b2cc3e;
 $incorrect-red: #ea4848;
-$background: #ffffff;
-$btn-hover-color: lightgrey;
+
+//Default Values
+$text: $dark;
+$highlight: $dark;
+$primary: #37d7fb;
+$secondary: #f1b1f9;
+$background: #fff;
+$placeholder: lighten($text, 20%);
+$btn-hover: lighten($highlight, 20%);
+
+//Dark Values
+$dark-text: #00adb5;
+$dark-highlight: #ccc;
+$dark-primary: #222831;
+$dark-secondary: #393e46;
+$dark-background: #222831;
+$dark-placeholder: darken($dark-text, 20%);
+$dark-btn-hover: darken($dark-highlight, 40%);
+
+$mint-text: #7900ff;
+$mint-highlight: #548cff;
+$mint-primary: #93ffd8;
+$mint-secondary: #cfffdc;
+$mint-background: #fffdde;
+$mint-placeholder: lighten($mint-text, 40%);
+$mint-btn-hover: lighten($mint-highlight, 20%);
 
 //TODO must stay at 1.4 rn because status button doesnt work at other sizes
 $card-font-size: 1.4rem;

@@ -4,7 +4,35 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-family: monospace;
-  color: #393e41;
+  color: var(--text, #393e41);
+}
+
+body {
+  background: var(--background, #fff);
+}
+
+::-webkit-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+:-ms-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+::-ms-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+::placeholder {
+  color: var(--placeholder, #697277);
+}
+
+svg {
+  fill: var(--highlight, #393e41);
+}
+
+input {
+  background: none;
 }
 
 a {
@@ -57,7 +85,6 @@ a {
 }
 
 .btn svg {
-  fill: #393e41;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -99,7 +126,6 @@ a {
   height: 15%;
   left: 10%;
   bottom: 0;
-  background: #ffffff;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -138,7 +164,7 @@ a {
 
 #delete-menu #delete-btns-container button:hover {
   cursor: pointer;
-  background: lightgrey;
+  background: var(--btn-hover, #697277);
 }
 
 #settings-btn {
@@ -226,7 +252,7 @@ a {
   width: 100%;
   height: 100%;
   /* width * 0.866 */
-  background: #393e41;
+  background: var(--highlight, #393e41);
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   text-align: center;
@@ -237,7 +263,7 @@ a {
 
 .hex-center {
   position: absolute;
-  background-color: #37d7fb;
+  background-color: var(--primary, #37d7fb);
   top: 5px;
   left: 5px;
   width: calc(100% - (5px * 2));
@@ -253,7 +279,6 @@ a {
   margin-left: 6.7%;
   width: 86.6%;
   height: 50%;
-  color: black;
   text-align: center;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -272,17 +297,15 @@ a {
 
 .hex-content h3 {
   font-size: 1.3rem;
-  color: #393e41;
 }
 
 .hex-content p {
   font-size: 1rem;
   margin-top: 0.5rem;
-  color: #393e41;
 }
 
 .hex-center:hover {
-  background: #f1b1f9;
+  background: var(--secondary, #f1b1f9);
 }
 
 .scroll-btn {
@@ -299,18 +322,6 @@ a {
   background: none;
   border: none;
   top: calc(50% - 24px);
-}
-
-.scroll-btn svg {
-  fill: #393e41;
-}
-
-.scroll-btn:hover {
-  cursor: pointer;
-}
-
-.scroll-btn:hover svg {
-  fill: #242627;
 }
 
 #scroll-forward {
@@ -344,8 +355,4 @@ a {
 .no-bunches-hex-content h3 {
   font-size: 1.3rem;
   text-align: center;
-}
-
-.no-bunches-hex-content svg {
-  fill: #393e41;
 }

@@ -4,6 +4,35 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-family: monospace;
+  color: var(--text, #393e41);
+}
+
+body {
+  background: var(--background, #fff);
+}
+
+::-webkit-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+:-ms-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+::-ms-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+::placeholder {
+  color: var(--placeholder, #697277);
+}
+
+svg {
+  fill: var(--highlight, #393e41);
+}
+
+input {
+  background: none;
 }
 
 a {
@@ -47,7 +76,7 @@ h2 {
 
 #main-separator {
   width: 85%;
-  border-top: 2px solid #393e41;
+  border-top: 2px solid var(--highlight, #393e41);
   margin-top: 8px;
   margin-bottom: 8px;
 }
@@ -58,18 +87,10 @@ h2 {
   left: 5px;
 }
 
-#back-btn svg {
-  fill: #393e41;
-}
-
 #options-btn {
   position: absolute;
   top: 5px;
   right: 5px;
-}
-
-#options-btn svg {
-  fill: #393e41;
 }
 
 #options-menu {
@@ -81,11 +102,9 @@ h2 {
   height: -moz-fit-content;
   height: fit-content;
   border-radius: 3px;
-  border: 2px solid #393e41;
-  color: #393e41;
+  border: 2px solid var(--highlight, #393e41);
   padding: 0.1rem 0 0.4rem 0.5rem;
   font-size: 1.3rem;
-  background: #ffffff;
 }
 
 #options-menu .row-container {
@@ -104,7 +123,7 @@ h2 {
 #options-menu .separator {
   width: 96%;
   margin-left: -1px;
-  border-top: 1px solid #393e41;
+  border-top: 1px solid var(--highlight, #393e41);
   margin-top: 3px;
   margin-bottom: 5px;
 }
@@ -139,18 +158,18 @@ h2 {
   left: 0;
   height: 1.2rem;
   width: 1.2rem;
-  background-color: #eee;
+  background-color: var(--secondary, #f1b1f9);
   border-radius: 3px;
 }
 
 /* On mouse-over, add a grey background color */
 .checkbox-container:hover input ~ .checkmark {
-  background-color: #ccc;
+  background-color: var(--primary, #37d7fb);
 }
 
 /* When the checkbox is checked, add a blue background */
 .checkbox-container input:checked ~ .checkmark {
-  background-color: #2196f3;
+  background-color: var(--highlight, #393e41);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -171,32 +190,28 @@ h2 {
   top: 0.18rem;
   width: 0.24rem;
   height: 0.48rem;
-  border: solid white;
+  border: solid var(--primary, #37d7fb);
   border-width: 0 0.2rem 0.2rem 0;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-}
-
-#flashcard-container h2 {
-  color: #393e41;
 }
 
 #flashcard-container #bottom-text {
   position: absolute;
   bottom: 10px;
   text-align: center;
+  color: var(--highlight, #393e41);
 }
 
 #flashcard-container #answer-input {
   width: 40vw;
   margin-top: 6vh;
-  border: 2px solid #393e41;
+  border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
   padding: 0.3rem;
   font-size: 1.4rem;
   text-align: center;
   font-weight: bold;
-  color: #393e41;
 }
 
 #flashcard-container #answer-input:focus {
@@ -216,7 +231,6 @@ h2 {
   line-height: 2rem;
   font-size: 1.6rem;
   font-weight: bold;
-  color: #393e41;
   background: #b2cc3e;
 }
 
@@ -229,7 +243,7 @@ h2 {
   position: absolute;
   right: 30vw;
   background: none;
-  color: #8151af;
+  color: var(--highlight, #393e41);
   border: none;
   font-weight: bold;
 }
@@ -241,7 +255,7 @@ h2 {
 
 #flashcard-container .typed-answer {
   width: 40%;
-  border: 2px solid #393e41;
+  border: 2px solid var(--highlight, #393e41);
   border-top: none;
   border-radius: 3px;
   padding: 0.3rem;

@@ -5,7 +5,23 @@
     padding: 0;
     box-sizing: border-box;
     font-family: monospace;
-    color: $dark;
+    color: var(--text, $text);
+}
+
+body {
+    background: var(--background, $background);
+}
+
+::placeholder {
+    color: var(--placeholder, $placeholder);
+}
+
+svg {
+    fill: var(--highlight, $highlight);
+}
+
+input {
+    background: none;
 }
 
 a {
@@ -45,7 +61,6 @@ a {
 
 .btn {
     svg {
-        fill: $dark;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -85,7 +100,6 @@ a {
     height: 15%;
     left: 10%;
     bottom: 0;
-    background: $background;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -101,10 +115,10 @@ a {
         button {
             &:hover {
                 cursor: pointer;
-                background: $btn-hover-color;
+                background: var(--btn-hover, $btn-hover);
             }
             background: none;
-            border: solid $dark 2px;
+            border: solid $highlight 2px;
             border-radius: 3px;
             width: 10%;
             padding: 0.1rem;
@@ -150,7 +164,7 @@ a {
     // border-radius: 20px;
     width: fit-content;
     border: none;
-    border-bottom: solid 1px $dark;
+    border-bottom: solid 1px $highlight;
     &:focus {
         outline: none;
     }
@@ -182,7 +196,7 @@ a {
     position: relative;
     width: 100%;
     height: 100%; /* width * 0.866 */
-    background: $dark;
+    background: var(--highlight, $highlight);
     box-sizing: border-box;
     text-align: center;
     clip-path: polygon(
@@ -214,7 +228,7 @@ a {
 //used for hover event
 .hex-center {
     position: absolute;
-    background-color: $primary-blue;
+    background-color: var(--primary, $primary);
     top: $border-thickness;
     left: $border-thickness;
     width: calc(100% - (#{$border-thickness} * 2));
@@ -251,7 +265,6 @@ a {
     margin-left: 6.7%;
     width: 86.6%;
     height: 50%;
-    color: black;
     text-align: center;
     display: flex;
     align-items: center;
@@ -260,17 +273,15 @@ a {
 
     h3 {
         font-size: 1.3rem;
-        color: $dark;
     }
     p {
         font-size: 1rem;
         margin-top: 0.5rem;
-        color: $dark;
     }
 }
 
 .hex-center:hover {
-    background: $primary-pink;
+    background: var(--secondary, $secondary);
 }
 
 //--------stuff for toast--------
@@ -282,11 +293,6 @@ a {
 //     border-radius: 3px;
 // }
 
-// .green {
-//     background: $correct-green;
-// }
-// -------------------------------
-
 .scroll-btn {
     position: absolute;
     display: flex;
@@ -297,17 +303,11 @@ a {
     // width: 24px;
     // height: 24px;
     top: calc(50% - 24px);
-    svg {
-        fill: $dark;
-    }
 }
 
-.scroll-btn:hover {
-    cursor: pointer;
-    svg {
-        fill: $darker;
-    }
-}
+// .scroll-btn:hover {
+//     cursor: pointer;
+// }
 
 #scroll-forward {
     right: 1rem;
@@ -332,9 +332,5 @@ a {
     h3 {
         font-size: 1.3rem;
         text-align: center;
-    }
-
-    svg {
-        fill: #393e41;
     }
 }

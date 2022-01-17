@@ -21,11 +21,7 @@ class Store {
         const defaults = {
             title: "",
             lastUsed: "",
-            pairs: [
-                { prompt: "", answer: "" },
-                { prompt: "", answer: "" },
-                { prompt: "", answer: "" },
-            ],
+            pairs: [],
         };
         this.data = parseDataFile(this.path, defaults);
     }
