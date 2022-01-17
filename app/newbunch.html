@@ -40,6 +40,15 @@
                 />
             </svg>
         </a>
+
+        <div class="hide" id="delete-menu">
+            <h3>Are you sure you want to clear this bunch?</h3>
+            <div id="delete-btns-container">
+                <button id="yes-delete">Yes</button>
+                <button id="no-delete">No</button>
+            </div>
+        </div>
+
         <form class="hide" id="import-form">
             <textarea
                 type="text"
@@ -90,8 +99,11 @@
                 />
                 <div id="pair-container"></div>
                 <div class="pair" id="submit-add-bar">
-                    <button type="submit">Submit</button>
-                    <div id="btn-holder">
+                    <div class="btn-holder">
+                        <button id="clear-btn">Clear</button>
+                        <button type="submit">Submit</button>
+                    </div>
+                    <div class="btn-holder">
                         <button type="button" id="edit-pairs">
                             <svg
                                 width="24px"

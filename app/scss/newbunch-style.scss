@@ -16,7 +16,8 @@ html,
 body {
     margin: 0;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
+    position: relative;
 }
 
 a {
@@ -92,29 +93,33 @@ input {
         }
     }
 
-    #btn-holder {
+    .btn-holder {
         display: flex;
         flex-direction: row;
+    }
 
-        #edit-pairs {
+    #clear-btn {
+        margin-right: 0.5rem;
+    }
+
+    #edit-pairs {
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0.5rem;
+        svg {
+            fill: $dark;
             width: 2rem;
             height: 2rem;
-            margin-right: 0.5rem;
-            svg {
-                fill: $dark;
-                width: 2rem;
-                height: 2rem;
-            }
         }
+    }
 
-        #plus {
-            width: 2rem;
-            height: 2rem;
-            svg {
-                fill: $dark;
-                width: 1rem;
-                height: 1rem;
-            }
+    #plus {
+        width: 2rem;
+        height: 2rem;
+        svg {
+            fill: $dark;
+            width: 1rem;
+            height: 1rem;
         }
     }
 }
@@ -196,22 +201,6 @@ form {
             padding: 0.1rem;
         }
     }
-    //DNE anymore delete this
-    // #import-close-btn {
-    //     position: absolute;
-    //     top: 0.2rem;
-    //     left: 0.2rem;
-    //     width: 1.8em;
-    //     height: 1.8rem;
-    //     display: flex;
-    //     justify-content: center;
-    //     align-items: center;
-    //     background: none;
-    //     border: none;
-    //     svg {
-    //         fill: $dark;
-    //     }
-    // }
 
     #import-submit-btn {
         width: 30%;
@@ -224,7 +213,6 @@ form {
     }
 
     #info-icon {
-        // position: absolute;
         fill: $dark;
         width: 1.5rem;
         height: 1.5rem;
@@ -258,6 +246,39 @@ form {
     }
     &:hover {
         cursor: pointer;
+    }
+}
+
+#delete-menu {
+    position: absolute;
+    width: 80vw;
+    height: 15vh;
+    left: 10vw;
+    bottom: 0px;
+    background: $background;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    #delete-btns-container {
+        margin-top: 1.5vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+
+        button {
+            &:hover {
+                cursor: pointer;
+                background: $btn-hover-color;
+            }
+            background: none;
+            border: solid $dark 2px;
+            border-radius: 3px;
+            width: 10%;
+            padding: 0.1rem;
+        }
     }
 }
 

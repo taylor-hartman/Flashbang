@@ -2,9 +2,7 @@ const { ipcRenderer } = require("electron");
 
 var answerShown = false,
     studyComplete = false;
-var pairs, currentPair; //pairs is all pairs in bunch, current pair is the one currently being displayed
-var callsRemaining = {}; //stores how many times each pair has left to be called
-var choosable = []; //pair is removed from here when 0 calls remaining //shallow copy of pairs
+var pairs; //pairs is all pairs in bunch, current pair is the one currently being displayed
 var menuToggled = false;
 var correct; //stores if the current answer is correct
 
@@ -52,8 +50,10 @@ function onOrderChange() {
         },
     });
 
-    generatePairs();
-    displayCard();
+    const url = document.location.href;
+    var title = url.split("?")[1].split("=")[1];
+    title = title.replaceAll("%20", " ");
+    ipcRenderer.send("bunch:get", title);
 }
 
 //question type
@@ -68,7 +68,7 @@ function onQuestionTypeChange() {
         value: {
             flashcard: document.getElementById("ask-flashcard").checked,
             typed: document.getElementById("ask-typed").checked,
-            both: document.getElementById("ask-both").checked,
+            // both: document.getElementById("ask-both").checked,
         },
     });
 
@@ -91,9 +91,7 @@ function onShowInfoChange() {
 }
 
 function updateInfo() {
-    console.log("info updated");
     const isChecked = document.getElementById("show-info").checked;
-    console.log(isChecked);
     if (isChecked) {
         document.getElementById("bottom-text").classList.remove("hide");
     } else {
@@ -119,7 +117,7 @@ function getAllSettings(settings) {
     document.getElementById("ask-flashcard").checked =
         settings.questionType.flashcard;
     document.getElementById("ask-typed").checked = settings.questionType.typed;
-    document.getElementById("ask-both").checked = settings.questionType.both;
+    // document.getElementById("ask-both").checked = settings.questionType.both;
     document.getElementById("show-info").checked = settings.showInfo;
 }
 
@@ -152,61 +150,65 @@ function updateHTML() {
 
         document.getElementById("iwr-btn").addEventListener("click", iWasRight);
     }
+    //TODO shouldnt be here
     updateInfo();
 }
 
 function iWasRight() {
     //HACK: calls twice to undo the already done incorrect and then do the correct
-    callsRemainingCorrect();
-    callsRemainingCorrect();
+    callsCorrect();
+    callsCorrect();
     resetPage();
 }
 
 function generatePairs() {
     //TODO make it so calls remaining stays for already existsing
-    callsRemaining = {};
-    choosable = [];
     if (document.getElementById("both").checked) {
         //both first in if statement
-        for (x = 0; x < pairs.length; x++) {
-            //TODO this naming scheme means you cannot have two of the same term
-            callsRemaining[pairs[x].prompt] = 2;
-            callsRemaining[pairs[x].answer] = 2; //makes a slot for all reversed pairs
-            choosable[x] = pairs[x];
-            choosable[x + pairs.length] = {
-                prompt: pairs[x].answer,
-                answer: pairs[x].prompt,
-            }; //creates reverse pairs in choosable array
+        const ogPairLen = pairs.length;
+        for (x = 0; x < ogPairLen; x++) {
+            const revPair = { prompt: "", answer: "" };
+            revPair.prompt = pairs[x].answer;
+            revPair.answer = pairs[x].prompt;
+            pairs.push(revPair);
         }
     } else if (document.getElementById("reversed").checked) {
         for (x = 0; x < pairs.length; x++) {
-            //TODO this naming scheme means you cannot have two of the same term name
-            callsRemaining[pairs[x].answer] = 2;
-            choosable[x] = {
-                prompt: pairs[x].answer,
-                answer: pairs[x].prompt,
-            }; //puts only reversed pairs in
+            const promtpHolder = pairs[x].prompt;
+            pairs[x].prompt = pairs[x].answer;
+            pairs[x].answer = promtpHolder;
         }
     } else if (document.getElementById("standard").checked) {
+        //nothing to do here
+    }
+
+    generateCalls();
+}
+
+function generateCalls() {
+    if (document.getElementById("both").checked) {
         for (x = 0; x < pairs.length; x++) {
-            //TODO this naming scheme means you cannot have two of the same term
-            callsRemaining[pairs[x].prompt] = 2;
-            choosable[x] = pairs[x];
+            pairs[x].calls = 4;
+        }
+    } else {
+        for (x = 0; x < pairs.length; x++) {
+            pairs[x].calls = 2;
         }
     }
+
+    console.log(pairs);
 }
 
 function displayCard() {
-    const index = Math.floor(Math.random() * choosable.length);
+    const index = Math.floor(Math.random() * pairs.length);
     //TODO add shit to stop repeats etc
-    currentPair = choosable[index];
-    console.log(currentPair);
+    currentPair = pairs[index];
     //TODO same for both no if
     if (document.getElementById("ask-flashcard").checked) {
-        document.getElementById("prompt").innerText = choosable[index].prompt;
-        document.getElementById("answer").innerText = choosable[index].answer;
+        document.getElementById("prompt").innerText = currentPair.prompt;
+        document.getElementById("answer").innerText = currentPair.answer;
     } else if (document.getElementById("ask-typed").checked) {
-        document.getElementById("prompt").innerText = choosable[index].prompt;
+        document.getElementById("prompt").innerText = currentPair.prompt;
         document.getElementById("answer").innerText = currentPair.answer;
     }
     answerShown = false;
@@ -252,34 +254,31 @@ function answersManager(key) {
         if (key === "2" || key === " ") {
             //Answer is right
             //TODO make sure this bottoms out at 0 somewhere else
-            callsRemainingCorrect();
+            callsCorrect();
         } else if (key === "1") {
             //answer is wrong
             //TODO make sure this caps out at 2 somewhere else
-            callsRemainingIncorrect();
+            callsIncorrect();
         }
         resetPage();
     }
 }
 
-function callsRemainingCorrect() {
+function callsCorrect() {
     console.log("Correct");
-    if (callsRemaining[currentPair.prompt] > 0) {
-        callsRemaining[currentPair.prompt] -= 1;
-        if (callsRemaining[currentPair.prompt] === 0) {
-            const index = choosable.indexOf(currentPair);
-            choosable.splice(index, 1);
+    if (currentPair.calls > 0) {
+        currentPair.calls -= 1;
+        if (currentPair.calls === 0) {
+            const index = pairs.indexOf(currentPair);
+            pairs.splice(index, 1);
         }
     }
 }
 
-function callsRemainingIncorrect() {
+function callsIncorrect() {
     console.log("Inorrect");
-    if (
-        callsRemaining[currentPair.prompt] !== 0 &&
-        callsRemaining[currentPair.prompt] < 2
-    ) {
-        callsRemaining[currentPair.prompt] += 1;
+    if (currentPair.calls !== 0 && currentPair.calls < 2) {
+        currentPair.calls += 1;
     }
 }
 
@@ -293,11 +292,11 @@ function typedShowAnswer() {
         "Press Enter to Continue";
     const userAnswer = document.getElementById("answer-input").value;
     if (userAnswer === currentPair.answer) {
-        callsRemainingCorrect();
+        callsCorrect();
         styleCorrect();
         correctTimeout = setTimeout(resetPage, 1000);
     } else {
-        callsRemainingIncorrect();
+        callsIncorrect();
         styleIncorrect();
     }
 }
@@ -332,7 +331,7 @@ function styleIncorrect() {
 }
 
 function resetPage() {
-    if (choosable.length > 0) {
+    if (pairs.length > 0) {
         if (document.getElementById("ask-flashcard").checked) {
             document.querySelector("#main-separator").classList.add("hide");
             document.getElementById("answer").classList.add("hide");

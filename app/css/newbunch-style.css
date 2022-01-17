@@ -15,7 +15,8 @@ html,
 body {
   margin: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  position: relative;
 }
 
 a {
@@ -114,7 +115,7 @@ input {
   background: lightgrey;
 }
 
-#submit-add-bar #btn-holder {
+#submit-add-bar .btn-holder {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -124,24 +125,28 @@ input {
           flex-direction: row;
 }
 
-#submit-add-bar #btn-holder #edit-pairs {
+#submit-add-bar #clear-btn {
+  margin-right: 0.5rem;
+}
+
+#submit-add-bar #edit-pairs {
   width: 2rem;
   height: 2rem;
   margin-right: 0.5rem;
 }
 
-#submit-add-bar #btn-holder #edit-pairs svg {
+#submit-add-bar #edit-pairs svg {
   fill: #393e41;
   width: 2rem;
   height: 2rem;
 }
 
-#submit-add-bar #btn-holder #plus {
+#submit-add-bar #plus {
   width: 2rem;
   height: 2rem;
 }
 
-#submit-add-bar #btn-holder #plus svg {
+#submit-add-bar #plus svg {
   fill: #393e41;
   width: 1rem;
   height: 1rem;
@@ -308,6 +313,54 @@ form {
 
 .pair-delete-btn:hover {
   cursor: pointer;
+}
+
+#delete-menu {
+  position: absolute;
+  width: 80vw;
+  height: 15vh;
+  left: 10vw;
+  bottom: 0px;
+  background: #ffffff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#delete-menu #delete-btns-container {
+  margin-top: 1.5vh;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+#delete-menu #delete-btns-container button {
+  background: none;
+  border: solid #393e41 2px;
+  border-radius: 3px;
+  width: 10%;
+  padding: 0.1rem;
+}
+
+#delete-menu #delete-btns-container button:hover {
+  cursor: pointer;
+  background: lightgrey;
 }
 
 .hide {

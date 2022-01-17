@@ -1,6 +1,7 @@
 const ipcRenderer = require("electron").ipcRenderer;
 var pairs;
 
+//---------------Editing stuff------------------
 var editingPairs = false;
 document.getElementById("edit-pairs").addEventListener("click", (e) => {
     editingPairs = !editingPairs;
@@ -74,9 +75,38 @@ document.getElementById("plus").addEventListener("click", (e) => {
     window.scrollTo(0, yPos);
 });
 
-const form = document.getElementById("new-bunch-form");
+//---stuff for clearing---
+document.getElementById("clear-btn").addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById("delete-menu").classList.remove("hide");
+    // setTimeout(() => {
+    //     document.getElementById("delete-menu").classList.add("hide");
+    // }, 5000);
+});
 
+document.getElementById("yes-delete").addEventListener("click", () => {
+    pairs = [
+        { prompt: "", answer: "" },
+        { prompt: "", answer: "" },
+        { prompt: "", answer: "" },
+    ];
+    document.getElementById("title-input").value = "";
+    if (editing) {
+        title = document.getElementById("title-input").value;
+    }
+    generatePairs();
+    document.getElementById("delete-menu").classList.add("hide");
+});
+
+document.getElementById("no-delete").addEventListener("click", () => {
+    document.getElementById("delete-menu").classList.add("hide");
+});
+//------------
+
+//--------------------------------------------
+//-----------------Save Stuff-------------------
 //Bunchesa re saved either when submitting or when pressing the back button. aka at any exit of the page throughh buttons
+const form = document.getElementById("new-bunch-form");
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     const bunch = makeBunch();
@@ -105,8 +135,6 @@ document.getElementById("back-btn").addEventListener("click", (e) => {
     }
     ipcRenderer.send("returnToIndex");
 });
-
-//--------load bunches data--------
 function makeBunch() {
     const prompts = form.getElementsByClassName("prompt");
     const answers = form.getElementsByClassName("answer");
@@ -118,12 +146,16 @@ function makeBunch() {
     };
 
     for (x = 0; x < prompts.length; x++) {
-        bunch.pairs[x] = { prompt: prompts[x].value, answer: answers[x].value };
+        //TODO remove blank pairs
+        var prompt = prompts[x].value;
+        var answer = answers[x].value;
+        bunch.pairs[x] = { prompt: prompt.trim(), answer: answer.trim() };
     }
 
     return bunch;
 }
-
+//--------------------------------------------
+//---------------Load Stuff-------------------
 var title;
 try {
     const url = document.location.href;
@@ -225,6 +257,25 @@ document.getElementById("import-submit-btn").addEventListener("click", (e) => {
     e.preventDefault();
     parseImport();
     generatePairs();
+
+    //close import menu
+    document.getElementById("import-form").classList.add("hide");
+    document
+        .getElementsByClassName("new-bunch-container")[0]
+        .classList.remove("hide");
+    document.getElementById("top-right-btn").innerHTML = `
+        <svg
+            width="24px"
+            height="24px"
+            viewBox="0 0 24 24"
+            version="1.2"
+            baseProfile="tiny"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M15 12h-2v-2c0-.553-.447-1-1-1s-1 .447-1 1v2h-2c-.553 0-1 .447-1 1s.447 1 1 1h2v2c0 .553.447 1 1 1s1-.447 1-1v-2h2c.553 0 1-.447 1-1s-.447-1-1-1zM19.707 7.293l-4-4c-.187-.188-.441-.293-.707-.293h-8c-1.654 0-3 1.346-3 3v12c0 1.654 1.346 3 3 3h10c1.654 0 3-1.346 3-3v-10c0-.266-.105-.52-.293-.707zm-2.121.707h-1.086c-.827 0-1.5-.673-1.5-1.5v-1.086l2.586 2.586zm-.586 11h-10c-.552 0-1-.448-1-1v-12c0-.552.448-1 1-1h7v1.5c0 1.379 1.121 2.5 2.5 2.5h1.5v9c0 .552-.448 1-1 1z" />
+        </svg>`;
+
+    importMenuOpen = false;
 });
 
 document.getElementById("info-icon").addEventListener("mouseenter", () => {
@@ -250,8 +301,8 @@ function parseImport() {
     for (x = 0; x < pairsStrings.length; x++) {
         const pairArray = pairsStrings[x].split(termSeparator);
         const pair = {};
-        pair["prompt"] = pairArray[0];
-        pair["answer"] = pairArray[1];
+        pair["prompt"] = pairArray[0].trim(); //removed leading and trailing white spaces
+        pair["answer"] = pairArray[1].trim();
         importPairs.push(pair);
     }
     console.log(importPairs);

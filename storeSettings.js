@@ -19,7 +19,6 @@ class StoreSettings {
             questionType: {
                 flashcard: true,
                 typed: false,
-                both: false,
             },
             showInfo: true,
         };
