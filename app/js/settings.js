@@ -8,6 +8,7 @@ for (x = 0; x < palettes.length; x++) {
 function changeTheme(e) {
     const theme = e.target.id;
     ipcRenderer.send("globalSettings:set", { key: "theme", value: theme });
+    ipcRenderer.send("background:set");
 }
 
 ipcRenderer.on("globalSettings:getAll", (e, settings) => {

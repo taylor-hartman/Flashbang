@@ -12,6 +12,29 @@ const isMac = process.platform === "darwin" ? true : false;
 
 let mainWindow;
 
+//HACK....this is painful wtf
+//-----------background flash fix------------
+const globalSettings = new Settings("global");
+
+const backgroundLookUp = {
+    light: "#e7e6e1",
+    dark: "#222831",
+    mint: "#fffdde",
+    "sea-mist": "#c4f8f0",
+    toucan: "#ffc600",
+    houseplant: "#a7ff83",
+    cafe: "#f4dfba",
+    terminal: "#000",
+};
+
+var theme = globalSettings.get("theme");
+
+ipcMain.on("background:set", () => {
+    theme = globalSettings.get("theme");
+    mainWindow.setBackgroundColor(backgroundLookUp[theme]);
+});
+//--------------------------------------
+
 function createMainWindow() {
     mainWindow = new BrowserWindow({
         title: "Flashbang",
@@ -19,6 +42,7 @@ function createMainWindow() {
         height: 425,
         icon: "./assets/icons/icon.png",
         resizable: false,
+        backgroundColor: backgroundLookUp[theme],
         // titleBarStyle: "hidden",
         webPreferences: {
             nodeIntegration: true,
@@ -197,7 +221,6 @@ ipcMain.on("studySettings:set", (e, input) => {
 });
 
 //----------Global Settings----------
-const globalSettings = new Settings("global");
 
 ipcMain.on("globalSettings:get", (e, key) => {
     // mainWindow.webContents.send("settings:getAll", globalSettings.getAll());
