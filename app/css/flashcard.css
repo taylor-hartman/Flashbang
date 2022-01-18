@@ -8,7 +8,7 @@
 }
 
 body {
-  background: var(--background, #e7e6e1);
+  background: var(--background);
 }
 
 ::-webkit-input-placeholder {

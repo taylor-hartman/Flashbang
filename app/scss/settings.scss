@@ -9,10 +9,7 @@
 }
 
 body {
-    background: var(--background, $background);
-    // width: 100vw;
-    // min-height: 100vh;
-    // position: relative;
+    background: var(--background);
 }
 
 ::placeholder {

@@ -1,4 +1,4 @@
-// const { ipcRenderer } = require("electron");
+const { ipcRenderer } = require("electron");
 
 var answerShown = false,
     studyComplete = false;

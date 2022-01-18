@@ -1,4 +1,4 @@
-// const ipcRenderer = require("electron").ipcRenderer;
+const ipcRenderer = require("electron").ipcRenderer;
 
 const palettes = document.getElementsByClassName("palette");
 for (x = 0; x < palettes.length; x++) {
@@ -11,6 +11,10 @@ function changeTheme(e) {
 }
 
 ipcRenderer.on("globalSettings:getAll", (e, settings) => {
-    const link = `<link rel="stylesheet" href="css/${settings.theme}.css" id="${settings.theme}-stylesheet"/>`;
-    document.getElementById("theme-stylesheets").innerHTML = link;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = `css/${settings.theme}.css`;
+    link.id = "theme-style";
+    document.getElementById("theme-style").remove();
+    document.head.append(link);
 });

@@ -9,8 +9,7 @@
 }
 
 body {
-    background: var(--background, $background);
-    // background-color: #222831;
+    background: var(--background);
 }
 
 ::placeholder {
