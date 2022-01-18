@@ -1,4 +1,4 @@
-const { ipcRenderer } = require("electron");
+// const { ipcRenderer } = require("electron");
 
 var answerShown = false,
     studyComplete = false;
@@ -16,9 +16,9 @@ window.onload = () => {
     const url = document.location.href;
     var title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
     title = title.replaceAll("%20", " ");
-    //reuquests settings data from main
+    //reuquests studySettings data from main
     //NOTE Settings must be gotten before pairs
-    ipcRenderer.send("settings:getAll");
+    ipcRenderer.send("studySettings:getAll");
     //requests bunch data
     ipcRenderer.send("bunch:get", title);
 };
@@ -34,6 +34,10 @@ document.getElementById("options-btn").addEventListener("click", () => {
     menuToggled = !menuToggled;
 });
 
+document.getElementById("back-btn").addEventListener("click", () => {
+    ipcRenderer.send("returnToIndex");
+});
+
 //pair order
 var orderRadios = document.querySelectorAll('input[name="pairOrder"]');
 Array.prototype.forEach.call(orderRadios, (radio) => {
@@ -41,7 +45,7 @@ Array.prototype.forEach.call(orderRadios, (radio) => {
 });
 
 function onOrderChange() {
-    ipcRenderer.send("settings:set", {
+    ipcRenderer.send("studySettings:set", {
         key: "pairOrder",
         value: {
             standard: document.getElementById("standard").checked,
@@ -63,7 +67,7 @@ Array.prototype.forEach.call(typeRadios, (radio) => {
 });
 
 function onQuestionTypeChange() {
-    ipcRenderer.send("settings:set", {
+    ipcRenderer.send("studySettings:set", {
         key: "questionType",
         value: {
             flashcard: document.getElementById("ask-flashcard").checked,
@@ -82,7 +86,7 @@ document
     .addEventListener("change", onShowInfoChange);
 
 function onShowInfoChange() {
-    ipcRenderer.send("settings:set", {
+    ipcRenderer.send("studySettings:set", {
         key: "showInfo",
         value: document.getElementById("show-info").checked,
     });
@@ -99,26 +103,29 @@ function updateInfo() {
     }
 }
 
-//called the first time settings are gotten to initialize info and html
-ipcRenderer.once("settings:getAll", (e, settings) => {
-    getAllSettings(settings);
+//called the first time studySettings are gotten to initialize info and html
+ipcRenderer.once("studySettings:getAll", (e, studySettings) => {
+    getAllStudySettings(studySettings);
     updateHTML();
 });
 
 //-----------Settings Stuff------------
-ipcRenderer.on("settings:getAll", (e, settings) => {
-    getAllSettings(settings);
+ipcRenderer.on("studySettings:getAll", (e, studySettings) => {
+    getAllStudySettings(studySettings);
 });
 
-function getAllSettings(settings) {
-    document.getElementById("standard").checked = settings.pairOrder.standard;
-    document.getElementById("reversed").checked = settings.pairOrder.reversed;
-    document.getElementById("both").checked = settings.pairOrder.both;
+function getAllStudySettings(studySettings) {
+    document.getElementById("standard").checked =
+        studySettings.pairOrder.standard;
+    document.getElementById("reversed").checked =
+        studySettings.pairOrder.reversed;
+    document.getElementById("both").checked = studySettings.pairOrder.both;
     document.getElementById("ask-flashcard").checked =
-        settings.questionType.flashcard;
-    document.getElementById("ask-typed").checked = settings.questionType.typed;
-    // document.getElementById("ask-both").checked = settings.questionType.both;
-    document.getElementById("show-info").checked = settings.showInfo;
+        studySettings.questionType.flashcard;
+    document.getElementById("ask-typed").checked =
+        studySettings.questionType.typed;
+    // document.getElementById("ask-both").checked = studySettings.questionType.both;
+    document.getElementById("show-info").checked = studySettings.showInfo;
 }
 
 // ------------Pairs Stuff-------------

@@ -1,0 +1,12 @@
+@import "../variables";
+
+:root {
+    --text: #{$sea-mist-text};
+    --highlight: #{$sea-mist-highlight};
+    --primary: #{$sea-mist-primary};
+    --secondary: #{$sea-mist-secondary};
+    --background: #{$sea-mist-background};
+
+    --placeholder: #{$sea-mist-placeholder};
+    --btn-hover: #{$sea-mist-btn-hover};
+}

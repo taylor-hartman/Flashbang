@@ -8,7 +8,7 @@
 }
 
 body {
-  background: var(--background, #fff);
+  background: var(--background, #e7e6e1);
 }
 
 ::-webkit-input-placeholder {
@@ -142,11 +142,11 @@ a {
 }
 
 #light .one {
-  background: #fff;
+  background: #e7e6e1;
 }
 
 #light .two {
-  background: #37d7fb;
+  background: #e7e6e1;
 }
 
 #dark .one {
@@ -163,4 +163,44 @@ a {
 
 #mint .two {
   background: #93ffd8;
+}
+
+#sea-mist .one {
+  background: #c4f8f0;
+}
+
+#sea-mist .two {
+  background: #7ac7c7;
+}
+
+#toucan .one {
+  background: #ffc600;
+}
+
+#toucan .two {
+  background: #5800ff;
+}
+
+#houseplant .one {
+  background: #a7ff83;
+}
+
+#houseplant .two {
+  background: #086972;
+}
+
+#cafe .one {
+  background: #f4dfba;
+}
+
+#cafe .two {
+  background: #876445;
+}
+
+#terminal .one {
+  background: #7bf950;
+}
+
+#terminal .two {
+  background: #000;
 }

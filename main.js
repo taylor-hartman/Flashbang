@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
-const Store = require("./store");
-const StoreSettings = require("./storeSettings");
+const BunchStorage = require("./bunchStorage");
+const Settings = require("./settings");
 const fs = require("fs");
 
 // Set env
@@ -19,13 +19,17 @@ function createMainWindow() {
         height: 425,
         icon: "./assets/icons/icon.png",
         resizable: false,
-        // backgroundColor: "white",
         // titleBarStyle: "hidden",
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             contextIsolation: false,
         },
+    });
+
+    mainWindow.on("ready-to-show", function () {
+        mainWindow.show();
+        mainWindow.focus();
     });
 
     if (isDev) {
@@ -90,6 +94,8 @@ app.on("activate", () => {
     }
 });
 
+ipcMain.on("returnToIndex", returnToIndexPage);
+
 ipcMain.on("bunch:setAll", (e, bunch, fileTitle) => {
     var count = 0;
     const userDataPath = app.getPath("userData");
@@ -103,22 +109,22 @@ ipcMain.on("bunch:setAll", (e, bunch, fileTitle) => {
     }
     title += count === 0 ? "" : count;
 
-    const store = new Store({
+    const bunchStorage = new BunchStorage({
         fileName: fileTitle,
     });
-    store.set("title", title);
+    bunchStorage.set("title", title);
 
     const oldPath = userDataPath + "/bunches/" + fileTitle + ".json";
     fs.rename(oldPath, filePath, () => {});
-    e.reply("bunch:get", store.getAll());
+    e.reply("bunch:get", bunchStorage.getAll());
 });
 
 ipcMain.on("bunch:save", (e, bunch, fileTitle) => {
-    const store = new Store({
+    const bunchStorage = new BunchStorage({
         fileName: fileTitle,
     });
-    store.setAll(bunch);
-    e.reply("bunch:get", store.getAll()); //TODO idk if this should rlly be here (used for import button)
+    bunchStorage.setAll(bunch);
+    e.reply("bunch:get", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
 });
 
 ipcMain.on("bunch:delete", (e, fileName) => {
@@ -128,8 +134,8 @@ ipcMain.on("bunch:delete", (e, fileName) => {
 });
 
 ipcMain.on("bunch:get", (e, title) => {
-    const store = new Store({ fileName: title });
-    e.reply("bunch:get", store.getAll()); //TODO idk if this should rlly be here (used for import button)
+    const bunchStorage = new BunchStorage({ fileName: title });
+    e.reply("bunch:get", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
 });
 
 ipcMain.on("bunchdata:get", sendBunchData);
@@ -172,24 +178,41 @@ function sendBunchData() {
 }
 
 function returnToIndexPage() {
-    // sendBunchData();
+    // mainWindow.hide();
     mainWindow.loadFile("./app/index.html");
 }
 
-//-------Settings----------
-const storeSettings = new StoreSettings();
+//-------Study Settings----------
+const studySettings = new Settings("study");
 
-ipcMain.on("settings:getAll", (e) => {
-    // mainWindow.webContents.send("settings:getAll", storeSettings.getAll());
-    e.reply("settings:getAll", storeSettings.getAll());
+ipcMain.on("studySettings:getAll", (e) => {
+    // mainWindow.webContents.send("settings:getAll", studySettings.getAll());
+    e.reply("studySettings:getAll", studySettings.getAll());
 });
 
-ipcMain.on("settings:set", (e, input) => {
-    storeSettings.set(input.key, input.value);
+ipcMain.on("studySettings:set", (e, input) => {
+    studySettings.set(input.key, input.value);
     //TODO make a more specific get method
-    e.reply("settings:getAll", storeSettings.getAll());
+    e.reply("studySettings:getAll", studySettings.getAll());
 });
 
-ipcMain.on("returnToIndex", returnToIndexPage);
+//----------Global Settings----------
+const globalSettings = new Settings("global");
+
+ipcMain.on("globalSettings:get", (e, key) => {
+    // mainWindow.webContents.send("settings:getAll", globalSettings.getAll());
+    e.reply(`globalSettings:get${key}`, globalSettings.get(key));
+});
+
+ipcMain.on("globalSettings:getAll", (e) => {
+    // mainWindow.webContents.send("settings:getAll", globalSettings.getAll());
+    e.reply("globalSettings:getAll", globalSettings.getAll());
+});
+
+ipcMain.on("globalSettings:set", (e, input) => {
+    globalSettings.set(input.key, input.value);
+    //TODO make a more specific get method
+    e.reply("globalSettings:getAll", globalSettings.getAll());
+});
 
 app.allowRendererProcessReuse = true;

@@ -8,7 +8,7 @@
 }
 
 body {
-  background: var(--background, #fff);
+  background: var(--background, #e7e6e1);
 }
 
 ::-webkit-input-placeholder {
@@ -164,7 +164,7 @@ a {
 
 #delete-menu #delete-btns-container button:hover {
   cursor: pointer;
-  background: var(--btn-hover, #697277);
+  background: var(--btn-hover, #9da5a9);
 }
 
 #settings-btn {
@@ -263,7 +263,7 @@ a {
 
 .hex-center {
   position: absolute;
-  background-color: var(--primary, #37d7fb);
+  background-color: var(--primary, #e7e6e1);
   top: 5px;
   left: 5px;
   width: calc(100% - (5px * 2));
@@ -305,7 +305,7 @@ a {
 }
 
 .hex-center:hover {
-  background: var(--secondary, #f1b1f9);
+  background: var(--secondary, #c8c6c6);
 }
 
 .scroll-btn {

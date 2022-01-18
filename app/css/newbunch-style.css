@@ -40,7 +40,7 @@ body {
 }
 
 body {
-  background: var(--background, #fff);
+  background: var(--background, #e7e6e1);
 }
 
 a {
@@ -135,7 +135,7 @@ input {
 
 #submit-add-bar button:hover {
   cursor: pointer;
-  background: var(--btn-hover, #697277);
+  background: var(--btn-hover, #9da5a9);
 }
 
 #submit-add-bar .btn-holder {
@@ -331,7 +331,7 @@ form {
   height: 15vh;
   left: 10vw;
   bottom: 0px;
-  background: #fff;
+  background: #e7e6e1;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -370,7 +370,7 @@ form {
 
 #delete-menu #delete-btns-container button:hover {
   cursor: pointer;
-  background: var(--btn-hover, #697277);
+  background: var(--btn-hover, #9da5a9);
 }
 
 .hide {

@@ -137,3 +137,48 @@ a {
         background: $mint-primary;
     }
 }
+
+#sea-mist {
+    .one {
+        background: $sea-mist-background;
+    }
+    .two {
+        background: $sea-mist-text;
+    }
+}
+
+#toucan {
+    .one {
+        background: $toucan-background;
+    }
+    .two {
+        background: $toucan-primary;
+    }
+}
+
+#houseplant {
+    .one {
+        background: $houseplant-background;
+    }
+    .two {
+        background: $houseplant-highlight;
+    }
+}
+
+#cafe {
+    .one {
+        background: $cafe-background;
+    }
+    .two {
+        background: $cafe-highlight;
+    }
+}
+
+#terminal {
+    .one {
+        background: $terminal-text;
+    }
+    .two {
+        background: $terminal-background;
+    }
+}

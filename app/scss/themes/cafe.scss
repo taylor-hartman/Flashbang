@@ -1,0 +1,12 @@
+@import "../variables";
+
+:root {
+    --text: #{$cafe-text};
+    --highlight: #{$cafe-highlight};
+    --primary: #{$cafe-primary};
+    --secondary: #{$cafe-secondary};
+    --background: #{$cafe-background};
+
+    --placeholder: #{$cafe-placeholder};
+    --btn-hover: #{$cafe-btn-hover};
+}

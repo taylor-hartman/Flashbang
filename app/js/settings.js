@@ -1,3 +1,5 @@
+// const ipcRenderer = require("electron").ipcRenderer;
+
 const palettes = document.getElementsByClassName("palette");
 for (x = 0; x < palettes.length; x++) {
     palettes[x].addEventListener("click", changeTheme);
@@ -5,6 +7,10 @@ for (x = 0; x < palettes.length; x++) {
 
 function changeTheme(e) {
     const theme = e.target.id;
-    const link = `<link rel="stylesheet" href="css/${theme}.css" id="${theme}-stylesheet"/>`;
-    document.getElementById("theme-stylesheets").innerHTML = link;
+    ipcRenderer.send("globalSettings:set", { key: "theme", value: theme });
 }
+
+ipcRenderer.on("globalSettings:getAll", (e, settings) => {
+    const link = `<link rel="stylesheet" href="css/${settings.theme}.css" id="${settings.theme}-stylesheet"/>`;
+    document.getElementById("theme-stylesheets").innerHTML = link;
+});

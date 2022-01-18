@@ -12,14 +12,15 @@ $incorrect-red: #ea4848;
 //Default Values
 $text: $dark;
 $highlight: $dark;
-$primary: #37d7fb;
-$secondary: #f1b1f9;
-$background: #fff;
+$primary: #e7e6e1;
+$secondary: #c8c6c6;
+$background: #e7e6e1;
 $placeholder: lighten($text, 20%);
-$btn-hover: lighten($highlight, 20%);
+$btn-hover: lighten($highlight, 40%);
 
 //Dark Values
-$dark-text: #00adb5;
+// $dark-text: #00adb5;
+$dark-text: #ccc;
 $dark-highlight: #ccc;
 $dark-primary: #222831;
 $dark-secondary: #393e46;
@@ -27,13 +28,59 @@ $dark-background: #222831;
 $dark-placeholder: darken($dark-text, 20%);
 $dark-btn-hover: darken($dark-highlight, 40%);
 
-$mint-text: #7900ff;
+//Mint
+$mint-text: #548cff;
 $mint-highlight: #548cff;
 $mint-primary: #93ffd8;
 $mint-secondary: #cfffdc;
 $mint-background: #fffdde;
-$mint-placeholder: lighten($mint-text, 40%);
+$mint-placeholder: lighten($mint-text, 20%);
 $mint-btn-hover: lighten($mint-highlight, 20%);
+
+//Sea Mist
+$sea-mist-text: #7ac7c7;
+$sea-mist-highlight: #7ac7c7;
+$sea-mist-primary: #fcd1d1;
+$sea-mist-secondary: #ece2e1;
+$sea-mist-background: #c4f8f0;
+$sea-mist-placeholder: lighten($sea-mist-text, 10%);
+$sea-mist-btn-hover: lighten($sea-mist-highlight, 20%);
+
+//Toucan
+$toucan-text: #000;
+$toucan-highlight: #000;
+$toucan-primary: #5800ff;
+$toucan-secondary: #e900ff;
+$toucan-background: #ffc600;
+$toucan-placeholder: #555;
+$toucan-btn-hover: #555;
+
+//Houseplant
+$houseplant-text: #086972;
+$houseplant-highlight: #086972;
+$houseplant-primary: #17b978;
+$houseplant-secondary: #a7ff83;
+$houseplant-background: #a7ff83;
+$houseplant-placeholder: #17b978;
+$houseplant-btn-hover: #17b978;
+
+//Cafe
+$cafe-text: #876445;
+$cafe-highlight: #876445;
+$cafe-primary: #ca965c;
+$cafe-secondary: #eec373;
+$cafe-background: #f4dfba;
+$cafe-placeholder: lighten($cafe-text, 20%);
+$cafe-btn-hover: $cafe-secondary;
+
+//Terminal
+$terminal-text: #7bf950;
+$terminal-highlight: #4b39d8;
+$terminal-primary: #000;
+$terminal-secondary: #000aaa; //c44ccc
+$terminal-background: #000;
+$terminal-placeholder: darken($terminal-text, 40%);
+$terminal-btn-hover: darken($terminal-highlight, 30%);
 
 //TODO must stay at 1.4 rn because status button doesnt work at other sizes
 $card-font-size: 1.4rem;

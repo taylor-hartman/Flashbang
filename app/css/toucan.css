@@ -1,0 +1,9 @@
+:root {
+  --text: #000;
+  --highlight: #000;
+  --primary: #5800ff;
+  --secondary: #e900ff;
+  --background: #ffc600;
+  --placeholder: #555;
+  --btn-hover: #555;
+}

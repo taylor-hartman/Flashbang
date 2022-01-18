@@ -1,9 +1,9 @@
 :root {
   --text: #393e41;
   --highlight: #393e41;
-  --primary: #37d7fb;
-  --secondary: #f1b1f9;
-  --background: #fff;
+  --primary: #e7e6e1;
+  --secondary: #c8c6c6;
+  --background: #e7e6e1;
   --placeholder: #697277;
-  --btn-hover: #697277;
+  --btn-hover: #9da5a9;
 }

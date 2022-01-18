@@ -1,0 +1,12 @@
+@import "../variables";
+
+:root {
+    --text: #{$terminal-text};
+    --highlight: #{$terminal-highlight};
+    --primary: #{$terminal-primary};
+    --secondary: #{$terminal-secondary};
+    --background: #{$terminal-background};
+
+    --placeholder: #{$terminal-placeholder};
+    --btn-hover: #{$terminal-btn-hover};
+}

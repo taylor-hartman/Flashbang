@@ -8,7 +8,7 @@
 }
 
 body {
-  background: var(--background, #fff);
+  background: var(--background, #e7e6e1);
 }
 
 ::-webkit-input-placeholder {
@@ -158,13 +158,13 @@ h2 {
   left: 0;
   height: 1.2rem;
   width: 1.2rem;
-  background-color: var(--secondary, #f1b1f9);
+  background-color: var(--secondary, #c8c6c6);
   border-radius: 3px;
 }
 
 /* On mouse-over, add a grey background color */
 .checkbox-container:hover input ~ .checkmark {
-  background-color: var(--primary, #37d7fb);
+  background-color: var(--primary, #e7e6e1);
 }
 
 /* When the checkbox is checked, add a blue background */
@@ -190,7 +190,7 @@ h2 {
   top: 0.18rem;
   width: 0.24rem;
   height: 0.48rem;
-  border: solid var(--primary, #37d7fb);
+  border: solid var(--primary, #e7e6e1);
   border-width: 0 0.2rem 0.2rem 0;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);

@@ -1,4 +1,4 @@
-const ipcRenderer = require("electron").ipcRenderer;
+// const ipcRenderer = require("electron").ipcRenderer;
 var pageNumber = 0;
 var bunches, bunchCount;
 

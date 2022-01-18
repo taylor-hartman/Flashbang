@@ -1,0 +1,12 @@
+@import "../variables";
+
+:root {
+    --text: #{$houseplant-text};
+    --highlight: #{$houseplant-highlight};
+    --primary: #{$houseplant-primary};
+    --secondary: #{$houseplant-secondary};
+    --background: #{$houseplant-background};
+
+    --placeholder: #{$houseplant-placeholder};
+    --btn-hover: #{$houseplant-btn-hover};
+}
