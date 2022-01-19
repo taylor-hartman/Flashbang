@@ -156,7 +156,7 @@ a {
 
 #delete-menu #delete-btns-container button {
   background: none;
-  border: solid #393e41 2px;
+  border: solid 2px var(--highlight, #393e41);
   border-radius: 3px;
   width: 10%;
   padding: 0.1rem;
@@ -206,7 +206,7 @@ a {
   width: -moz-fit-content;
   width: fit-content;
   border: none;
-  border-bottom: solid 1px #393e41;
+  border-bottom: solid 1px var(--highlight, #393e41);
 }
 
 #search-input:focus {

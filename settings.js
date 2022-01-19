@@ -22,15 +22,26 @@ class Settings {
                     flashcard: true,
                     typed: false,
                 },
-                showInfo: true,
             };
         } else if (type === "global") {
             //settings only changable in settings.html
             this.path = path.join(userDataPath + "/settings.json");
-            defaults = { theme: "light" };
+            defaults = {
+                theme: "light",
+                strikeThrough: true,
+                showInfo: true,
+                showIwr: true,
+                delayCorrect: 1,
+                delayIncorrect: 0,
+            };
         }
 
         this.data = parseDataFile(this.path, defaults);
+
+        //create file if dne
+        if (!fs.existsSync(this.path)) {
+            fs.writeFileSync(this.path, JSON.stringify(this.data));
+        }
     }
     get(key) {
         return this.data[key];

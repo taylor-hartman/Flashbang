@@ -31,6 +31,7 @@ a {
 }
 
 h2 {
+    //this is for answer and promtp
     font-size: $card-font-size;
     text-align: center;
     width: 83%;
@@ -53,8 +54,12 @@ h2 {
     // margin-top: -3.5%;
 }
 
-#prompt {
-    margin-top: -3.5%;
+.typed-margin {
+    margin-top: -5vh;
+}
+
+.flashcard-margin {
+    margin-top: -10vh;
 }
 
 #main-separator {
@@ -135,19 +140,19 @@ h2 {
     left: 0;
     height: 1.2rem;
     width: 1.2rem;
-    background-color: var(--secondary, $secondary);
+    background-color: var(--highlight, $highlight);
     border-radius: 3px;
 }
 
-/* On mouse-over, add a grey background color */
-.checkbox-container:hover input ~ .checkmark {
-    background-color: var(--primary, $primary);
-}
+// // On mouse-over
+// .checkbox-container:hover input ~ .checkmark {
+//     background-color: var(--btn-hover, $btn-hover);
+// }
 
-/* When the checkbox is checked, add a blue background */
-.checkbox-container input:checked ~ .checkmark {
-    background-color: var(--highlight, $highlight);
-}
+// //When the checkbox is checked
+// .checkbox-container input:checked ~ .checkmark {
+//     background-color: var(--highlight, $highlight);
+// }
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
@@ -167,7 +172,7 @@ h2 {
     top: 0.18rem;
     width: 0.24rem;
     height: 0.48rem;
-    border: solid var(--primary, $primary);
+    border: solid var(--background, $background);
     border-width: 0 0.2rem 0.2rem 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -212,7 +217,8 @@ h2 {
         line-height: 2rem; //set equal to height of this item to center text vertically
         font-size: 1.6rem;
         font-weight: bold;
-        background: $correct-green;
+        color: var(--highlight, $highlight);
+        // background: $correct-green;
     }
 
     //idfk why i cant do this without container
@@ -242,6 +248,11 @@ h2 {
         padding: 0.3rem;
         font-size: $card-font-size;
         text-align: center;
+    }
+
+    #end-dialogue {
+        position: absolute;
+        top: 40vh;
     }
 }
 

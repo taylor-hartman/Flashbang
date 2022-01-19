@@ -19,12 +19,14 @@ const globalSettings = new Settings("global");
 const backgroundLookUp = {
     light: "#e7e6e1",
     dark: "#222831",
-    mint: "#fffdde",
+    "lemon-mint": "#fffdde",
     "sea-mist": "#c4f8f0",
-    toucan: "#ffc600",
+    beehive: "#ffc600",
     houseplant: "#a7ff83",
     cafe: "#f4dfba",
     terminal: "#000",
+    dream: "#091933",
+    construction: "#52575d",
 };
 
 var theme = globalSettings.get("theme");
@@ -236,6 +238,12 @@ ipcMain.on("globalSettings:set", (e, input) => {
     globalSettings.set(input.key, input.value);
     //TODO make a more specific get method
     e.reply("globalSettings:getAll", globalSettings.getAll());
+});
+
+//replies only wiht the set value
+ipcMain.on("globalSettings:set1", (e, input) => {
+    globalSettings.set(input.key, input.value);
+    e.reply(`globalSettings:get${input.key}`, globalSettings.get(input.key));
 });
 
 app.allowRendererProcessReuse = true;

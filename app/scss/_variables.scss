@@ -28,14 +28,14 @@ $dark-background: #222831;
 $dark-placeholder: darken($dark-text, 20%);
 $dark-btn-hover: darken($dark-highlight, 40%);
 
-//Mint
-$mint-text: #548cff;
-$mint-highlight: #548cff;
-$mint-primary: #93ffd8;
-$mint-secondary: #cfffdc;
-$mint-background: #fffdde;
-$mint-placeholder: lighten($mint-text, 20%);
-$mint-btn-hover: lighten($mint-highlight, 20%);
+//Beach
+$lemon-mint-text: #548cff;
+$lemon-mint-highlight: #548cff;
+$lemon-mint-primary: #93ffd8;
+$lemon-mint-secondary: #cfffdc;
+$lemon-mint-background: #fffdde;
+$lemon-mint-placeholder: lighten($lemon-mint-text, 20%);
+$lemon-mint-btn-hover: lighten($lemon-mint-highlight, 20%);
 
 //Sea Mist
 $sea-mist-text: #7ac7c7;
@@ -46,14 +46,14 @@ $sea-mist-background: #c4f8f0;
 $sea-mist-placeholder: lighten($sea-mist-text, 10%);
 $sea-mist-btn-hover: lighten($sea-mist-highlight, 20%);
 
-//Toucan
-$toucan-text: #000;
-$toucan-highlight: #000;
-$toucan-primary: #5800ff;
-$toucan-secondary: #e900ff;
-$toucan-background: #ffc600;
-$toucan-placeholder: #555;
-$toucan-btn-hover: #555;
+//Beehive
+$beehive-text: #7e370c;
+$beehive-highlight: #7e370c;
+$beehive-primary: #fdd054;
+$beehive-secondary: #fac32b;
+$beehive-background: #fcc326;
+$beehive-placeholder: lighten($beehive-text, 35%);
+$beehive-btn-hover: lighten($beehive-text, 20%);
 
 //Houseplant
 $houseplant-text: #086972;
@@ -81,6 +81,24 @@ $terminal-secondary: #000aaa; //c44ccc
 $terminal-background: #000;
 $terminal-placeholder: darken($terminal-text, 40%);
 $terminal-btn-hover: darken($terminal-highlight, 30%);
+
+//Neon
+$dream-text: #0ebcc6;
+$dream-highlight: #0ebcc6;
+$dream-primary: #7a04eb;
+$dream-secondary: #a204eb; //c44ccc
+$dream-background: #091933;
+$dream-placeholder: darken($dream-text, 20%);
+$dream-btn-hover: darken($dream-highlight, 20%);
+
+//Construction
+$construction-text: #fddb3a;
+$construction-highlight: #fddb3a;
+$construction-primary: #41444b;
+$construction-secondary: #52575d; //c44ccc
+$construction-background: #52575d;
+$construction-placeholder: darken($construction-text, 25%);
+$construction-btn-hover: darken($construction-highlight, 40%);
 
 //TODO must stay at 1.4 rn because status button doesnt work at other sizes
 $card-font-size: 1.4rem;

@@ -1,0 +1,12 @@
+@import "../variables";
+
+:root {
+    --text: #{$construction-text};
+    --highlight: #{$construction-highlight};
+    --primary: #{$construction-primary};
+    --secondary: #{$construction-secondary};
+    --background: #{$construction-background};
+
+    --placeholder: #{$construction-placeholder};
+    --btn-hover: #{$construction-btn-hover};
+}

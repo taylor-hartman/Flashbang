@@ -20,6 +20,10 @@ svg {
     fill: var(--highlight, $highlight);
 }
 
+::-webkit-scrollbar {
+    width: 0px;
+}
+
 input {
     background: none;
 }
@@ -29,7 +33,7 @@ a {
 }
 
 #back-btn {
-    position: absolute;
+    position: fixed;
     top: 5px;
     left: 5px;
 }
@@ -48,6 +52,7 @@ a {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin-bottom: 3vh;
 
         h2 {
             width: 100%;
@@ -58,51 +63,79 @@ a {
 
         .theme-holder {
             margin-top: 3vh;
-            width: 70vw;
+            width: 80vw;
             display: grid;
             grid-template-columns: auto auto auto auto auto;
-            grid-auto-rows: 8vw;
-            column-gap: 7.5vw;
-            row-gap: 5vh;
+            // grid-auto-rows: 8vw;
+            // column-gap: 7.5vw;
+            row-gap: 1vh;
+
+            .palette {
+                width: 16vw;
+                margin-left: auto;
+                margin-right: auto;
+
+                &:hover {
+                    cursor: pointer;
+                }
+
+                .color-box {
+                    margin: auto;
+                    width: 8vw; //(50px for standard rem)
+                    height: 8vw;
+                    position: relative;
+                    border-radius: 50%;
+                    border: 2px solid var(--highlight, $highlight);
+                    transform: rotate(-45deg);
+                    overflow: hidden;
+                    pointer-events: none;
+                }
+
+                .color {
+                    position: absolute;
+                    width: calc(8vw - 1.5px);
+                    height: calc(4vw - 1.5px);
+                }
+
+                .one {
+                    top: 0;
+                }
+
+                .two {
+                    bottom: 0;
+                }
+
+                p {
+                    text-align: center;
+                    pointer-events: none;
+                }
+            }
         }
 
-        .palette {
-            width: 8vw;
+        .setting-holder {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 2vh;
 
-            &:hover {
-                cursor: pointer;
-            }
+            .setting {
+                width: 75vw;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                margin: 1vh 0;
 
-            .color-box {
-                width: 8vw; //(50px for standard rem)
-                height: 8vw;
-                position: relative;
-                border-radius: 50%;
-                border: 2px solid var(--highlight, $highlight);
-                width: 100%;
-                height: 100%;
-                transform: rotate(-45deg);
-                overflow: hidden;
-                pointer-events: none;
-            }
-
-            .color {
-                position: absolute;
-                width: calc(8vw - 1.5px);
-                height: calc(4vw - 1.5px);
-            }
-
-            .one {
-                top: 0;
-            }
-
-            .two {
-                bottom: 0;
-            }
-
-            p {
-                text-align: center;
-                pointer-events: none;
+                input {
+                    width: 3rem;
+                    text-align: center;
+                    border: 2px solid var(--highlight, $highlight);
+                    border-radius: 3px;
+                    outline: none;
+                    padding: 1px;
+                }
             }
         }
     }
@@ -126,12 +159,12 @@ a {
     }
 }
 
-#mint {
+#lemon-mint {
     .one {
-        background: $mint-background;
+        background: $lemon-mint-background;
     }
     .two {
-        background: $mint-primary;
+        background: $lemon-mint-highlight;
     }
 }
 
@@ -144,12 +177,12 @@ a {
     }
 }
 
-#toucan {
+#beehive {
     .one {
-        background: $toucan-background;
+        background: $beehive-background;
     }
     .two {
-        background: $toucan-primary;
+        background: $beehive-highlight;
     }
 }
 
@@ -179,3 +212,93 @@ a {
         background: $terminal-background;
     }
 }
+
+#dream {
+    .one {
+        background: $dream-highlight;
+    }
+    .two {
+        background: $dream-background;
+    }
+}
+
+#construction {
+    .one {
+        background: $construction-text;
+    }
+    .two {
+        background: $construction-background;
+    }
+}
+
+//----------Checkbox Stuff----------
+/* The container */
+.checkbox-container {
+    display: block;
+    position: relative;
+    // padding-left: 25px;
+    margin-right: 2.5vw;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.2rem;
+    width: 1.2rem;
+    background-color: var(--highlight, $highlight);
+    border-radius: 3px;
+}
+
+// On mouse-over
+// .checkbox-container:hover input ~ .checkmark {
+//     background-color: var(--btn-hover, $btn-hover);
+// }
+
+// //When the checkbox is checked
+// .checkbox-container input:checked ~ .checkmark {
+//     background-color: var(--highlight, $highlight);
+// }
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+    left: 0.38rem;
+    top: 0.18rem;
+    width: 0.24rem;
+    height: 0.48rem;
+    border: solid var(--background, $background);
+    border-width: 0 0.2rem 0.2rem 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+//-----------end checkbox stuff-------------

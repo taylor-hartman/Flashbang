@@ -70,8 +70,12 @@ h2 {
   height: 100vh;
 }
 
-#prompt {
-  margin-top: -3.5%;
+.typed-margin {
+  margin-top: -5vh;
+}
+
+.flashcard-margin {
+  margin-top: -10vh;
 }
 
 #main-separator {
@@ -158,18 +162,8 @@ h2 {
   left: 0;
   height: 1.2rem;
   width: 1.2rem;
-  background-color: var(--secondary, #c8c6c6);
-  border-radius: 3px;
-}
-
-/* On mouse-over, add a grey background color */
-.checkbox-container:hover input ~ .checkmark {
-  background-color: var(--primary, #e7e6e1);
-}
-
-/* When the checkbox is checked, add a blue background */
-.checkbox-container input:checked ~ .checkmark {
   background-color: var(--highlight, #393e41);
+  border-radius: 3px;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -190,7 +184,7 @@ h2 {
   top: 0.18rem;
   width: 0.24rem;
   height: 0.48rem;
-  border: solid var(--primary, #e7e6e1);
+  border: solid var(--background, #e7e6e1);
   border-width: 0 0.2rem 0.2rem 0;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
@@ -231,7 +225,7 @@ h2 {
   line-height: 2rem;
   font-size: 1.6rem;
   font-weight: bold;
-  background: #b2cc3e;
+  color: var(--highlight, #393e41);
 }
 
 #flashcard-container #iwr-btn-container {
@@ -261,6 +255,11 @@ h2 {
   padding: 0.3rem;
   font-size: 1.4rem;
   text-align: center;
+}
+
+#flashcard-container #end-dialogue {
+  position: absolute;
+  top: 40vh;
 }
 
 .hide {

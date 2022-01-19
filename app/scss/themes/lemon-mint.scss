@@ -1,0 +1,12 @@
+@import "../variables";
+
+:root {
+    --text: #{$lemon-mint-text};
+    --highlight: #{$lemon-mint-highlight};
+    --primary: #{$lemon-mint-primary};
+    --secondary: #{$lemon-mint-secondary};
+    --background: #{$lemon-mint-background};
+
+    --placeholder: #{$lemon-mint-placeholder};
+    --btn-hover: #{$lemon-mint-btn-hover};
+}

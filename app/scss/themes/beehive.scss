@@ -1,0 +1,12 @@
+@import "../variables";
+
+:root {
+    --text: #{$beehive-text};
+    --highlight: #{$beehive-highlight};
+    --primary: #{$beehive-primary};
+    --secondary: #{$beehive-secondary};
+    --background: #{$beehive-background};
+
+    --placeholder: #{$beehive-placeholder};
+    --btn-hover: #{$beehive-btn-hover};
+}

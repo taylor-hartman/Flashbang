@@ -6,9 +6,9 @@ var pairs; //pairs is all pairs in bunch, current pair is the one currently bein
 var menuToggled = false;
 var correct; //stores if the current answer is correct
 
-const correctGreen = "#B2CC3E",
-    incorrectRed = "#ea4848",
-    dark = "#393e41";
+// const correctGreen = "#B2CC3E",
+//     incorrectRed = "#ea4848",
+//     dark = "#393e41";
 
 //TODO could likely be chnaged do document.addEventListener('DOMContentLoaded', ()) and be faster
 window.onload = () => {
@@ -16,6 +16,7 @@ window.onload = () => {
     const url = document.location.href;
     var title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
     title = title.replaceAll("%20", " ");
+    ipcRenderer.send("globalSettings:getAll");
     //reuquests studySettings data from main
     //NOTE Settings must be gotten before pairs
     ipcRenderer.send("studySettings:getAll");
@@ -80,29 +81,7 @@ function onQuestionTypeChange() {
     displayCard();
 }
 
-//show info
-document
-    .getElementById("show-info")
-    .addEventListener("change", onShowInfoChange);
-
-function onShowInfoChange() {
-    ipcRenderer.send("studySettings:set", {
-        key: "showInfo",
-        value: document.getElementById("show-info").checked,
-    });
-
-    updateInfo();
-}
-
-function updateInfo() {
-    const isChecked = document.getElementById("show-info").checked;
-    if (isChecked) {
-        document.getElementById("bottom-text").classList.remove("hide");
-    } else {
-        document.getElementById("bottom-text").classList.add("hide");
-    }
-}
-
+//TODO git rid of
 //called the first time studySettings are gotten to initialize info and html
 ipcRenderer.once("studySettings:getAll", (e, studySettings) => {
     getAllStudySettings(studySettings);
@@ -124,9 +103,15 @@ function getAllStudySettings(studySettings) {
         studySettings.questionType.flashcard;
     document.getElementById("ask-typed").checked =
         studySettings.questionType.typed;
-    // document.getElementById("ask-both").checked = studySettings.questionType.both;
-    document.getElementById("show-info").checked = studySettings.showInfo;
 }
+let showIwr, showInfo, strikeThrough, delayCorrect, delayIncorrect;
+ipcRenderer.on("globalSettings:getAll", (e, settings) => {
+    showInfo = settings.showInfo;
+    showIwr = settings.showIwr;
+    strikeThrough = settings.strikeThrough;
+    delayCorrect = settings.delayCorrect;
+    delayIncorrect = settings.delayIncorrect;
+});
 
 // ------------Pairs Stuff-------------
 // handles pairs data
@@ -139,30 +124,34 @@ ipcRenderer.on("bunch:get", (e, bunch) => {
 function updateHTML() {
     if (document.getElementById("ask-flashcard").checked) {
         document.getElementById("flashcard-container").innerHTML = `
-        <h2 id="prompt"></h2>
+        <h2 class="flashcard-margin" id="prompt"></h2>
        <div class="hide" id="main-separator"></div>
        <h2 class="hide" id="answer"></h2>
-       <p class="hide" id="bottom-text">Press Space to Reveal Answer</p>`;
+       <p ${
+           showInfo ? "" : 'class="hide"'
+       } id="bottom-text">Press Space to Reveal Answer</p>`;
     } else if (document.getElementById("ask-typed").checked) {
         document.getElementById(
             "flashcard-container"
-        ).innerHTML = `<h2 id="prompt">Lorem</h2>
+        ).innerHTML = `<h2 class="typed-margin" id="prompt">Lorem</h2>
         <div class="input-container">
                 <input type="text" id="answer-input" />
                 <div class="hide" id="status-block">&#10004</div>
         </div>
         <h2 class="hide typed-answer" id="answer">Lorem</h2>
         <div class="hide" id="iwr-btn-container"><button id="iwr-btn">I was right</button></div>
-        <p class="hide" id="bottom-text">Press Enter to Answer</p>`;
+        <p ${
+            showInfo ? "" : 'class="hide"'
+        } id="bottom-text">Press Enter to Answer</p>`;
 
         document.getElementById("iwr-btn").addEventListener("click", iWasRight);
     }
-    //TODO shouldnt be here
-    updateInfo();
 }
 
 function iWasRight() {
     //HACK: calls twice to undo the already done incorrect and then do the correct
+    clearTimeout(incorrectTimeout);
+    noTimeout = true;
     callsCorrect();
     callsCorrect();
     resetPage();
@@ -237,13 +226,14 @@ function keyListener(e) {
     }
 }
 
+var noTimeout; //used for incorrect forced delay
 function typedAnswersManager(e) {
     if (!answerShown) {
         if (e.key === "Enter") {
             typedShowAnswer();
         }
     } else {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && noTimeout) {
             clearTimeout(correctTimeout);
             resetPage();
         } else if (e.metaKey && e.key === "d") {
@@ -290,7 +280,7 @@ function callsIncorrect() {
 }
 
 //TODO decide if you are making dif functions or using if statements
-var correctTimeout;
+var correctTimeout, incorrectTimeout;
 function typedShowAnswer() {
     document.getElementById("answer-input").blur();
     document.getElementById("answer-input").readOnly = true;
@@ -300,9 +290,17 @@ function typedShowAnswer() {
     const userAnswer = document.getElementById("answer-input").value;
     if (userAnswer === currentPair.answer) {
         callsCorrect();
-        styleCorrect();
-        correctTimeout = setTimeout(resetPage, 1000);
+        if (delayCorrect == 0) {
+            resetPage();
+        } else {
+            styleCorrect();
+            correctTimeout = setTimeout(resetPage, delayCorrect * 1000);
+        }
     } else {
+        noTimeout = false;
+        incorrectTimeout = setTimeout(() => {
+            noTimeout = true;
+        }, delayIncorrect * 1000);
         callsIncorrect();
         styleIncorrect();
     }
@@ -318,20 +316,24 @@ function showAnswer() {
 
 function styleCorrect() {
     const input = document.getElementById("answer-input");
-    input.style.border = `2px solid ${correctGreen}`;
+    // input.style.border = `2px solid ${correctGreen}`;
     const statusBlock = document.getElementById("status-block");
-    statusBlock.style.background = correctGreen;
+    // statusBlock.style.background = correctGreen;
     statusBlock.innerHTML = "&#10004";
     statusBlock.classList.remove("hide");
 }
 
 function styleIncorrect() {
     document.getElementById("answer").classList.remove("hide");
-    document.getElementById("iwr-btn-container").classList.remove("hide");
+    if (showIwr) {
+        document.getElementById("iwr-btn-container").classList.remove("hide");
+    }
     const input = document.getElementById("answer-input");
-    input.style.textDecoration = `line-through ${incorrectRed} 2px`;
+    if (strikeThrough) {
+        input.style.textDecoration = `line-through 2px`;
+    }
     const statusBlock = document.getElementById("status-block");
-    statusBlock.style.background = incorrectRed;
+    // statusBlock.style.background = incorrectRed;
     statusBlock.innerHTML = "&#10006";
     statusBlock.classList.remove("hide");
     // input.style.border = `2px solid ${incorrectRed}`;
@@ -364,7 +366,7 @@ function resetPage() {
         var fcc = document.getElementById("flashcard-container");
         const bottomText = document.getElementById("bottom-text");
         bottomText.innerText = "Press Space to Return Home";
-        fcc.innerHTML = `<h2>Bunch Study Complete!</h2>`;
+        fcc.innerHTML = `<h2 id="end-dialogue">Bunch Study Complete!</h2>`;
         fcc.innerHTML += bottomText.outerHTML;
         studyComplete = true;
     }

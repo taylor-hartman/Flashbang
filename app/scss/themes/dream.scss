@@ -1,0 +1,12 @@
+@import "../variables";
+
+:root {
+    --text: #{$dream-text};
+    --highlight: #{$dream-highlight};
+    --primary: #{$dream-primary};
+    --secondary: #{$dream-secondary};
+    --background: #{$dream-background};
+
+    --placeholder: #{$dream-placeholder};
+    --btn-hover: #{$dream-btn-hover};
+}
