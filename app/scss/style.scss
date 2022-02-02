@@ -303,6 +303,10 @@ a {
     // width: 24px;
     // height: 24px;
     top: calc(50% - 24px);
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 // .scroll-btn:hover {

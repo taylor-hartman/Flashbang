@@ -346,3 +346,11 @@ function refactorIndicies() {
         indicies[x].innerText = x + 1;
     }
 }
+
+//prevents enter from doing form actions
+document.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        return false;
+    }
+});

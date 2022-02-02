@@ -324,6 +324,10 @@ a {
   top: calc(50% - 24px);
 }
 
+.scroll-btn:hover {
+  cursor: pointer;
+}
+
 #scroll-forward {
   right: 1rem;
 }

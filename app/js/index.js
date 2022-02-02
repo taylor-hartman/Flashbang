@@ -106,7 +106,6 @@ document.getElementById("search-input").addEventListener("input", () => {
             matchingBunches.slice(pageNumber * 7, (pageNumber + 1) * 7)
         );
     }
-    console.log(matchingBunches);
 });
 
 //-----------------------------------------------

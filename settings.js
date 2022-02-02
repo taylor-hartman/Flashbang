@@ -31,6 +31,8 @@ class Settings {
                 strikeThrough: true,
                 showInfo: true,
                 showIwr: true,
+                timesCorrect: 2,
+                penalizeIncorrect: true,
                 delayCorrect: 1,
                 delayIncorrect: 0,
             };

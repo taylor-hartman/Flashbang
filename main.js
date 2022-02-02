@@ -69,10 +69,6 @@ function createMainWindow() {
 app.on("ready", () => {
     createMainWindow();
 
-    // mainWindow.webContents.on("dom-ready", () => {
-    //     sendBunchData(); //TODO could be optimized by putting someowhere else
-    // });
-
     const mainMenu = Menu.buildFromTemplate(menu);
     Menu.setApplicationMenu(mainMenu);
 });
@@ -190,7 +186,6 @@ function sendBunchData() {
                     data.push({ title, lastUsed, numTerms });
                 }
             }
-            //TODO chnag to e reply
             mainWindow.webContents.send("bunchdata:get", data);
         } catch {
             (error) => {
@@ -198,7 +193,6 @@ function sendBunchData() {
             };
         }
     } else {
-        //TODO chnag to e reply
         mainWindow.webContents.send("bunchdata:get", []); //return 0 if bunches directory dne
     }
 }
@@ -236,7 +230,6 @@ ipcMain.on("globalSettings:getAll", (e) => {
 
 ipcMain.on("globalSettings:set", (e, input) => {
     globalSettings.set(input.key, input.value);
-    //TODO make a more specific get method
     e.reply("globalSettings:getAll", globalSettings.getAll());
 });
 

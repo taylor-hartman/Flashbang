@@ -4,7 +4,6 @@ var answerShown = false,
     studyComplete = false;
 var pairs; //pairs is all pairs in bunch, current pair is the one currently being displayed
 var menuToggled = false;
-var correct; //stores if the current answer is correct
 
 // const correctGreen = "#B2CC3E",
 //     incorrectRed = "#ea4848",
@@ -26,14 +25,16 @@ window.onload = () => {
 
 //----------buttons listners--------------
 //options button
-document.getElementById("options-btn").addEventListener("click", () => {
+document.getElementById("options-btn").addEventListener("click", toggleMenu);
+
+function toggleMenu() {
     if (!menuToggled) {
         document.getElementById("options-menu").classList.remove("hide");
     } else {
         document.getElementById("options-menu").classList.add("hide");
     }
     menuToggled = !menuToggled;
-});
+}
 
 document.getElementById("back-btn").addEventListener("click", () => {
     ipcRenderer.send("returnToIndex");
@@ -104,11 +105,19 @@ function getAllStudySettings(studySettings) {
     document.getElementById("ask-typed").checked =
         studySettings.questionType.typed;
 }
-let showIwr, showInfo, strikeThrough, delayCorrect, delayIncorrect;
+let showIwr,
+    showInfo,
+    strikeThrough,
+    penalizeIncorrect,
+    timesCorrect,
+    delayCorrect,
+    delayIncorrect;
 ipcRenderer.on("globalSettings:getAll", (e, settings) => {
     showInfo = settings.showInfo;
     showIwr = settings.showIwr;
     strikeThrough = settings.strikeThrough;
+    timesCorrect = settings.timesCorrect;
+    penalizeIncorrect = settings.penalizeIncorrect;
     delayCorrect = settings.delayCorrect;
     delayIncorrect = settings.delayIncorrect;
 });
@@ -149,11 +158,20 @@ function updateHTML() {
 }
 
 function iWasRight() {
-    //HACK: calls twice to undo the already done incorrect and then do the correct
     clearTimeout(incorrectTimeout);
     noTimeout = true;
-    callsCorrect();
-    callsCorrect();
+
+    if (prevNumCalls === timesCorrect) {
+        currentPair.calls -= 1;
+    } else {
+        currentPair.calls -= 2;
+    }
+
+    if (currentPair.calls <= 0) {
+        const index = pairs.indexOf(currentPair);
+        pairs.splice(index, 1);
+    }
+
     resetPage();
 }
 
@@ -182,14 +200,19 @@ function generatePairs() {
 }
 
 function generateCalls() {
-    if (document.getElementById("both").checked) {
-        for (x = 0; x < pairs.length; x++) {
-            pairs[x].calls = 4;
-        }
-    } else {
-        for (x = 0; x < pairs.length; x++) {
-            pairs[x].calls = 2;
-        }
+    // if (document.getElementById("both").checked) {
+    //     for (x = 0; x < pairs.length; x++) {
+    //         // pairs[x].calls = timesCorrect * 2;
+    //         pairs[x].calls = timesCorrect;
+    //     }
+    // } else {
+    //     for (x = 0; x < pairs.length; x++) {
+    //         pairs[x].calls = timesCorrect;
+    //     }
+    // }
+
+    for (x = 0; x < pairs.length; x++) {
+        pairs[x].calls = timesCorrect;
     }
 
     console.log(pairs);
@@ -223,6 +246,10 @@ function keyListener(e) {
         answersManager(key);
     } else if (document.getElementById("ask-typed").checked) {
         typedAnswersManager(e);
+    }
+
+    if (menuToggled) {
+        toggleMenu();
     }
 }
 
@@ -272,9 +299,15 @@ function callsCorrect() {
     }
 }
 
+let prevNumCalls;
 function callsIncorrect() {
     console.log("Inorrect");
-    if (currentPair.calls !== 0 && currentPair.calls < 2) {
+    prevNumCalls = currentPair.calls;
+    if (
+        currentPair.calls !== 0 &&
+        currentPair.calls < timesCorrect &&
+        penalizeIncorrect
+    ) {
         currentPair.calls += 1;
     }
 }
@@ -340,6 +373,7 @@ function styleIncorrect() {
 }
 
 function resetPage() {
+    console.log(pairs);
     if (pairs.length > 0) {
         if (document.getElementById("ask-flashcard").checked) {
             document.querySelector("#main-separator").classList.add("hide");
