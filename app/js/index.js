@@ -131,7 +131,12 @@ function scrollBack() {
 }
 
 function makeIndexPage() {
-    sortByDate(bunches);
+    if (sortHomeBy === "lastUsed") {
+        sortByDate(bunches);
+    } else {
+        sortByName(bunches);
+    }
+
     generateHTML(bunchCount - 7 * pageNumber < 7 ? bunchCount % 7 : 7);
     populateHexs(bunches.slice(pageNumber * 7, (pageNumber + 1) * 7));
     scrollButtonControl();
@@ -144,6 +149,15 @@ function sortByDate(bunches) {
         var dateA = new Date(a.lastUsed),
             dateB = new Date(b.lastUsed);
         return dateB - dateA;
+    });
+    console.log(bunches);
+}
+
+function sortByName(bunches) {
+    bunches.sort(function (a, b) {
+        var title1 = a.title,
+            title2 = b.title;
+        return title1.localeCompare(title2, undefined, { numeric: true });
     });
 }
 
@@ -375,3 +389,10 @@ function scrollButtonControl() {
         document.getElementById("scroll-forward").classList.remove("hide");
     }
 }
+
+let sortHomeBy;
+ipcRenderer.send("globalSettings:get", "sortHomeBy");
+ipcRenderer.on("globalSettings:getsortHomeBy", (e, val) => {
+    //Study
+    sortHomeBy = val;
+});
