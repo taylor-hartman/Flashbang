@@ -19,6 +19,9 @@ body {
 
 svg {
     fill: var(--highlight, $highlight);
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 input {

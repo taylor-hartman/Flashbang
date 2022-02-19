@@ -7,7 +7,7 @@ var menuToggled = false;
 
 // const correctGreen = "#B2CC3E",
 //     incorrectRed = "#ea4848",
-//     dark = "#393e41";
+//     dark = "#393e41"
 
 //TODO could likely be chnaged do document.addEventListener('DOMContentLoaded', ()) and be faster
 window.onload = () => {
@@ -19,6 +19,8 @@ window.onload = () => {
     //reuquests studySettings data from main
     //NOTE Settings must be gotten before pairs
     ipcRenderer.send("studySettings:getAll");
+    //sets lastUsed to current time
+    ipcRenderer.send("bunch:setLastUsed", title);
     //requests bunch data
     ipcRenderer.send("bunch:get", title);
 };

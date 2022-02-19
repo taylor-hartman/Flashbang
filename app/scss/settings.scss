@@ -136,7 +136,46 @@ a {
                     outline: none;
                     padding: 1px;
                 }
+
+                select {
+                    background: none;
+                    border: 1px solid var(--highlight, $highlight);
+                    border-radius: 3px;
+                }
             }
+        }
+    }
+
+    .separator {
+        width: 100%;
+        border-top: 2px solid var(--highlight, $highlight);
+    }
+
+    button {
+        background: none;
+        border: 2px solid var(--highlight, $highlight);
+        border-radius: 3px;
+        padding: 0.3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--highlight, $highlight);
+        &:hover {
+            cursor: pointer;
+            background: var(--btn-hover, $btn-hover);
+        }
+    }
+
+    #end-bar {
+        width: 100%;
+        margin-top: 0.5rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: right;
+        #reset-btn {
+            // position: absolute;
+            right: 0;
         }
     }
 }

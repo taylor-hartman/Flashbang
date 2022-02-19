@@ -185,6 +185,10 @@ a {
   left: 10px;
 }
 
+#edit-bunch-btn:hover {
+  cursor: pointer;
+}
+
 #search-bunch-btn {
   position: absolute;
   top: 5px;
@@ -279,6 +283,7 @@ a {
   margin-left: 6.7%;
   width: 86.6%;
   height: 50%;
+  max-height: 50%;
   text-align: center;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -297,6 +302,11 @@ a {
 
 .hex-content h3 {
   font-size: 1.3rem;
+  line-height: 1.5rem;
+  max-height: 3rem;
+  width: 100%;
+  overflow: hidden;
+  overflow-wrap: break-word;
 }
 
 .hex-content p {

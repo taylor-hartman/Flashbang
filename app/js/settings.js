@@ -71,6 +71,17 @@ document.getElementById("delay-incorrect").addEventListener("change", () => {
     });
 });
 
+document.getElementById("sort-home-by").addEventListener("change", () => {
+    ipcRenderer.send("globalSettings:set", {
+        key: "sortHomeBy",
+        value: document.getElementById("sort-home-by").value,
+    });
+});
+
+document.getElementById("reset-btn").addEventListener("click", () => {
+    ipcRenderer.send("globalSettings:resetDefaults");
+});
+
 //-------Get Settings-------
 ipcRenderer.send("globalSettings:getAll");
 ipcRenderer.on("globalSettings:getAll", (e, settings) => {
@@ -83,4 +94,5 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
         settings.penalizeIncorrect;
     document.getElementById("delay-correct").value = settings.delayCorrect;
     document.getElementById("delay-incorrect").value = settings.delayIncorrect;
+    document.getElementById("sort-home-by").value = settings.sortHomeBy;
 });

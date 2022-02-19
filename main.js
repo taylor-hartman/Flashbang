@@ -160,6 +160,12 @@ ipcMain.on("bunch:get", (e, title) => {
     e.reply("bunch:get", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
 });
 
+//no reply (used for setting lastUsed at open of bunch)
+ipcMain.on("bunch:setLastUsed", (e, title) => {
+    const bunchStorage = new BunchStorage({ fileName: title });
+    bunchStorage.set("lastUsed", new Date());
+});
+
 ipcMain.on("bunchdata:get", sendBunchData);
 
 //used to format index page
@@ -237,6 +243,12 @@ ipcMain.on("globalSettings:set", (e, input) => {
 ipcMain.on("globalSettings:set1", (e, input) => {
     globalSettings.set(input.key, input.value);
     e.reply(`globalSettings:get${input.key}`, globalSettings.get(input.key));
+});
+
+ipcMain.on("globalSettings:resetDefaults", (e) => {
+    globalSettings.resetDefault();
+    e.reply("globalSettings:getAll", globalSettings.getAll());
+    e.reply("globalSettings:gettheme", globalSettings.get("theme"));
 });
 
 app.allowRendererProcessReuse = true;

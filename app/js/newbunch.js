@@ -181,6 +181,12 @@ ipcRenderer.send("bunch:get", title);
 ipcRenderer.on("bunch:get", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs));
     document.getElementById("title-input").value = bunch.title;
+    if (pairs.length < 3) {
+        const lenHolder = pairs.length;
+        for (x = 0; x < 3 - lenHolder; x++) {
+            pairs.push({ prompt: "", answer: "" });
+        }
+    }
     generatePairsHTML();
 });
 

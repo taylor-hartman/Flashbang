@@ -179,6 +179,10 @@ input {
   left: 5px;
 }
 
+#back-btn:hover {
+  cursor: pointer;
+}
+
 #top-right-btn {
   position: fixed;
   top: 5px;

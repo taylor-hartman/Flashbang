@@ -31,6 +31,10 @@ svg {
   fill: var(--highlight, #393e41);
 }
 
+svg:hover {
+  cursor: pointer;
+}
+
 input {
   background: none;
 }

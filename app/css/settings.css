@@ -189,6 +189,61 @@ a {
   padding: 1px;
 }
 
+.main-container .section .setting-holder .setting select {
+  background: none;
+  border: 1px solid var(--highlight, #393e41);
+  border-radius: 3px;
+}
+
+.main-container .separator {
+  width: 100%;
+  border-top: 2px solid var(--highlight, #393e41);
+}
+
+.main-container button {
+  background: none;
+  border: 2px solid var(--highlight, #393e41);
+  border-radius: 3px;
+  padding: 0.3rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: var(--highlight, #393e41);
+}
+
+.main-container button:hover {
+  cursor: pointer;
+  background: var(--btn-hover, #9da5a9);
+}
+
+.main-container #end-bar {
+  width: 100%;
+  margin-top: 0.5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: right;
+      -ms-flex-pack: right;
+          justify-content: right;
+}
+
+.main-container #end-bar #reset-btn {
+  right: 0;
+}
+
 #light .one {
   background: #e7e6e1;
 }
