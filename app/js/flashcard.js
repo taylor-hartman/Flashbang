@@ -26,6 +26,16 @@ window.onload = () => {
 };
 
 //----------buttons listners--------------
+//edit button
+document.getElementById("edit-bunch-btn").addEventListener("click", () => {
+    const url = document.location.href;
+    var title = url.split("?")[1].split("=")[1];
+    title = title.replaceAll("%20", " ");
+    document
+        .getElementById("edit-bunch-btn")
+        .setAttribute("href", `newbunch.html?title=${title}`);
+});
+
 //options button
 document.getElementById("options-btn").addEventListener("click", toggleMenu);
 

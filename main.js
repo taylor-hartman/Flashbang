@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const BunchStorage = require("./bunchStorage");
 const Settings = require("./settings");
+const ProgressStorage = require("./progressStorage");
 const fs = require("fs");
 
 // Set env
@@ -250,5 +251,13 @@ ipcMain.on("globalSettings:resetDefaults", (e) => {
     e.reply("globalSettings:getAll", globalSettings.getAll());
     e.reply("globalSettings:gettheme", globalSettings.get("theme"));
 });
+
+//-----------Progress load-------------
+// let progressStorage;
+// ipcMain.on("progressStorage:get", (e, options) => {
+//     progressStorage = new ProgressStorage({
+//         fileName: options.title,
+//     });
+// });
 
 app.allowRendererProcessReuse = true;
