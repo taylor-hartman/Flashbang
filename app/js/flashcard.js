@@ -4,6 +4,8 @@ var answerShown = false,
     studyComplete = false;
 var pairs; //pairs is all pairs in bunch, current pair is the one currently being displayed
 var menuToggled = false;
+var currentReversed; // bool if the currentPair is asked standard or reversed
+let pairsRef = []; //array of references to each pair
 
 // const correctGreen = "#B2CC3E",
 //     incorrectRed = "#ea4848",
@@ -138,7 +140,10 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
 // handles pairs data
 ipcRenderer.on("bunch:get", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs)); //deep copy
-    generatePairs();
+    for (x = 0; x < pairs.length; x++) {
+        pairsRef[x] = pairs[x]; //reference
+    }
+    generateCalls();
     displayCard();
 });
 
@@ -169,79 +174,41 @@ function updateHTML() {
     }
 }
 
-function iWasRight() {
-    clearTimeout(incorrectTimeout);
-    noTimeout = true;
-
-    if (prevNumCalls === timesCorrect) {
-        currentPair.calls -= 1;
-    } else {
-        currentPair.calls -= 2;
-    }
-
-    if (currentPair.calls <= 0) {
-        const index = pairs.indexOf(currentPair);
-        pairs.splice(index, 1);
-    }
-
-    resetPage();
-}
-
-function generatePairs() {
-    //TODO make it so calls remaining stays for already existsing
+function generateCalls() {
     if (document.getElementById("both").checked) {
-        //both first in if statement
-        const ogPairLen = pairs.length;
-        for (x = 0; x < ogPairLen; x++) {
-            const revPair = { prompt: "", answer: "" };
-            revPair.prompt = pairs[x].answer;
-            revPair.answer = pairs[x].prompt;
-            pairs.push(revPair);
+        for (x = 0; x < pairs.length; x++) {
+            pairs[x].calls = timesCorrect;
+            pairs[x].revCalls = timesCorrect;
         }
     } else if (document.getElementById("reversed").checked) {
         for (x = 0; x < pairs.length; x++) {
-            const promtpHolder = pairs[x].prompt;
-            pairs[x].prompt = pairs[x].answer;
-            pairs[x].answer = promtpHolder;
+            pairs[x].calls = 0;
+            pairs[x].revCalls = timesCorrect;
         }
     } else if (document.getElementById("standard").checked) {
-        //nothing to do here
+        for (x = 0; x < pairs.length; x++) {
+            pairs[x].calls = timesCorrect;
+            pairs[x].revCalls = 0;
+        }
     }
 
-    generateCalls();
-}
-
-function generateCalls() {
-    // if (document.getElementById("both").checked) {
-    //     for (x = 0; x < pairs.length; x++) {
-    //         // pairs[x].calls = timesCorrect * 2;
-    //         pairs[x].calls = timesCorrect;
-    //     }
-    // } else {
-    //     for (x = 0; x < pairs.length; x++) {
-    //         pairs[x].calls = timesCorrect;
-    //     }
-    // }
-
-    for (x = 0; x < pairs.length; x++) {
-        pairs[x].calls = timesCorrect;
-    }
-
-    console.log(pairs);
+    console.log("Pairs", pairs);
 }
 
 function displayCard() {
-    const index = Math.floor(Math.random() * pairs.length);
+    const index = Math.floor(Math.random() * pairsRef.length);
     //TODO add shit to stop repeats etc
-    currentPair = pairs[index];
-    //TODO same for both no if
-    if (document.getElementById("ask-flashcard").checked) {
+    currentPair = pairsRef[index];
+    if (currentPair.calls > 0) {
+        currentReversed = false;
         document.getElementById("prompt").innerText = currentPair.prompt;
         document.getElementById("answer").innerText = currentPair.answer;
-    } else if (document.getElementById("ask-typed").checked) {
-        document.getElementById("prompt").innerText = currentPair.prompt;
-        document.getElementById("answer").innerText = currentPair.answer;
+    } else {
+        currentReversed = true;
+        document.getElementById("prompt").innerText = currentPair.answer;
+        document.getElementById("answer").innerText = currentPair.prompt;
     }
+
     answerShown = false;
 }
 
@@ -302,11 +269,12 @@ function answersManager(key) {
 
 function callsCorrect() {
     console.log("Correct");
-    if (currentPair.calls > 0) {
-        currentPair.calls -= 1;
-        if (currentPair.calls === 0) {
-            const index = pairs.indexOf(currentPair);
-            pairs.splice(index, 1);
+    callsString = currentReversed ? "revCalls" : "calls";
+    if (currentPair[callsString] > 0) {
+        currentPair[callsString] -= 1;
+        if (currentPair["calls"] === 0 && currentPair["revCalls"] === 0) {
+            const index = pairsRef.indexOf(currentPair);
+            pairsRef.splice(index, 1); //TODO this is splicing from og array too (also does in iwr)
         }
     }
 }
@@ -314,14 +282,34 @@ function callsCorrect() {
 let prevNumCalls;
 function callsIncorrect() {
     console.log("Inorrect");
-    prevNumCalls = currentPair.calls;
+    prevNumCalls = currentPair[callsString];
     if (
-        currentPair.calls !== 0 &&
-        currentPair.calls < timesCorrect &&
+        currentPair[callsString] !== 0 &&
+        currentPair[callsString] < timesCorrect &&
         penalizeIncorrect
     ) {
-        currentPair.calls += 1;
+        currentPair[callsString] += 1;
     }
+}
+
+function iWasRight() {
+    clearTimeout(incorrectTimeout);
+    noTimeout = true;
+
+    callsString = currentReversed ? "revCalls" : "calls";
+
+    if (prevNumCalls === timesCorrect) {
+        currentPair[callsString] -= 1;
+    } else {
+        currentPair[callsString] -= 2;
+    }
+
+    if (currentPair["calls"] === 0 && currentPair["revCalls"] === 0) {
+        const index = pairsRef.indexOf(currentPair);
+        pairsRef.splice(index, 1);
+    }
+
+    resetPage();
 }
 
 //TODO decide if you are making dif functions or using if statements
@@ -385,8 +373,9 @@ function styleIncorrect() {
 }
 
 function resetPage() {
-    console.log(pairs);
-    if (pairs.length > 0) {
+    console.log("Pairs", pairs);
+    console.log("PairsRef", pairsRef);
+    if (pairsRef.length > 0) {
         if (document.getElementById("ask-flashcard").checked) {
             document.querySelector("#main-separator").classList.add("hide");
             document.getElementById("answer").classList.add("hide");
