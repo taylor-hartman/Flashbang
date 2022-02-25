@@ -160,10 +160,9 @@ ipcMain.on("bunch:get", (e, title) => {
     e.reply("bunch:get", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
 });
 
-//no reply (used for setting lastUsed at open of bunch)
-ipcMain.on("bunch:setLastUsed", (e, title) => {
+ipcMain.on("bunch:set", (e, title, input) => {
     const bunchStorage = new BunchStorage({ fileName: title });
-    bunchStorage.set("lastUsed", new Date());
+    bunchStorage.set(input.key, input.value);
 });
 
 ipcMain.on("bunchdata:get", sendBunchData);

@@ -2,6 +2,7 @@ const { ipcRenderer } = require("electron");
 
 var answerShown = false,
     studyComplete = false;
+inResetMenu = false;
 var pairs; //pairs is all pairs in bunch, current pair is the one currently being displayed
 var menuToggled = false;
 var currentReversed; // bool if the currentPair is asked standard or reversed
@@ -11,18 +12,22 @@ let pairsRef = []; //array of references to each pair
 //     incorrectRed = "#ea4848",
 //     dark = "#393e41"
 
+const url = document.location.href;
+const title = url.split("?")[1].split("=")[1].replaceAll("%20", " "); //gets the title of bunch from query string
+// title = title.replaceAll("%20", " ");
+
 //TODO could likely be chnaged do document.addEventListener('DOMContentLoaded', ()) and be faster
 window.onload = () => {
     //requests pairs data from main
-    const url = document.location.href;
-    var title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
-    title = title.replaceAll("%20", " ");
     ipcRenderer.send("globalSettings:getAll");
     //reuquests studySettings data from main
     //NOTE Settings must be gotten before pairs
     ipcRenderer.send("studySettings:getAll");
     //sets lastUsed to current time
-    ipcRenderer.send("bunch:setLastUsed", title);
+    ipcRenderer.send("bunch:set", title, {
+        key: "lastUsed",
+        value: new Date(),
+    });
     //requests bunch data
     ipcRenderer.send("bunch:get", title);
 };
@@ -30,9 +35,6 @@ window.onload = () => {
 //----------buttons listners--------------
 //edit button
 document.getElementById("edit-bunch-btn").addEventListener("click", () => {
-    const url = document.location.href;
-    var title = url.split("?")[1].split("=")[1];
-    title = title.replaceAll("%20", " ");
     document
         .getElementById("edit-bunch-btn")
         .setAttribute("href", `newbunch.html?title=${title}`);
@@ -70,9 +72,6 @@ function onOrderChange() {
         },
     });
 
-    const url = document.location.href;
-    var title = url.split("?")[1].split("=")[1];
-    title = title.replaceAll("%20", " ");
     ipcRenderer.send("bunch:get", title);
 }
 
@@ -141,11 +140,30 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
 ipcRenderer.on("bunch:get", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs)); //deep copy
     for (x = 0; x < pairs.length; x++) {
+        // if (!(pairs[x].calls === 0 && pairs[x].revCalls === 0)) {
         pairsRef[x] = pairs[x]; //reference
+        // }
     }
-    generateCalls();
-    displayCard();
+
+    studyComplete = bunch.complete;
+    if (studyComplete === true) {
+        inResetMenu = true;
+        displayStudyAgain();
+    } else if (studyComplete === false) {
+        displayCard();
+    } else {
+        //if studyComplete === "new"
+        generateCalls();
+        displayCard();
+        studyComplete = false; //YOU HAVE TO LEAVE THIS HERE PUTTING A STRING IN A BOOL IS STUPID AF BUT YOU CHOSE TO DO IT
+        setComplete();
+    }
 });
+
+function displayStudyAgain() {
+    var fcc = document.getElementById("flashcard-container");
+    fcc.innerHTML = `<h2 id="end-dialogue">Bunch Complete <br> Press Space to Reset Progress</h2>`;
+}
 
 function updateHTML() {
     if (document.getElementById("ask-flashcard").checked) {
@@ -180,18 +198,21 @@ function generateCalls() {
             pairs[x].calls = timesCorrect;
             pairs[x].revCalls = timesCorrect;
         }
+        console.log("both");
     } else if (document.getElementById("reversed").checked) {
         for (x = 0; x < pairs.length; x++) {
             pairs[x].calls = 0;
             pairs[x].revCalls = timesCorrect;
         }
+        console.log("revh");
     } else if (document.getElementById("standard").checked) {
         for (x = 0; x < pairs.length; x++) {
             pairs[x].calls = timesCorrect;
             pairs[x].revCalls = 0;
         }
+        console.log("sta");
     }
-
+    setPairs();
     console.log("Pairs", pairs);
 }
 
@@ -217,11 +238,22 @@ function keyListener(e) {
     //whatever we want to do goes in this block
     e = e || window.e; //capture the e, and ensure we have an e
     var key = e.key; //find the key that was pressed
-    if (key === "Escape" || (studyComplete && key === " ")) {
+    if (key === "Escape" || (!inResetMenu && studyComplete && key === " ")) {
         window.location.href = "index.html";
         return;
-    }
-    if (document.getElementById("ask-flashcard").checked) {
+    } else if (inResetMenu && key === " ") {
+        //if the user wishes to reset progress
+        studyComplete = false;
+        inResetMenu = false;
+        ipcRenderer.send("bunch:set", title, {
+            key: "complete",
+            value: studyComplete,
+        });
+        updateHTML();
+        generateCalls();
+        displayCard();
+        //i chnaged the line below from an if to an else if. i dont think it shoudl cause any issues
+    } else if (document.getElementById("ask-flashcard").checked) {
         answersManager(key);
     } else if (document.getElementById("ask-typed").checked) {
         typedAnswersManager(e);
@@ -397,6 +429,7 @@ function resetPage() {
         // answerShown = false; //answershown set in displaycard now
         displayCard();
     } else {
+        //else if pairsRef.length <= 0 aka if study complete
         //flashcard container
         var fcc = document.getElementById("flashcard-container");
         const bottomText = document.getElementById("bottom-text");
@@ -404,5 +437,22 @@ function resetPage() {
         fcc.innerHTML = `<h2 id="end-dialogue">Bunch Study Complete!</h2>`;
         fcc.innerHTML += bottomText.outerHTML;
         studyComplete = true;
+        setComplete();
     }
+
+    setPairs();
+}
+
+function setPairs() {
+    ipcRenderer.send("bunch:set", title, {
+        key: "pairs",
+        value: pairs,
+    });
+}
+
+function setComplete() {
+    ipcRenderer.send("bunch:set", title, {
+        key: "complete",
+        value: studyComplete,
+    });
 }

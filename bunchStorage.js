@@ -20,8 +20,9 @@ class BunchStorage {
 
         const defaults = {
             title: "",
-            lastUsed: "",
+            lastUsed: 0,
             pairs: [],
+            complete: "new",
         };
         this.data = parseDataFile(this.path, defaults);
     }

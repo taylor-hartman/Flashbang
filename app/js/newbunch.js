@@ -100,12 +100,13 @@ document.getElementById("no-delete").addEventListener("click", () => {
 
 //--------------------------------------------
 //-----------------Save Stuff-------------------
-//Bunchesa re saved either when submitting or when pressing the back button. aka at any exit of the page throughh buttons
+//Bunchesa are saved either when submitting or when pressing the back button. aka at any exit of the page throughh buttons
 const form = document.getElementById("new-bunch-form");
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     const bunch = makeBunch();
     if (editing) {
+        //if we are using nebunch.html to edit existing bunch
         if (title != oldTitle) {
             ipcRenderer.send("bunch:save", bunch, oldTitle);
             ipcRenderer.send("bunch:setAll", bunch, oldTitle); //passes in the old title, because set all renames the old file to the current bunch.title
@@ -113,6 +114,8 @@ form.addEventListener("submit", (e) => {
             ipcRenderer.send("bunch:save", bunch, title);
         }
     } else {
+        //if we are creating a new bunch (using .new_bunch.json)
+        bunch.complete = "new";
         ipcRenderer.send("bunch:save", bunch, title);
         ipcRenderer.send("bunch:setAll", bunch, title);
     }
