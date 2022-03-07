@@ -138,6 +138,7 @@ function makeBunch() {
     const prompts = form.getElementsByClassName("prompt");
     const answers = form.getElementsByClassName("answer");
 
+    //TODO this is only part of the data. defaults shoudl be used for the rest (see main.js bunch:save)
     var bunch = {
         title: document.getElementById("title-input").value,
         lastUsed: new Date(),
@@ -179,9 +180,9 @@ document.getElementById("title-input").addEventListener("change", () => {
     }
 });
 
-ipcRenderer.send("bunch:get", title);
+ipcRenderer.send("bunch:getAll", title);
 
-ipcRenderer.on("bunch:get", (e, bunch) => {
+ipcRenderer.on("bunch:getAll", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs));
     document.getElementById("title-input").value = bunch.title;
     if (pairs.length < 3) {

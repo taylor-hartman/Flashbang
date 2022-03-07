@@ -29,7 +29,7 @@ window.onload = () => {
         value: new Date(),
     });
     //requests bunch data
-    ipcRenderer.send("bunch:get", title);
+    ipcRenderer.send("bunch:getAll", title);
 };
 
 //----------buttons listners--------------
@@ -63,7 +63,7 @@ Array.prototype.forEach.call(orderRadios, (radio) => {
 });
 
 function onOrderChange() {
-    ipcRenderer.send("studySettings:set", {
+    ipcRenderer.send("bunch:set", title, {
         key: "pairOrder",
         value: {
             standard: document.getElementById("standard").checked,
@@ -72,7 +72,8 @@ function onOrderChange() {
         },
     });
 
-    ipcRenderer.send("bunch:get", title);
+    generateCalls();
+    // ipcRenderer.send("bunch:getAll", title);
 }
 
 //question type
@@ -82,7 +83,7 @@ Array.prototype.forEach.call(typeRadios, (radio) => {
 });
 
 function onQuestionTypeChange() {
-    ipcRenderer.send("studySettings:set", {
+    ipcRenderer.send("bunch:set", title, {
         key: "questionType",
         value: {
             flashcard: document.getElementById("ask-flashcard").checked,
@@ -95,29 +96,8 @@ function onQuestionTypeChange() {
     displayCard();
 }
 
-//TODO git rid of
-//called the first time studySettings are gotten to initialize info and html
-ipcRenderer.once("studySettings:getAll", (e, studySettings) => {
-    getAllStudySettings(studySettings);
-    updateHTML();
-});
-
 //-----------Settings Stuff------------
-ipcRenderer.on("studySettings:getAll", (e, studySettings) => {
-    getAllStudySettings(studySettings);
-});
 
-function getAllStudySettings(studySettings) {
-    document.getElementById("standard").checked =
-        studySettings.pairOrder.standard;
-    document.getElementById("reversed").checked =
-        studySettings.pairOrder.reversed;
-    document.getElementById("both").checked = studySettings.pairOrder.both;
-    document.getElementById("ask-flashcard").checked =
-        studySettings.questionType.flashcard;
-    document.getElementById("ask-typed").checked =
-        studySettings.questionType.typed;
-}
 let showIwr,
     showInfo,
     strikeThrough,
@@ -125,6 +105,7 @@ let showIwr,
     timesCorrect,
     delayCorrect,
     delayIncorrect;
+
 ipcRenderer.on("globalSettings:getAll", (e, settings) => {
     showInfo = settings.showInfo;
     showIwr = settings.showIwr;
@@ -137,13 +118,22 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
 
 // ------------Pairs Stuff-------------
 // handles pairs data
-ipcRenderer.on("bunch:get", (e, bunch) => {
+ipcRenderer.on("bunch:getAll", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs)); //deep copy
     for (x = 0; x < pairs.length; x++) {
         // if (!(pairs[x].calls === 0 && pairs[x].revCalls === 0)) {
         pairsRef[x] = pairs[x]; //reference
         // }
     }
+
+    document.getElementById("standard").checked = bunch.pairOrder.standard;
+    document.getElementById("reversed").checked = bunch.pairOrder.reversed;
+    document.getElementById("both").checked = bunch.pairOrder.both;
+    document.getElementById("ask-flashcard").checked =
+        bunch.questionType.flashcard;
+    document.getElementById("ask-typed").checked = bunch.questionType.typed;
+
+    updateHTML();
 
     studyComplete = bunch.complete;
     if (studyComplete === true) {
@@ -154,7 +144,6 @@ ipcRenderer.on("bunch:get", (e, bunch) => {
     } else {
         //if studyComplete === "new"
         generateCalls();
-        displayCard();
         studyComplete = false; //YOU HAVE TO LEAVE THIS HERE PUTTING A STRING IN A BOOL IS STUPID AF BUT YOU CHOSE TO DO IT
         setComplete();
     }
@@ -213,6 +202,7 @@ function generateCalls() {
         console.log("sta");
     }
     setPairs();
+    displayCard();
     console.log("Pairs", pairs);
 }
 
@@ -251,7 +241,6 @@ function keyListener(e) {
         });
         updateHTML();
         generateCalls();
-        displayCard();
         //i chnaged the line below from an if to an else if. i dont think it shoudl cause any issues
     } else if (document.getElementById("ask-flashcard").checked) {
         answersManager(key);
@@ -314,6 +303,7 @@ function callsCorrect() {
 let prevNumCalls;
 function callsIncorrect() {
     console.log("Inorrect");
+    callsString = currentReversed ? "revCalls" : "calls";
     prevNumCalls = currentPair[callsString];
     if (
         currentPair[callsString] !== 0 &&

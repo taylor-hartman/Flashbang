@@ -18,13 +18,22 @@ class BunchStorage {
             "/bunches/" + options.fileName + ".json"
         );
 
-        const defaults = {
+        this.defaults = {
             title: "",
             lastUsed: 0,
             pairs: [],
             complete: "new",
+            pairOrder: {
+                standard: true,
+                reversed: false,
+                both: false,
+            },
+            questionType: {
+                flashcard: true,
+                typed: false,
+            },
         };
-        this.data = parseDataFile(this.path, defaults);
+        this.data = parseDataFile(this.path, this.defaults);
     }
 
     get(key) {

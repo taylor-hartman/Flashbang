@@ -138,15 +138,20 @@ ipcMain.on("bunch:setAll", (e, bunch, fileTitle) => {
 
     const oldPath = userDataPath + "/bunches/" + fileTitle + ".json";
     fs.rename(oldPath, filePath, () => {});
-    e.reply("bunch:get", bunchStorage.getAll());
+    e.reply("bunch:getAll", bunchStorage.getAll());
 });
 
 ipcMain.on("bunch:save", (e, bunch, fileTitle) => {
     const bunchStorage = new BunchStorage({
         fileName: fileTitle,
     });
-    bunchStorage.setAll(bunch);
-    e.reply("bunch:get", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
+    // bunchStorage.setAll(bunch);
+
+    for (const [key, value] of Object.entries(bunch)) {
+        bunchStorage.set(key, value);
+    }
+
+    e.reply("bunch:getAll", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
 });
 
 ipcMain.on("bunch:delete", (e, fileName) => {
@@ -155,14 +160,20 @@ ipcMain.on("bunch:delete", (e, fileName) => {
     fs.unlink(filePath, () => {});
 });
 
-ipcMain.on("bunch:get", (e, title) => {
+ipcMain.on("bunch:getAll", (e, title) => {
     const bunchStorage = new BunchStorage({ fileName: title });
-    e.reply("bunch:get", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
+    e.reply("bunch:getAll", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
 });
 
 ipcMain.on("bunch:set", (e, title, input) => {
     const bunchStorage = new BunchStorage({ fileName: title });
     bunchStorage.set(input.key, input.value);
+});
+
+//pass bunch title of "" for defaults
+ipcMain.on("bunch:get", (e, title, key) => {
+    const bunchStorage = new BunchStorage({ fileName: title });
+    e.reply(`bunch:get${key}`, bunchStorage.get(key));
 });
 
 ipcMain.on("bunchdata:get", sendBunchData);
@@ -206,20 +217,6 @@ function returnToIndexPage() {
     // mainWindow.hide();
     mainWindow.loadFile("./app/index.html");
 }
-
-//-------Study Settings----------
-const studySettings = new Settings("study");
-
-ipcMain.on("studySettings:getAll", (e) => {
-    // mainWindow.webContents.send("settings:getAll", studySettings.getAll());
-    e.reply("studySettings:getAll", studySettings.getAll());
-});
-
-ipcMain.on("studySettings:set", (e, input) => {
-    studySettings.set(input.key, input.value);
-    //TODO make a more specific get method
-    e.reply("studySettings:getAll", studySettings.getAll());
-});
 
 //----------Global Settings----------
 

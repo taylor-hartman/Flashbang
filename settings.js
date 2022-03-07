@@ -9,35 +9,19 @@ class Settings {
         );
 
         var defaults;
-        if (type === "study") {
-            //settings that can be chnaged within flashcard.html
-            this.path = path.join(userDataPath + "/study-settings.json");
-            defaults = {
-                pairOrder: {
-                    standard: true,
-                    reversed: false,
-                    both: false,
-                },
-                questionType: {
-                    flashcard: true,
-                    typed: false,
-                },
-            };
-        } else if (type === "global") {
-            //settings only changable in settings.html
-            this.path = path.join(userDataPath + "/settings.json");
-            defaults = {
-                theme: "light",
-                strikeThrough: true,
-                showInfo: true,
-                showIwr: true,
-                timesCorrect: 2,
-                penalizeIncorrect: true,
-                delayCorrect: 1,
-                delayIncorrect: 0,
-                sortHomeBy: "lastUsed",
-            };
-        }
+        //settings only changable in settings.html
+        this.path = path.join(userDataPath + "/settings.json");
+        defaults = {
+            theme: "light",
+            strikeThrough: true,
+            showInfo: true,
+            showIwr: true,
+            timesCorrect: 2,
+            penalizeIncorrect: true,
+            delayCorrect: 1,
+            delayIncorrect: 0,
+            sortHomeBy: "lastUsed",
+        };
 
         this.data = parseDataFile(this.path, defaults);
 
