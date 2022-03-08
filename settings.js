@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 class Settings {
-    constructor(type) {
+    constructor() {
         const userDataPath = (electron.app || electron.remote.app).getPath(
             "userData"
         );

@@ -171,7 +171,7 @@ form {
     textarea {
         font-size: 1.1rem;
         border-radius: 6px;
-        padding: 0.1rem;
+        padding: 0.1rem 0.5rem;
         border: 2px solid var(--highlight, $highlight);
         resize: none;
         background: none;
@@ -251,6 +251,28 @@ form {
     &:hover {
         cursor: pointer;
     }
+}
+
+#title-valid-message {
+    position: absolute;
+    width: 80vw;
+    left: 10vw;
+    top: 15vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#import-valid-message {
+    position: fixed;
+    width: 80vw;
+    left: 10vw;
+    top: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 #delete-menu {

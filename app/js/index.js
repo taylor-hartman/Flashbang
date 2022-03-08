@@ -1,6 +1,6 @@
 const ipcRenderer = require("electron").ipcRenderer;
 var pageNumber = 0;
-var bunches, bunchCount;
+var bunches, matchingBunches; //bunches is all bunches; matchingBunches is bunches that match a search result
 
 window.onload = () => {
     ipcRenderer.send("bunchdata:get");
@@ -83,28 +83,19 @@ document.getElementById("search-bunch-btn").addEventListener("click", () => {
 });
 
 document.getElementById("search-input").addEventListener("input", () => {
-    //TODO hide input when appropriate
     //TODO cant have multiple pages rn
     const value = document.getElementById("search-input").value;
-    var matchingBunches = [];
-    for (x = 0; x < bunchCount; x++) {
+    matchingBunches = [];
+    for (x = 0; x < bunches.length; x++) {
         if (bunches[x].title.toLowerCase().includes(value.toLowerCase())) {
-            matchingBunches.push(bunches[x]);
+            matchingBunches.push(bunches[x]); //TODO change to reference (shallow copy)
         }
     }
     if (matchingBunches.length === 0) {
         const main = document.querySelector(".main-container");
         main.innerHTML = `<h2 id="no-matches">No Matches Found</h2>`;
     } else {
-        sortByDate(matchingBunches);
-        generateHTML(
-            matchingBunches.length - 7 * pageNumber < 7
-                ? matchingBunches.length % 7
-                : 7
-        );
-        populateHexs(
-            matchingBunches.slice(pageNumber * 7, (pageNumber + 1) * 7)
-        );
+        makeIndexPage();
     }
 });
 
@@ -112,12 +103,11 @@ document.getElementById("search-input").addEventListener("input", () => {
 ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
     //TODO redundant conversion before and after get
     bunches = JSON.parse(JSON.stringify(bunchesData));
-    bunchCount = bunches.length;
     makeIndexPage();
 });
 
 function scrollForward() {
-    if (pageNumber < bunchCount / 7 - 1) {
+    if (pageNumber < bunchesCurrent.length / 7 - 1) {
         pageNumber += 1;
         makeIndexPage();
     }
@@ -131,30 +121,39 @@ function scrollBack() {
 }
 
 function makeIndexPage() {
-    if (sortHomeBy === "lastUsed") {
-        sortByDate(bunches);
+    if (document.getElementById("search-input").value === "") {
+        bunchesCurrent = bunches;
     } else {
-        sortByName(bunches);
+        bunchesCurrent = matchingBunches;
     }
 
-    generateHTML(bunchCount - 7 * pageNumber < 7 ? bunchCount % 7 : 7);
-    populateHexs(bunches.slice(pageNumber * 7, (pageNumber + 1) * 7));
+    if (sortHomeBy === "lastUsed") {
+        sortByDate(bunchesCurrent);
+    } else {
+        sortByName(bunchesCurrent);
+    }
+
+    generateHTML(
+        bunchesCurrent.length - 7 * pageNumber < 7
+            ? bunchesCurrent.length % 7
+            : 7
+    );
+    populateHexs(bunchesCurrent.slice(pageNumber * 7, (pageNumber + 1) * 7));
     scrollButtonControl();
     updateEditIcons();
 }
 
 //pass by reference
-function sortByDate(bunches) {
-    bunches.sort(function (a, b) {
+function sortByDate(input) {
+    input.sort(function (a, b) {
         var dateA = new Date(a.lastUsed),
             dateB = new Date(b.lastUsed);
         return dateB - dateA;
     });
-    console.log(bunches);
 }
 
-function sortByName(bunches) {
-    bunches.sort(function (a, b) {
+function sortByName(input) {
+    input.sort(function (a, b) {
         var title1 = a.title,
             title2 = b.title;
         return title1.localeCompare(title2, undefined, { numeric: true });
@@ -251,99 +250,99 @@ function generateHexs(num) {
     return template;
 }
 
-function populateHexs(bunches) {
+function populateHexs(input) {
     //TODO possibly do this with loops
     //TODO Add top to bottom vs left to right
-    switch (bunches.length) {
+    switch (input.length) {
         //LEFT RIGHT TRAVERSAL
         // case 0:
         //     return;
         // case 1:
-        //     insertElement(0, 0, bunches[0]);
+        //     insertElement(0, 0, input[0]);
         //     break;
         // case 2:
-        //     insertElement(0, 0, bunches[0]);
-        //     insertElement(0, 1, bunches[1]);
+        //     insertElement(0, 0, input[0]);
+        //     insertElement(0, 1, input[1]);
         //     break;
         // case 3:
-        //     insertElement(0, 0, bunches[0]);
-        //     insertElement(1, 0, bunches[1]); //2nd goes on bottom row
-        //     insertElement(0, 1, bunches[2]);
+        //     insertElement(0, 0, input[0]);
+        //     insertElement(1, 0, input[1]); //2nd goes on bottom row
+        //     insertElement(0, 1, input[2]);
         //     break;
         // case 4:
-        //     insertElement(0, 0, bunches[0]);
-        //     insertElement(1, 0, bunches[1]); //2nd goes on bottom row
-        //     insertElement(0, 1, bunches[2]);
-        //     insertElement(1, 1, bunches[3]);
+        //     insertElement(0, 0, input[0]);
+        //     insertElement(1, 0, input[1]); //2nd goes on bottom row
+        //     insertElement(0, 1, input[2]);
+        //     insertElement(1, 1, input[3]);
         //     break;
         // case 5:
-        //     insertElement(0, 0, bunches[0]);
-        //     insertElement(1, 0, bunches[1]);
-        //     insertElement(0, 1, bunches[2]);
-        //     insertElement(1, 1, bunches[3]);
-        //     insertElement(0, 2, bunches[4]);
+        //     insertElement(0, 0, input[0]);
+        //     insertElement(1, 0, input[1]);
+        //     insertElement(0, 1, input[2]);
+        //     insertElement(1, 1, input[3]);
+        //     insertElement(0, 2, input[4]);
         //     break;
         // case 6:
-        //     insertElement(0, 0, bunches[0]);
-        //     insertElement(1, 0, bunches[1]);
-        //     insertElement(0, 1, bunches[2]);
-        //     insertElement(1, 1, bunches[3]);
-        //     insertElement(0, 2, bunches[4]);
-        //     insertElement(1, 2, bunches[5]);
+        //     insertElement(0, 0, input[0]);
+        //     insertElement(1, 0, input[1]);
+        //     insertElement(0, 1, input[2]);
+        //     insertElement(1, 1, input[3]);
+        //     insertElement(0, 2, input[4]);
+        //     insertElement(1, 2, input[5]);
         //     break;
         // case 7:
-        //     insertElement(0, 0, bunches[0]);
-        //     insertElement(1, 0, bunches[1]);
-        //     insertElement(0, 1, bunches[2]);
-        //     insertElement(1, 1, bunches[3]);
-        //     insertElement(0, 2, bunches[4]);
-        //     insertElement(1, 2, bunches[5]);
-        //     insertElement(0, 3, bunches[6]);
+        //     insertElement(0, 0, input[0]);
+        //     insertElement(1, 0, input[1]);
+        //     insertElement(0, 1, input[2]);
+        //     insertElement(1, 1, input[3]);
+        //     insertElement(0, 2, input[4]);
+        //     insertElement(1, 2, input[5]);
+        //     insertElement(0, 3, input[6]);
         //     break;
         //TOP BOTTOM TRAVERSAL
         case 0:
             return;
         case 1:
-            insertElement(0, 0, bunches[0]);
+            insertElement(0, 0, input[0]);
             break;
         case 2:
-            insertElement(0, 0, bunches[0]);
-            insertElement(0, 1, bunches[1]);
+            insertElement(0, 0, input[0]);
+            insertElement(0, 1, input[1]);
             break;
         case 3:
-            insertElement(0, 0, bunches[0]);
-            insertElement(0, 1, bunches[1]); //2nd goes on top row
-            insertElement(1, 0, bunches[2]);
+            insertElement(0, 0, input[0]);
+            insertElement(0, 1, input[1]); //2nd goes on top row
+            insertElement(1, 0, input[2]);
             break;
         case 4:
-            insertElement(0, 0, bunches[0]);
-            insertElement(0, 1, bunches[1]);
-            insertElement(1, 0, bunches[2]);
-            insertElement(1, 1, bunches[3]);
+            insertElement(0, 0, input[0]);
+            insertElement(0, 1, input[1]);
+            insertElement(1, 0, input[2]);
+            insertElement(1, 1, input[3]);
             break;
         case 5:
-            insertElement(0, 0, bunches[0]);
-            insertElement(0, 1, bunches[1]);
-            insertElement(0, 2, bunches[2]);
-            insertElement(1, 0, bunches[3]);
-            insertElement(1, 1, bunches[4]);
+            insertElement(0, 0, input[0]);
+            insertElement(0, 1, input[1]);
+            insertElement(0, 2, input[2]);
+            insertElement(1, 0, input[3]);
+            insertElement(1, 1, input[4]);
             break;
         case 6:
-            insertElement(0, 0, bunches[0]);
-            insertElement(0, 1, bunches[1]);
-            insertElement(0, 2, bunches[2]);
-            insertElement(1, 0, bunches[3]);
-            insertElement(1, 1, bunches[4]);
-            insertElement(1, 2, bunches[5]);
+            insertElement(0, 0, input[0]);
+            insertElement(0, 1, input[1]);
+            insertElement(0, 2, input[2]);
+            insertElement(1, 0, input[3]);
+            insertElement(1, 1, input[4]);
+            insertElement(1, 2, input[5]);
             break;
         case 7:
-            insertElement(0, 0, bunches[0]);
-            insertElement(0, 1, bunches[1]);
-            insertElement(0, 2, bunches[2]);
-            insertElement(0, 3, bunches[3]);
-            insertElement(1, 0, bunches[4]);
-            insertElement(1, 1, bunches[5]);
-            insertElement(1, 2, bunches[6]);
+            insertElement(0, 0, input[0]);
+            insertElement(0, 1, input[1]);
+            insertElement(0, 2, input[2]);
+            insertElement(0, 3, input[3]);
+            insertElement(1, 0, input[4]);
+            insertElement(1, 1, input[5]);
+            insertElement(1, 2, input[6]);
             break;
     }
 }
@@ -383,7 +382,7 @@ function scrollButtonControl() {
         document.getElementById("scroll-back").classList.remove("hide");
     }
 
-    if (bunchCount - 7 * pageNumber <= 7) {
+    if (bunchesCurrent.length - 7 * pageNumber <= 7) {
         document.getElementById("scroll-forward").classList.add("hide");
     } else {
         document.getElementById("scroll-forward").classList.remove("hide");

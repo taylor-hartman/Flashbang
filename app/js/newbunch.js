@@ -1,5 +1,6 @@
 const ipcRenderer = require("electron").ipcRenderer;
 var pairs;
+var title;
 
 //---------------Editing stuff------------------
 var editingPairs = false;
@@ -104,34 +105,44 @@ document.getElementById("no-delete").addEventListener("click", () => {
 const form = document.getElementById("new-bunch-form");
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const bunch = makeBunch();
-    if (editing) {
-        //if we are using nebunch.html to edit existing bunch
-        if (title != oldTitle) {
-            ipcRenderer.send("bunch:save", bunch, oldTitle);
-            ipcRenderer.send("bunch:setAll", bunch, oldTitle); //passes in the old title, because set all renames the old file to the current bunch.title
+    if (titleValid(document.getElementById("title-input").value)) {
+        const bunch = makeBunch();
+        if (editing) {
+            //if we are using nebunch.html to edit existing bunch
+            if (title != oldTitle) {
+                ipcRenderer.send("bunch:save", bunch, oldTitle);
+                ipcRenderer.send("bunch:setAll", bunch, oldTitle); //passes in the old title, because set all renames the old file to the current bunch.title
+            } else {
+                ipcRenderer.send("bunch:save", bunch, title);
+            }
         } else {
+            //if we are creating a new bunch (using .new_bunch.json)
+            bunch.complete = "new";
             ipcRenderer.send("bunch:save", bunch, title);
+            ipcRenderer.send("bunch:setAll", bunch, title);
         }
-    } else {
-        //if we are creating a new bunch (using .new_bunch.json)
-        bunch.complete = "new";
-        ipcRenderer.send("bunch:save", bunch, title);
-        ipcRenderer.send("bunch:setAll", bunch, title);
+        ipcRenderer.send("returnToIndex");
     }
-    ipcRenderer.send("returnToIndex");
 });
 
 function backBtnToIndex(e) {
     e.preventDefault();
     const bunch = makeBunch();
-    if (editing && title != oldTitle) {
-        ipcRenderer.send("bunch:save", bunch, oldTitle);
-        ipcRenderer.send("bunch:setAll", bunch, oldTitle);
+    if (editing) {
+        if (titleValid(document.getElementById("title-input").value)) {
+            //only valid title if editing
+            if (title != oldTitle) {
+                ipcRenderer.send("bunch:save", bunch, oldTitle);
+                ipcRenderer.send("bunch:setAll", bunch, oldTitle);
+            } else {
+                ipcRenderer.send("bunch:save", bunch, title);
+            }
+            ipcRenderer.send("returnToIndex");
+        }
     } else {
         ipcRenderer.send("bunch:save", bunch, title);
+        ipcRenderer.send("returnToIndex");
     }
-    ipcRenderer.send("returnToIndex");
 }
 
 function makeBunch() {
@@ -163,7 +174,6 @@ function makeBunch() {
 }
 //--------------------------------------------
 //---------------Load Stuff-------------------
-var title;
 try {
     const url = document.location.href;
     title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
@@ -178,7 +188,55 @@ document.getElementById("title-input").addEventListener("change", () => {
     if (editing) {
         title = document.getElementById("title-input").value;
     }
+    titleValid(document.getElementById("title-input").value);
 });
+
+var titleTimeout;
+function titleValid(t) {
+    // re = /^[0-9a-z]/i; //must start with alpha numeric
+    if (t === "") {
+        document.getElementById("title-valid-message").innerText =
+            "Title cannot be empty";
+        document.getElementById("title-valid-message").classList.remove("hide");
+        clearTimeout(titleTimeout);
+        titleTimeout = setTimeout(() => {
+            document
+                .getElementById("title-valid-message")
+                .classList.add("hide");
+        }, 3000);
+        return false;
+    }
+    re = /^(?![\.\s])/; //does not begin with . or whitespace
+    let result = re.test(t);
+    if (result) {
+        //passes first test
+        re = /^[^<>\/\\]+$/; //cannot contain <>/\
+        result = re.test(t);
+        if (result) {
+            //passes second test
+            return result;
+        } //fails second test
+        document.getElementById("title-valid-message").innerText =
+            "Title cannot contain <>/\\";
+        document.getElementById("title-valid-message").classList.remove("hide");
+        clearTimeout(titleTimeout);
+        titleTimeout = setTimeout(() => {
+            document
+                .getElementById("title-valid-message")
+                .classList.add("hide");
+        }, 3000);
+        return result;
+    }
+    //fails first test
+    document.getElementById("title-valid-message").innerText =
+        "Title cannot begin with . or space";
+    document.getElementById("title-valid-message").classList.remove("hide");
+    clearTimeout(titleTimeout);
+    titleTimeout = setTimeout(() => {
+        document.getElementById("title-valid-message").classList.add("hide");
+    }, 3000);
+    return result;
+}
 
 ipcRenderer.send("bunch:getAll", title);
 
@@ -283,8 +341,53 @@ document.getElementById("import-submit-btn").addEventListener("click", (e) => {
     parseImport();
     removeBlanks();
     generatePairsHTML();
+});
 
-    //close import menu
+document.getElementById("info-icon").addEventListener("mouseenter", () => {
+    document.getElementById("import-info-menu").classList.remove("hide");
+});
+
+document.getElementById("info-icon").addEventListener("mouseleave", () => {
+    document.getElementById("import-info-menu").classList.add("hide");
+});
+
+var importTimeout;
+function parseImport() {
+    try {
+        const termSeparatorInput = document.getElementById("btwn-term");
+        const pairSeparatorInput = document.getElementById("btwn-pair");
+
+        const termSeparator =
+            termSeparatorInput.value === "" ? "-" : termSeparatorInput.value;
+        const pairSeparator =
+            pairSeparatorInput.value === "" ? "\n" : pairSeparatorInput.value;
+
+        const importVals = document.getElementById("import-text").value;
+        const pairsStrings = importVals.split(pairSeparator);
+        const importPairs = [];
+        for (x = 0; x < pairsStrings.length; x++) {
+            const pairArray = pairsStrings[x].split(termSeparator);
+            const pair = {};
+            pair["prompt"] = pairArray[0].trim(); //removed leading and trailing white spaces
+            pair["answer"] = pairArray[1].trim();
+            importPairs.push(pair);
+        }
+        pairs = pairs.concat(importPairs);
+        closeImportMenu();
+    } catch {
+        document
+            .getElementById("import-valid-message")
+            .classList.remove("hide");
+        clearTimeout(importTimeout);
+        importTimeout = setTimeout(() => {
+            document
+                .getElementById("import-valid-message")
+                .classList.add("hide");
+        }, 3000);
+    }
+}
+
+function closeImportMenu() {
     document.getElementById("import-text").value = "";
     document.getElementById("import-form").classList.add("hide");
     document
@@ -303,36 +406,6 @@ document.getElementById("import-submit-btn").addEventListener("click", (e) => {
         </svg>`;
 
     importMenuOpen = false;
-});
-
-document.getElementById("info-icon").addEventListener("mouseenter", () => {
-    document.getElementById("import-info-menu").classList.remove("hide");
-});
-
-document.getElementById("info-icon").addEventListener("mouseleave", () => {
-    document.getElementById("import-info-menu").classList.add("hide");
-});
-
-function parseImport() {
-    const termSeparatorInput = document.getElementById("btwn-term");
-    const pairSeparatorInput = document.getElementById("btwn-pair");
-
-    const termSeparator =
-        termSeparatorInput.value === "" ? "-" : termSeparatorInput.value;
-    const pairSeparator =
-        pairSeparatorInput.value === "" ? "\n" : pairSeparatorInput.value;
-
-    const importVals = document.getElementById("import-text").value;
-    const pairsStrings = importVals.split(pairSeparator);
-    const importPairs = [];
-    for (x = 0; x < pairsStrings.length; x++) {
-        const pairArray = pairsStrings[x].split(termSeparator);
-        const pair = {};
-        pair["prompt"] = pairArray[0].trim(); //removed leading and trailing white spaces
-        pair["answer"] = pairArray[1].trim();
-        importPairs.push(pair);
-    }
-    pairs = pairs.concat(importPairs);
 }
 
 //TODO fix this should not be editing pairs, rather i think html
@@ -360,7 +433,8 @@ function refactorIndicies() {
 //prevents enter from doing form actions
 document.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
-        e.preventDefault();
-        return false;
+        if (document.activeElement.id != "import-text") {
+            e.preventDefault();
+        }
     }
 });

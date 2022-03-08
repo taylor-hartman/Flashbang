@@ -419,6 +419,7 @@ function resetPage() {
         // answerShown = false; //answershown set in displaycard now
         displayCard();
     } else {
+        //when complete
         //else if pairsRef.length <= 0 aka if study complete
         //flashcard container
         var fcc = document.getElementById("flashcard-container");
@@ -426,6 +427,7 @@ function resetPage() {
         bottomText.innerText = "Press Space to Return Home";
         fcc.innerHTML = `<h2 id="end-dialogue">Bunch Study Complete!</h2>`;
         fcc.innerHTML += bottomText.outerHTML;
+        document.getElementById("options-btn").classList.add("hide");
         studyComplete = true;
         setComplete();
     }

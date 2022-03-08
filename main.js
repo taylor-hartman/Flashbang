@@ -118,6 +118,7 @@ app.on("activate", () => {
 
 ipcMain.on("returnToIndex", returnToIndexPage);
 
+//manages when title change
 ipcMain.on("bunch:setAll", (e, bunch, fileTitle) => {
     var count = 0;
     const userDataPath = app.getPath("userData");
@@ -145,7 +146,6 @@ ipcMain.on("bunch:save", (e, bunch, fileTitle) => {
     const bunchStorage = new BunchStorage({
         fileName: fileTitle,
     });
-    // bunchStorage.setAll(bunch);
 
     for (const [key, value] of Object.entries(bunch)) {
         bunchStorage.set(key, value);
@@ -179,8 +179,7 @@ ipcMain.on("bunch:get", (e, title, key) => {
 ipcMain.on("bunchdata:get", sendBunchData);
 
 //used to format index page
-//TODO this should not exist and if it does exist it should be in index .js not here
-//the parsing of the data should be done elsewhere....or maybe not idk rn brain melt
+//this has to be done here and not in index becuase index.js cannot access directory
 function sendBunchData() {
     //TODO see if there is a way to stop this from reading all the contents of every json file
     const userDataPath = app.getPath("userData");

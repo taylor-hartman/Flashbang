@@ -222,7 +222,7 @@ form {
 #import-form textarea {
   font-size: 1.1rem;
   border-radius: 6px;
-  padding: 0.1rem;
+  padding: 0.1rem 0.5rem;
   border: 2px solid var(--highlight, #393e41);
   resize: none;
   background: none;
@@ -327,6 +327,46 @@ form {
 
 .pair-delete-btn:hover {
   cursor: pointer;
+}
+
+#title-valid-message {
+  position: absolute;
+  width: 80vw;
+  left: 10vw;
+  top: 15vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#import-valid-message {
+  position: fixed;
+  width: 80vw;
+  left: 10vw;
+  top: 8vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 #delete-menu {
