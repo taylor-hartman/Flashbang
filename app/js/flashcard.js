@@ -140,6 +140,7 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
         inResetMenu = true;
         displayStudyAgain();
     } else if (studyComplete === false) {
+        removeCompleteCards(bunch.pairOrder);
         displayCard();
     } else {
         //if studyComplete === "new"
@@ -148,6 +149,29 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
         setComplete();
     }
 });
+
+//removes cards that have 0 calls on current mode when !complete
+function removeCompleteCards(pairOrder) {
+    if (pairOrder.standard) {
+        for (x = 0; x < pairsRef.length; x++) {
+            if (pairsRef[x].calls === 0) {
+                pairsRef.splice(x, 1);
+            }
+        }
+    } else if (pairOrder.reversed) {
+        for (x = 0; x < pairsRef.length; x++) {
+            if (pairsRef[x].revCalls === 0) {
+                pairsRef.splice(x, 1);
+            }
+        }
+    } else if (pairOrder.both) {
+        for (x = 0; x < pairsRef.length; x++) {
+            if (pairsRef[x].calls === 0 && pairsRef[x].revCalls === 0) {
+                pairsRef.splice(x, 1);
+            }
+        }
+    }
+}
 
 function displayStudyAgain() {
     var fcc = document.getElementById("flashcard-container");
@@ -206,9 +230,18 @@ function generateCalls() {
     console.log("Pairs", pairs);
 }
 
+var lastPrompt;
 function displayCard() {
-    const index = Math.floor(Math.random() * pairsRef.length);
-    //TODO add shit to stop repeats etc
+    let index = Math.floor(Math.random() * pairsRef.length);
+
+    if (pairsRef.length > 1) {
+        while (pairsRef[index].prompt === lastPrompt) {
+            //TODO i feel like this while loop is not effiecient
+            index = Math.floor(Math.random() * pairsRef.length);
+        }
+        lastPrompt = pairsRef[index].prompt;
+    }
+
     currentPair = pairsRef[index];
     if (currentPair.calls > 0) {
         currentReversed = false;

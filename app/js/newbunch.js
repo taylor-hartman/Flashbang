@@ -2,8 +2,24 @@ const ipcRenderer = require("electron").ipcRenderer;
 var pairs;
 var title;
 
+var importMenuOpen = false,
+    exportMenuOpen = false;
+
+const editing = title !== ".new_bunch"; //true if editing; false if new bunch
+
+try {
+    const url = document.location.href;
+    title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
+    title = title.replaceAll("%20", " ");
+} catch {
+    title = ".new_bunch";
+}
+const oldTitle = title;
+
+var editingPairs = false; //represents if X's show to delete pairs
+
 //---------------Editing stuff------------------
-var editingPairs = false;
+
 document.getElementById("edit-pairs").addEventListener("click", (e) => {
     editingPairs = !editingPairs;
     adjustEditing();
@@ -145,6 +161,20 @@ function backBtnToIndex(e) {
     }
 }
 
+//saves when not leaving page e.g. going to import and export menus
+function saveInternal() {
+    const bunch = makeBunch();
+    // if (editing && title != oldTitle) {
+    //     ipcRenderer.send("bunch:save", bunch, oldTitle);
+    //     ipcRenderer.send("bunch:setAll", bunch, oldTitle);
+    // } else {
+    //     ipcRenderer.send("bunch:save", bunch, title);
+    // }
+    //saves pairs but not tile. i think this works, but may need fixing
+    bunch.title = oldTitle;
+    ipcRenderer.send("bunch:save", bunch, title);
+}
+
 function makeBunch() {
     const prompts = form.getElementsByClassName("prompt");
     const answers = form.getElementsByClassName("answer");
@@ -156,12 +186,23 @@ function makeBunch() {
         pairs: [],
     };
 
-    var redacted = 0;
+    bunch.pairs = JSON.parse(JSON.stringify(makePairs()));
+
+    return bunch;
+}
+
+function makePairs() {
+    const prompts = form.getElementsByClassName("prompt");
+    const answers = form.getElementsByClassName("answer");
+
+    let madePairs = [];
+
+    var redacted = 0; //amount of invalid pairs
     for (x = 0; x < prompts.length; x++) {
         var prompt = prompts[x].value;
         var answer = answers[x].value;
         if (prompt !== "" && answer !== "") {
-            bunch.pairs[x - redacted] = {
+            madePairs[x - redacted] = {
                 prompt: prompt.trim(),
                 answer: answer.trim(),
             };
@@ -170,19 +211,11 @@ function makeBunch() {
         }
     }
 
-    return bunch;
+    return madePairs;
 }
+
 //--------------------------------------------
 //---------------Load Stuff-------------------
-try {
-    const url = document.location.href;
-    title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
-    title = title.replaceAll("%20", " ");
-} catch {
-    title = ".new_bunch";
-}
-const editing = title !== ".new_bunch";
-const oldTitle = title;
 
 document.getElementById("title-input").addEventListener("change", () => {
     if (editing) {
@@ -294,7 +327,6 @@ function generatePairsHTML() {
 }
 
 //--------Import Stuff---------
-var importMenuOpen = false;
 document.getElementById("top-right-btn").addEventListener("click", () => {
     if (!importMenuOpen) {
         document.getElementById("import-form").classList.remove("hide");
@@ -305,17 +337,10 @@ document.getElementById("top-right-btn").addEventListener("click", () => {
         editingPairs = false;
         adjustEditing();
 
-        //saves bunch (taken from back button event save)
-        //HACK: janky maybe fix bc ipcMain send back bunch every save even when leave page
-        const bunch = makeBunch();
-        if (editing && title != oldTitle) {
-            ipcRenderer.send("bunch:save", bunch, oldTitle);
-            ipcRenderer.send("bunch:setAll", bunch, oldTitle);
-        } else {
-            ipcRenderer.send("bunch:save", bunch, title);
-        }
+        saveInternal();
         importMenuOpen = true;
     } else {
+        //TODO get rid of this hide the icon or move it
         closeImportMenu();
     }
 });
@@ -328,9 +353,19 @@ function closeImportMenu() {
     importMenuOpen = false;
 }
 
+function closeExportMenu() {
+    document.getElementById("export-menu").classList.add("hide");
+    document
+        .getElementsByClassName("new-bunch-container")[0]
+        .classList.remove("hide");
+    exportMenuOpen = false;
+}
+
 document.getElementById("back-btn").addEventListener("click", (e) => {
     if (importMenuOpen) {
         closeImportMenu();
+    } else if (exportMenuOpen) {
+        closeExportMenu();
     } else {
         backBtnToIndex(e);
     }
@@ -350,6 +385,18 @@ document.getElementById("info-icon").addEventListener("mouseenter", () => {
 document.getElementById("info-icon").addEventListener("mouseleave", () => {
     document.getElementById("import-info-menu").classList.add("hide");
 });
+
+document
+    .getElementById("info-icon-export")
+    .addEventListener("mouseenter", () => {
+        document.getElementById("export-info-menu").classList.remove("hide");
+    });
+
+document
+    .getElementById("info-icon-export")
+    .addEventListener("mouseleave", () => {
+        document.getElementById("export-info-menu").classList.add("hide");
+    });
 
 var importTimeout;
 function parseImport() {
@@ -393,6 +440,7 @@ function closeImportMenu() {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.remove("hide");
+    //TODO p sure this is not necissary anymore
     document.getElementById("top-right-btn").innerHTML = `
         <svg
             width="24px"
@@ -407,6 +455,48 @@ function closeImportMenu() {
 
     importMenuOpen = false;
 }
+
+//----------Export Stuff--------------
+document.getElementById("export-btn").addEventListener("click", () => {
+    document.getElementById("export-menu").classList.remove("hide");
+    document
+        .getElementsByClassName("new-bunch-container")[0]
+        .classList.add("hide");
+
+    exportMenuOpen = true;
+
+    saveInternal();
+    //TODO this is here because saving is not quick enough to update pairs
+    //pairs should probabaly be updated based on the html more often anyway
+    //this is an ok temporary fix
+    pairs = JSON.parse(JSON.stringify(makePairs()));
+    updateExport();
+});
+
+function updateExport() {
+    const termSeparatorInput = document.getElementById("btwn-term-export");
+    const pairSeparatorInput = document.getElementById("btwn-pair-export");
+
+    const termSeparator =
+        termSeparatorInput.value === "" ? "-" : termSeparatorInput.value;
+    const pairSeparator =
+        pairSeparatorInput.value === "" ? "\n" : pairSeparatorInput.value;
+
+    const textArea = document.getElementById("export-text");
+    textArea.value = "";
+    for (x = 0; x < pairs.length - 1; x++) {
+        textArea.value += `${pairs[x].prompt}${termSeparator}${pairs[x].answer}${pairSeparator}`;
+        console.log("lmao");
+    }
+    textArea.value += `${pairs[x].prompt}${termSeparator}${pairs[x].answer}`;
+}
+
+document
+    .getElementById("btwn-pair-export")
+    .addEventListener("change", updateExport);
+document
+    .getElementById("btwn-term-export")
+    .addEventListener("change", updateExport);
 
 //TODO fix this should not be editing pairs, rather i think html
 function removeBlanks() {

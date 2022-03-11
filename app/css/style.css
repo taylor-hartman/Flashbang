@@ -123,7 +123,7 @@ a {
 #delete-menu {
   position: absolute;
   width: 80%;
-  height: 15%;
+  height: 17%;
   left: 10%;
   bottom: 0;
   display: -webkit-box;
@@ -139,6 +139,11 @@ a {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+}
+
+#delete-menu h3 {
+  overflow: hidden;
+  text-align: center;
 }
 
 #delete-menu #delete-btns-container {

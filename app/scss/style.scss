@@ -97,13 +97,18 @@ a {
 #delete-menu {
     position: absolute;
     width: 80%;
-    height: 15%;
+    height: 17%;
     left: 10%;
     bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
+    h3 {
+        overflow: hidden;
+        text-align: center;
+    }
 
     #delete-btns-container {
         margin-top: 1.5vh;

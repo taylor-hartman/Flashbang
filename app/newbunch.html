@@ -96,6 +96,46 @@
             </div>
             <button type="submit" id="import-submit-btn">Import</button>
         </form>
+
+        <div class="hide" id="export-menu">
+            <textarea type="text" name="" id="export-text"></textarea>
+            <div class="horizontal-container">
+                <div class="input-container">
+                    <p>Separate Terms With</p>
+                    <input type="text" id="btwn-term-export" placeholder="-" />
+                </div>
+                <div class="input-container">
+                    <p>Separate Pairs With</p>
+                    <div class="input-and-icon-container">
+                        <input
+                            type="text"
+                            id="btwn-pair-export"
+                            placeholder="\n"
+                        />
+                        <div>
+                            <svg
+                                id="info-icon-export"
+                                width="24px"
+                                height="24px"
+                                viewBox="0 0 24 24"
+                                version="1.2"
+                                baseProfile="tiny"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M13.839 17.525c-.006.002-.559.186-1.039.186-.265 0-.372-.055-.406-.079-.168-.117-.48-.336.054-1.4l1-1.994c.593-1.184.681-2.329.245-3.225-.356-.733-1.039-1.236-1.92-1.416-.317-.065-.639-.097-.958-.097-1.849 0-3.094 1.08-3.146 1.126-.179.158-.221.42-.102.626.12.206.367.3.595.222.005-.002.559-.187 1.039-.187.263 0 .369.055.402.078.169.118.482.34-.051 1.402l-1 1.995c-.594 1.185-.681 2.33-.245 3.225.356.733 1.038 1.236 1.921 1.416.314.063.636.097.954.097 1.85 0 3.096-1.08 3.148-1.126.179-.157.221-.42.102-.626-.12-.205-.369-.297-.593-.223z"
+                                />
+                                <circle cx="13" cy="6.001" r="2.5" />
+                            </svg>
+                            <div class="hide" id="export-info-menu">
+                                Use \n to separate with new line
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="new-bunch-container">
             <form id="new-bunch-form" action="">
                 <input
@@ -111,6 +151,20 @@
                         <button type="submit">Submit</button>
                     </div>
                     <div class="btn-holder">
+                        <button type="button" id="export-btn">
+                            <svg
+                                width="24px"
+                                height="24px"
+                                viewBox="0 0 24 24"
+                                version="1.2"
+                                baseProfile="tiny"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M21.561 5.318l-2.879-2.879c-.293-.293-.677-.439-1.061-.439-.385 0-.768.146-1.061.439l-3.56 3.561h-9c-.552 0-1 .447-1 1v13c0 .553.448 1 1 1h13c.552 0 1-.447 1-1v-9l3.561-3.561c.293-.293.439-.677.439-1.061s-.146-.767-.439-1.06zm-10.061 9.354l-2.172-2.172 6.293-6.293 2.172 2.172-6.293 6.293zm-2.561-1.339l1.756 1.728-1.695-.061-.061-1.667zm7.061 5.667h-11v-11h6l-3.18 3.18c-.293.293-.478.812-.629 1.289-.16.5-.191 1.056-.191 1.47v3.061h3.061c.414 0 1.108-.1 1.571-.29.464-.19.896-.347 1.188-.64l3.18-3.07v6zm2.5-11.328l-2.172-2.172 1.293-1.293 2.171 2.172-1.292 1.293z"
+                                />
+                            </svg>
+                        </button>
                         <button type="button" id="edit-pairs">
                             <svg
                                 width="24px"

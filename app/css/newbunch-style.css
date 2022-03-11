@@ -152,6 +152,17 @@ input {
   margin-right: 0.5rem;
 }
 
+#submit-add-bar #export-btn {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+}
+
+#submit-add-bar #export-btn svg {
+  width: 2rem;
+  height: 2rem;
+}
+
 #submit-add-bar #edit-pairs {
   width: 2rem;
   height: 2rem;
@@ -237,49 +248,6 @@ form {
   height: 60%;
 }
 
-#import-form .horizontal-container {
-  width: 80%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin-top: 2%;
-}
-
-#import-form .input-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-#import-form .input-container input {
-  width: 60px;
-  text-align: center;
-  font-size: 1.1rem;
-  border-radius: 6px;
-  border: 2px solid var(--highlight, #393e41);
-  padding: 0.1rem;
-}
-
 #import-form #import-submit-btn {
   width: 30%;
   margin-top: 3%;
@@ -298,7 +266,14 @@ form {
   margin-left: 0.2rem;
 }
 
-#import-form .input-and-icon-container {
+#import-form #import-info-menu {
+  position: absolute;
+  margin-left: 0.2rem;
+  font-size: 1rem;
+  width: 20vw;
+}
+
+.input-and-icon-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -310,7 +285,98 @@ form {
           align-items: center;
 }
 
-#import-form #import-info-menu {
+.horizontal-container {
+  width: 80%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2%;
+}
+
+.input-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.input-container input {
+  width: 60px;
+  text-align: center;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  border: 2px solid var(--highlight, #393e41);
+  padding: 0.1rem;
+}
+
+#export-menu {
+  position: fixed;
+  width: 75vw;
+  height: 75vh;
+  top: 12.5vh;
+  left: 12.5vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 6px;
+}
+
+#export-menu textarea {
+  font-size: 1.1rem;
+  border-radius: 6px;
+  padding: 0.1rem 0.5rem;
+  border: 2px solid var(--highlight, #393e41);
+  resize: none;
+  background: none;
+}
+
+#export-menu textarea:focus {
+  outline: none;
+}
+
+#export-menu #export-text {
+  width: 80%;
+  height: 60%;
+}
+
+#export-menu #info-icon-export {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid var(--highlight, #393e41);
+  border-radius: 50%;
+  margin-left: 0.2rem;
+}
+
+#export-menu #export-info-menu {
   position: absolute;
   margin-left: 0.2rem;
   font-size: 1rem;
