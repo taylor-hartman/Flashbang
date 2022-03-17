@@ -213,7 +213,6 @@ function sendBunchData() {
 }
 
 function returnToIndexPage() {
-    // mainWindow.hide();
     mainWindow.loadFile("./app/index.html");
 }
 

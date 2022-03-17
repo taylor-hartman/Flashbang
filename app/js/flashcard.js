@@ -142,11 +142,6 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
     } else if (studyComplete === false) {
         removeCompleteCards(bunch.pairOrder);
         displayCard();
-    } else {
-        //if studyComplete === "new"
-        generateCalls();
-        studyComplete = false; //YOU HAVE TO LEAVE THIS HERE PUTTING A STRING IN A BOOL IS STUPID AF BUT YOU CHOSE TO DO IT
-        setComplete();
     }
 });
 
@@ -211,19 +206,16 @@ function generateCalls() {
             pairs[x].calls = timesCorrect;
             pairs[x].revCalls = timesCorrect;
         }
-        console.log("both");
     } else if (document.getElementById("reversed").checked) {
         for (x = 0; x < pairs.length; x++) {
             pairs[x].calls = 0;
             pairs[x].revCalls = timesCorrect;
         }
-        console.log("revh");
     } else if (document.getElementById("standard").checked) {
         for (x = 0; x < pairs.length; x++) {
             pairs[x].calls = timesCorrect;
             pairs[x].revCalls = 0;
         }
-        console.log("sta");
     }
     setPairs();
     displayCard();
@@ -267,11 +259,8 @@ function keyListener(e) {
     } else if (inResetMenu && key === " ") {
         //if the user wishes to reset progress
         studyComplete = false;
+        setComplete();
         inResetMenu = false;
-        ipcRenderer.send("bunch:set", title, {
-            key: "complete",
-            value: studyComplete,
-        });
         updateHTML();
         generateCalls();
         //i chnaged the line below from an if to an else if. i dont think it shoudl cause any issues

@@ -22,7 +22,7 @@ class BunchStorage {
             title: "",
             lastUsed: 0,
             pairs: [],
-            complete: "new",
+            complete: false,
             pairOrder: {
                 standard: true,
                 reversed: false,

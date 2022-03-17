@@ -18,6 +18,15 @@ const oldTitle = title;
 
 var editingPairs = false; //represents if X's show to delete pairs
 
+//calls management
+let timesCorrect;
+let pairOrder, questionType;
+
+ipcRenderer.send("globalSettings:get", "timesCorrect");
+ipcRenderer.on("globalSettings:gettimesCorrect", (e, val) => {
+    timesCorrect = val;
+});
+
 //---------------Editing stuff------------------
 
 document.getElementById("edit-pairs").addEventListener("click", (e) => {
@@ -44,6 +53,7 @@ function adjustEditing() {
     }
 }
 
+//add pair
 document.getElementById("plus").addEventListener("click", (e) => {
     e.preventDefault();
     var indicies = document.getElementsByClassName("index");
@@ -51,6 +61,16 @@ document.getElementById("plus").addEventListener("click", (e) => {
 
     var newPair = document.createElement("div");
     newPair.classList.add("pair");
+
+    newPair.setAttribute(
+        "calls",
+        pairOrder.standard || pairOrder.both ? timesCorrect : 0
+    );
+    newPair.setAttribute(
+        "revCalls",
+        pairOrder.reversed || pairOrder.both ? timesCorrect : 0
+    );
+
     newPair.innerHTML = `
         <p class="index">${idNum}</p>
         <div class="input-holder">
@@ -118,8 +138,7 @@ document.getElementById("no-delete").addEventListener("click", () => {
 //--------------------------------------------
 //-----------------Save Stuff-------------------
 //Bunchesa are saved either when submitting or when pressing the back button. aka at any exit of the page throughh buttons
-const form = document.getElementById("new-bunch-form");
-form.addEventListener("submit", (e) => {
+document.getElementById("new-bunch-form").addEventListener("submit", (e) => {
     e.preventDefault();
     if (titleValid(document.getElementById("title-input").value)) {
         const bunch = makeBunch();
@@ -133,7 +152,6 @@ form.addEventListener("submit", (e) => {
             }
         } else {
             //if we are creating a new bunch (using .new_bunch.json)
-            bunch.complete = "new";
             ipcRenderer.send("bunch:save", bunch, title);
             ipcRenderer.send("bunch:setAll", bunch, title);
         }
@@ -176,9 +194,6 @@ function saveInternal() {
 }
 
 function makeBunch() {
-    const prompts = form.getElementsByClassName("prompt");
-    const answers = form.getElementsByClassName("answer");
-
     //TODO this is only part of the data. defaults shoudl be used for the rest (see main.js bunch:save)
     var bunch = {
         title: document.getElementById("title-input").value,
@@ -187,24 +202,30 @@ function makeBunch() {
     };
 
     bunch.pairs = JSON.parse(JSON.stringify(makePairs()));
+    console.log(bunch.pairs);
 
     return bunch;
 }
 
 function makePairs() {
-    const prompts = form.getElementsByClassName("prompt");
-    const answers = form.getElementsByClassName("answer");
+    const htmlPairs = document
+        .getElementById("pair-container")
+        .getElementsByClassName("pair");
 
     let madePairs = [];
 
     var redacted = 0; //amount of invalid pairs
-    for (x = 0; x < prompts.length; x++) {
-        var prompt = prompts[x].value;
-        var answer = answers[x].value;
+    for (x = 0; x < htmlPairs.length; x++) {
+        let prompt = htmlPairs[x].getElementsByClassName("prompt")[0].value;
+        let answer = htmlPairs[x].getElementsByClassName("answer")[0].value;
+        let calls = htmlPairs[x].getAttribute("calls");
+        let revCalls = htmlPairs[x].getAttribute("revCalls");
         if (prompt !== "" && answer !== "") {
             madePairs[x - redacted] = {
                 prompt: prompt.trim(),
                 answer: answer.trim(),
+                calls: parseInt(calls),
+                revCalls: parseInt(revCalls),
             };
         } else {
             redacted += 1;
@@ -275,6 +296,8 @@ ipcRenderer.send("bunch:getAll", title);
 
 ipcRenderer.on("bunch:getAll", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs));
+    pairOrder = JSON.parse(JSON.stringify(bunch.pairOrder));
+    questionType = JSON.parse(JSON.stringify(bunch.questionType));
     document.getElementById("title-input").value = bunch.title;
     if (pairs.length < 3) {
         const lenHolder = pairs.length;
@@ -299,6 +322,25 @@ function generatePairsHTML() {
     for (x = 0; x < pairs.length; x++) {
         var newPair = document.createElement("div");
         newPair.classList.add("pair");
+
+        if (pairs[x].calls != null) {
+            newPair.setAttribute("calls", pairs[x].calls);
+        } else {
+            newPair.setAttribute(
+                "calls",
+                pairOrder.standard || pairOrder.both ? timesCorrect : 0
+            );
+        }
+
+        if (pairs[x].revCalls != null) {
+            newPair.setAttribute("revCalls", pairs[x].revCalls);
+        } else {
+            newPair.setAttribute(
+                "revCalls",
+                pairOrder.reversed || pairOrder.both ? timesCorrect : 0
+            );
+        }
+
         newPair.innerHTML = `
             <p class="index">${x + 1}</p>
             <div class="input-holder">
@@ -419,6 +461,7 @@ function parseImport() {
             pair["answer"] = pairArray[1].trim();
             importPairs.push(pair);
         }
+        //TODO calls must be added in editing mode
         pairs = pairs.concat(importPairs);
         closeImportMenu();
     } catch {
