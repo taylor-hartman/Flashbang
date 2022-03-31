@@ -133,6 +133,8 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
         bunch.questionType.flashcard;
     document.getElementById("ask-typed").checked = bunch.questionType.typed;
 
+    currentReversed = bunch.pairOrder.reversed;
+
     updateHTML();
 
     studyComplete = bunch.complete;
@@ -365,7 +367,10 @@ function typedShowAnswer() {
     document.getElementById("bottom-text").innerText =
         "Press Enter to Continue";
     const userAnswer = document.getElementById("answer-input").value;
-    if (userAnswer === currentPair.answer) {
+
+    const answer = currentReversed ? currentPair.prompt : currentPair.answer;
+
+    if (userAnswer == answer) {
         callsCorrect();
         if (delayCorrect == 0) {
             resetPage();
