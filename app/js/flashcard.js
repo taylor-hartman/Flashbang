@@ -68,7 +68,8 @@ function onOrderChange() {
         value: {
             standard: document.getElementById("standard").checked,
             reversed: document.getElementById("reversed").checked,
-            both: document.getElementById("both").checked,
+            bothsr: document.getElementById("bothsr").checked,
+            bothrs: document.getElementById("bothrs").checked,
         },
     });
 
@@ -88,7 +89,6 @@ function onQuestionTypeChange() {
         value: {
             flashcard: document.getElementById("ask-flashcard").checked,
             typed: document.getElementById("ask-typed").checked,
-            // both: document.getElementById("ask-both").checked,
         },
     });
 
@@ -118,6 +118,7 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
 
 // ------------Pairs Stuff-------------
 // handles pairs data
+let promptLang, answerLang;
 ipcRenderer.on("bunch:getAll", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs)); //deep copy
     for (x = 0; x < pairs.length; x++) {
@@ -128,10 +129,14 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
 
     document.getElementById("standard").checked = bunch.pairOrder.standard;
     document.getElementById("reversed").checked = bunch.pairOrder.reversed;
-    document.getElementById("both").checked = bunch.pairOrder.both;
+    document.getElementById("bothsr").checked = bunch.pairOrder.bothsr;
+    document.getElementById("bothrs").checked = bunch.pairOrder.bothrs;
     document.getElementById("ask-flashcard").checked =
         bunch.questionType.flashcard;
     document.getElementById("ask-typed").checked = bunch.questionType.typed;
+
+    promptLang = bunch.promptLang;
+    answerLang = bunch.answerLang;
 
     currentReversed = bunch.pairOrder.reversed;
 
@@ -161,7 +166,7 @@ function removeCompleteCards(pairOrder) {
                 pairsRef.splice(x, 1);
             }
         }
-    } else if (pairOrder.both) {
+    } else if (pairOrder.bothsr || pairOrder.bothrs) {
         for (x = 0; x < pairsRef.length; x++) {
             if (pairsRef[x].calls === 0 && pairsRef[x].revCalls === 0) {
                 pairsRef.splice(x, 1);
@@ -203,7 +208,10 @@ function updateHTML() {
 }
 
 function generateCalls() {
-    if (document.getElementById("both").checked) {
+    if (
+        document.getElementById("bothsr").checked ||
+        document.getElementById("bothrs").checked
+    ) {
         for (x = 0; x < pairs.length; x++) {
             pairs[x].calls = timesCorrect;
             pairs[x].revCalls = timesCorrect;
@@ -237,15 +245,33 @@ function displayCard() {
     }
 
     currentPair = pairsRef[index];
-    if (currentPair.calls > 0) {
-        currentReversed = false;
-        document.getElementById("prompt").innerText = currentPair.prompt;
-        document.getElementById("answer").innerText = currentPair.answer;
+    if (document.getElementById("bothrs").checked) {
+        //is reversed to standard both
+        if (currentPair.revCalls > 0) {
+            currentReversed = true;
+            document.getElementById("prompt").innerText = currentPair.answer;
+            document.getElementById("answer").innerText = currentPair.prompt;
+        } else {
+            currentReversed = false;
+            document.getElementById("prompt").innerText = currentPair.prompt;
+            document.getElementById("answer").innerText = currentPair.answer;
+        }
     } else {
-        currentReversed = true;
-        document.getElementById("prompt").innerText = currentPair.answer;
-        document.getElementById("answer").innerText = currentPair.prompt;
+        if (currentPair.calls > 0) {
+            //this is ok because calls is set to zero for reversed
+            //TODO should probably make into one thing and not two tho
+            currentReversed = false;
+            document.getElementById("prompt").innerText = currentPair.prompt;
+            document.getElementById("answer").innerText = currentPair.answer;
+        } else {
+            currentReversed = true;
+            document.getElementById("prompt").innerText = currentPair.answer;
+            document.getElementById("answer").innerText = currentPair.prompt;
+        }
     }
+
+    const lang = currentReversed ? answerLang : promptLang;
+    say(currentReversed ? currentPair.answer : currentPair.prompt, lang);
 
     answerShown = false;
 }
@@ -310,6 +336,12 @@ function answersManager(key) {
         }
         resetPage();
     }
+}
+
+function say(string, lang) {
+    var msg = new SpeechSynthesisUtterance(string);
+    msg.lang = lang;
+    window.speechSynthesis.speak(msg);
 }
 
 function callsCorrect() {
@@ -385,6 +417,8 @@ function typedShowAnswer() {
         }, delayIncorrect * 1000);
         callsIncorrect();
         styleIncorrect();
+        const lang = currentReversed ? promptLang : answerLang;
+        say(currentReversed ? currentPair.prompt : currentPair.answer, lang);
     }
 }
 
@@ -394,6 +428,8 @@ function showAnswer() {
     document.getElementById("bottom-text").innerText =
         "Incorrect: Press 1 \n Correct: Press 2 or Space";
     answerShown = true;
+    const lang = currentReversed ? promptLang : answerLang;
+    say(currentReversed ? currentPair.prompt : currentPair.answer, lang);
 }
 
 function styleCorrect() {

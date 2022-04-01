@@ -24,10 +24,13 @@ class BunchStorage {
             lastUsed: 0,
             pairs: [],
             complete: false,
+            promptLang: "en-US",
+            answerLang: "en-US",
             pairOrder: {
                 standard: true,
                 reversed: false,
-                both: false,
+                bothSR: false,
+                bothRS: false,
             },
             questionType: {
                 flashcard: true,

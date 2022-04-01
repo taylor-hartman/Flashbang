@@ -124,9 +124,6 @@ ipcMain.on("newbunch:save", (e, bunch) => {
         fileName: ".new_bunch",
     });
 
-    // bunch.id = ".new_bunch";
-    console.log("newbunchsave", bunch);
-
     for (const [key, value] of Object.entries(bunch)) {
         bunchStorage.set(key, value);
     }
@@ -176,9 +173,7 @@ ipcMain.on("bunch:delete", (e, fileName) => {
 });
 
 ipcMain.on("bunch:getAll", (e, id) => {
-    console.log(id);
     const bunchStorage = new BunchStorage({ fileName: id });
-    console.log("getAll", bunchStorage.getAll());
     e.reply("bunch:getAll", bunchStorage.getAll());
 });
 
@@ -189,7 +184,6 @@ ipcMain.on("bunch:set", (e, id, input) => {
 
 //pass bunch title of "" for defaults
 ipcMain.on("bunch:get", (e, id, key) => {
-    console.log(id);
     const bunchStorage = new BunchStorage({ fileName: id });
     e.reply(`bunch:get${key}`, bunchStorage.get(key));
 });

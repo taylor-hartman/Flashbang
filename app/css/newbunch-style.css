@@ -71,6 +71,26 @@ input {
   margin-bottom: 5px;
 }
 
+#lang-select {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0.5rem 0 0.8rem 0;
+  width: 70vw;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-right: 1rem;
+  padding-left: 1.3rem;
+}
+
+#lang-select select {
+  background: none;
+  border: 1px solid var(--highlight, #393e41);
+  border-radius: 3px;
+  width: 46%;
+}
+
 .pair {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -101,10 +121,6 @@ input {
   padding: 0.3rem;
   font-size: 1.2rem;
   width: 46%;
-}
-
-.pair .spacer {
-  width: 3rem;
 }
 
 #submit-add-bar {

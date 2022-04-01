@@ -38,9 +38,10 @@ function updateEditIcons() {
 }
 
 //-----------------------Delete Bunches---------------------------
-var fileTitle;
+let bunchID; //the id of the bunch to be deleted
 function deleteBunch(e) {
-    fileTitle = e.target.getAttribute("file-title");
+    const fileTitle = e.target.getAttribute("bunch-title");
+    bunchID = e.target.getAttribute("bunch-id"); //TODO this is bad structure
     const deleteMenuText = document
         .getElementById("delete-menu")
         .querySelector("h3");
@@ -52,15 +53,8 @@ function deleteBunch(e) {
 }
 
 document.getElementById("yes-delete").addEventListener("click", () => {
-    ipcRenderer.send("bunch:delete", fileTitle);
+    ipcRenderer.send("bunch:delete", bunchID);
     ipcRenderer.send("bunchdata:get");
-    // document.getElementById("delete-menu").querySelector("h3").innerText =
-    //     "Successfully Deleted";
-    // document.getElementById("no-delete").classList.add("hide");
-    // document.getElementById("yes-delete").classList.add("hide");
-    // setTimeout(() => {
-    //     document.getElementById("delete-menu").classList.add("hide");
-    // }, 1500);
     document.getElementById("delete-menu").classList.add("hide");
 });
 
@@ -372,7 +366,11 @@ function insertElement(row, index, bunch) {
     rows[row]
         .getElementsByClassName("edit-icons-container")
         [index].querySelector(".delete-btn")
-        .setAttribute("file-title", `${bunch.title}`);
+        .setAttribute("bunch-title", `${bunch.title}`);
+    rows[row]
+        .getElementsByClassName("edit-icons-container")
+        [index].querySelector(".delete-btn")
+        .setAttribute("bunch-id", `${bunch.id}`);
 }
 
 function scrollButtonControl() {
