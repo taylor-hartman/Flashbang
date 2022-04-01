@@ -118,40 +118,55 @@ app.on("activate", () => {
 
 ipcMain.on("returnToIndex", returnToIndexPage);
 
-//manages when title change
-ipcMain.on("bunch:setAll", (e, bunch, fileTitle) => {
-    var count = 0;
-    const userDataPath = app.getPath("userData");
-    var title;
-    title = bunch.title + "";
-    var filePath = userDataPath + "/bunches/" + title + ".json";
-    while (fs.existsSync(filePath)) {
-        //checks to see if title is taken
-        count += 1;
-        filePath = userDataPath + "/bunches/" + title + count + ".json";
-    }
-    title += count === 0 ? "" : count;
-
+//saves new bunch when the back button is pressed
+ipcMain.on("newbunch:save", (e, bunch) => {
     const bunchStorage = new BunchStorage({
-        fileName: fileTitle,
+        fileName: ".new_bunch",
     });
-    bunchStorage.set("title", title);
 
-    const oldPath = userDataPath + "/bunches/" + fileTitle + ".json";
-    fs.rename(oldPath, filePath, () => {});
-    e.reply("bunch:getAll", bunchStorage.getAll());
+    // bunch.id = ".new_bunch";
+    console.log("newbunchsave", bunch);
+
+    for (const [key, value] of Object.entries(bunch)) {
+        bunchStorage.set(key, value);
+    }
 });
 
-ipcMain.on("bunch:save", (e, bunch, fileTitle) => {
+ipcMain.on("bunch:save", (e, bunch) => {
     const bunchStorage = new BunchStorage({
-        fileName: fileTitle,
+        fileName: bunch.id,
     });
 
     for (const [key, value] of Object.entries(bunch)) {
         bunchStorage.set(key, value);
     }
+});
 
-    e.reply("bunch:getAll", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
+//when a newbunch is submitted
+ipcMain.on("bunch:submit", (e, bunch) => {
+    //generate id
+    var count = 0;
+    const userDataPath = app.getPath("userData");
+    var filePath = userDataPath + "/bunches/" + count + ".json";
+    while (fs.existsSync(filePath)) {
+        count += 1;
+        filePath = userDataPath + "/bunches/" + count + ".json";
+    }
+
+    const bunchStorage = new BunchStorage({
+        fileName: count,
+    });
+
+    bunch.id = count;
+
+    //save bunch
+    for (const [key, value] of Object.entries(bunch)) {
+        bunchStorage.set(key, value);
+    }
+
+    //delete .new_bunch file
+    const newBunch = userDataPath + "/bunches/.new_bunch.json";
+    fs.unlink(newBunch, () => {});
 });
 
 ipcMain.on("bunch:delete", (e, fileName) => {
@@ -160,19 +175,22 @@ ipcMain.on("bunch:delete", (e, fileName) => {
     fs.unlink(filePath, () => {});
 });
 
-ipcMain.on("bunch:getAll", (e, title) => {
-    const bunchStorage = new BunchStorage({ fileName: title });
-    e.reply("bunch:getAll", bunchStorage.getAll()); //TODO idk if this should rlly be here (used for import button)
+ipcMain.on("bunch:getAll", (e, id) => {
+    console.log(id);
+    const bunchStorage = new BunchStorage({ fileName: id });
+    console.log("getAll", bunchStorage.getAll());
+    e.reply("bunch:getAll", bunchStorage.getAll());
 });
 
-ipcMain.on("bunch:set", (e, title, input) => {
-    const bunchStorage = new BunchStorage({ fileName: title });
+ipcMain.on("bunch:set", (e, id, input) => {
+    const bunchStorage = new BunchStorage({ fileName: id });
     bunchStorage.set(input.key, input.value);
 });
 
 //pass bunch title of "" for defaults
-ipcMain.on("bunch:get", (e, title, key) => {
-    const bunchStorage = new BunchStorage({ fileName: title });
+ipcMain.on("bunch:get", (e, id, key) => {
+    console.log(id);
+    const bunchStorage = new BunchStorage({ fileName: id });
     e.reply(`bunch:get${key}`, bunchStorage.get(key));
 });
 
@@ -198,7 +216,8 @@ function sendBunchData() {
                     const title = bunch.title;
                     const lastUsed = bunch.lastUsed;
                     const numTerms = bunch.pairs.length;
-                    data.push({ title, lastUsed, numTerms });
+                    const id = bunch.id;
+                    data.push({ id, title, lastUsed, numTerms });
                 }
             }
             mainWindow.webContents.send("bunchdata:get", data);

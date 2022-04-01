@@ -362,12 +362,12 @@ function insertElement(row, index, bunch) {
     //inserts links with query strings
     rows[row]
         .getElementsByClassName("hex-center")
-        [index].setAttribute("href", `flashcard.html?title=${bunch.title}`);
+        [index].setAttribute("href", `flashcard.html?id=${bunch.id}`);
     //add edit query strings
     rows[row]
         .getElementsByClassName("edit-icons-container")
         [index].querySelector(".edit-btn")
-        .setAttribute("href", `newbunch.html?title=${bunch.title}`);
+        .setAttribute("href", `newbunch.html?id=${bunch.id}`);
     //add delete strings
     rows[row]
         .getElementsByClassName("edit-icons-container")

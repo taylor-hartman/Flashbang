@@ -19,6 +19,7 @@ class BunchStorage {
         );
 
         this.defaults = {
+            id: 0,
             title: "",
             lastUsed: 0,
             pairs: [],

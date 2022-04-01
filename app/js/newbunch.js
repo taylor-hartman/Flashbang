@@ -1,20 +1,22 @@
 const ipcRenderer = require("electron").ipcRenderer;
 var pairs;
-var title;
+var id;
 
 var importMenuOpen = false,
     exportMenuOpen = false;
 
-const editing = title !== ".new_bunch"; //true if editing; false if new bunch
-
 try {
     const url = document.location.href;
-    title = url.split("?")[1].split("=")[1]; //gets the title of bunch from query string
-    title = title.replaceAll("%20", " ");
+    id = url.split("?")[1].split("=")[1]; //gets the id of bunch from query string
+    id = id.replaceAll("%20", " ");
 } catch {
-    title = ".new_bunch";
+    //there is no ? or = in the new bunch btn so it throws err
+    id = ".new_bunch";
 }
-const oldTitle = title;
+
+console.log(id);
+
+const editing = id !== ".new_bunch"; //true if editing; false if new bunch
 
 var editingPairs = false; //represents if X's show to delete pairs
 
@@ -28,7 +30,6 @@ ipcRenderer.on("globalSettings:gettimesCorrect", (e, val) => {
 });
 
 //---------------Editing stuff------------------
-
 document.getElementById("edit-pairs").addEventListener("click", (e) => {
     editingPairs = !editingPairs;
     adjustEditing();
@@ -123,9 +124,6 @@ document.getElementById("clear-btn").addEventListener("click", (e) => {
 document.getElementById("yes-delete").addEventListener("click", () => {
     pairs = [];
     document.getElementById("title-input").value = "";
-    if (editing) {
-        title = document.getElementById("title-input").value;
-    }
     generatePairsHTML();
     document.getElementById("delete-menu").classList.add("hide");
 });
@@ -137,23 +135,16 @@ document.getElementById("no-delete").addEventListener("click", () => {
 
 //--------------------------------------------
 //-----------------Save Stuff-------------------
-//Bunchesa are saved either when submitting or when pressing the back button. aka at any exit of the page throughh buttons
+//Bunches are saved either when submitting or when pressing the back button. aka at any exit of the page throughh buttons
 document.getElementById("new-bunch-form").addEventListener("submit", (e) => {
     e.preventDefault();
     if (titleValid(document.getElementById("title-input").value)) {
         const bunch = makeBunch();
         if (editing) {
-            //if we are using nebunch.html to edit existing bunch
-            if (title != oldTitle) {
-                ipcRenderer.send("bunch:save", bunch, oldTitle);
-                ipcRenderer.send("bunch:setAll", bunch, oldTitle); //passes in the old title, because set all renames the old file to the current bunch.title
-            } else {
-                ipcRenderer.send("bunch:save", bunch, title);
-            }
+            //id = id
+            ipcRenderer.send("bunch:save", bunch);
         } else {
-            //if we are creating a new bunch (using .new_bunch.json)
-            ipcRenderer.send("bunch:save", bunch, title);
-            ipcRenderer.send("bunch:setAll", bunch, title);
+            ipcRenderer.send("bunch:submit", bunch); //id = newly generated id
         }
         ipcRenderer.send("returnToIndex");
     }
@@ -164,17 +155,11 @@ function backBtnToIndex(e) {
     const bunch = makeBunch();
     if (editing) {
         if (titleValid(document.getElementById("title-input").value)) {
-            //only valid title if editing
-            if (title != oldTitle) {
-                ipcRenderer.send("bunch:save", bunch, oldTitle);
-                ipcRenderer.send("bunch:setAll", bunch, oldTitle);
-            } else {
-                ipcRenderer.send("bunch:save", bunch, title);
-            }
+            ipcRenderer.send("bunch:save", bunch); //id = id
             ipcRenderer.send("returnToIndex");
         }
     } else {
-        ipcRenderer.send("bunch:save", bunch, title);
+        ipcRenderer.send("newbunch:save", bunch); //id = ".new_bunch"
         ipcRenderer.send("returnToIndex");
     }
 }
@@ -182,20 +167,14 @@ function backBtnToIndex(e) {
 //saves when not leaving page e.g. going to import and export menus
 function saveInternal() {
     const bunch = makeBunch();
-    // if (editing && title != oldTitle) {
-    //     ipcRenderer.send("bunch:save", bunch, oldTitle);
-    //     ipcRenderer.send("bunch:setAll", bunch, oldTitle);
-    // } else {
-    //     ipcRenderer.send("bunch:save", bunch, title);
-    // }
     //saves pairs but not tile. i think this works, but may need fixing
-    bunch.title = oldTitle;
-    ipcRenderer.send("bunch:save", bunch, title);
+    ipcRenderer.send("bunch:save", bunch);
 }
 
 function makeBunch() {
     //TODO this is only part of the data. defaults shoudl be used for the rest (see main.js bunch:save)
     var bunch = {
+        id: id,
         title: document.getElementById("title-input").value,
         lastUsed: new Date(),
         pairs: [],
@@ -239,9 +218,6 @@ function makePairs() {
 //---------------Load Stuff-------------------
 
 document.getElementById("title-input").addEventListener("change", () => {
-    if (editing) {
-        title = document.getElementById("title-input").value;
-    }
     titleValid(document.getElementById("title-input").value);
 });
 
@@ -292,7 +268,7 @@ function titleValid(t) {
     return result;
 }
 
-ipcRenderer.send("bunch:getAll", title);
+ipcRenderer.send("bunch:getAll", id);
 
 ipcRenderer.on("bunch:getAll", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs));
@@ -409,7 +385,7 @@ document.getElementById("back-btn").addEventListener("click", (e) => {
     } else if (exportMenuOpen) {
         closeExportMenu();
     } else {
-        backBtnToIndex(e);
+        backBtnToIndex(e); //TODO idky passing this e in
     }
 });
 
