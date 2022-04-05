@@ -13,8 +13,7 @@ let pairsRef = []; //array of references to each pair
 //     dark = "#393e41"
 
 const url = document.location.href;
-const title = url.split("?")[1].split("=")[1].replaceAll("%20", " "); //gets the title of bunch from query string
-// title = title.replaceAll("%20", " ");
+const id = url.split("?")[1].split("=")[1].replaceAll("%20", " "); //gets the id of bunch from query string
 
 //TODO could likely be chnaged do document.addEventListener('DOMContentLoaded', ()) and be faster
 window.onload = () => {
@@ -24,12 +23,12 @@ window.onload = () => {
     //NOTE Settings must be gotten before pairs
     ipcRenderer.send("studySettings:getAll");
     //sets lastUsed to current time
-    ipcRenderer.send("bunch:set", title, {
+    ipcRenderer.send("bunch:set", id, {
         key: "lastUsed",
         value: new Date(),
     });
     //requests bunch data
-    ipcRenderer.send("bunch:getAll", title);
+    ipcRenderer.send("bunch:getAll", id);
 };
 
 //----------buttons listners--------------
@@ -37,7 +36,7 @@ window.onload = () => {
 document.getElementById("edit-bunch-btn").addEventListener("click", () => {
     document
         .getElementById("edit-bunch-btn")
-        .setAttribute("href", `newbunch.html?title=${title}`);
+        .setAttribute("href", `newbunch.html?id=${id}`);
 });
 
 //options button
@@ -63,7 +62,7 @@ Array.prototype.forEach.call(orderRadios, (radio) => {
 });
 
 function onOrderChange() {
-    ipcRenderer.send("bunch:set", title, {
+    ipcRenderer.send("bunch:set", id, {
         key: "pairOrder",
         value: {
             standard: document.getElementById("standard").checked,
@@ -74,7 +73,6 @@ function onOrderChange() {
     });
 
     generateCalls();
-    // ipcRenderer.send("bunch:getAll", title);
 }
 
 //question type
@@ -84,7 +82,7 @@ Array.prototype.forEach.call(typeRadios, (radio) => {
 });
 
 function onQuestionTypeChange() {
-    ipcRenderer.send("bunch:set", title, {
+    ipcRenderer.send("bunch:set", id, {
         key: "questionType",
         value: {
             flashcard: document.getElementById("ask-flashcard").checked,
@@ -97,14 +95,16 @@ function onQuestionTypeChange() {
 }
 
 //-----------Settings Stuff------------
-
+//TODO possibly just make settings global
 let showIwr,
     showInfo,
     strikeThrough,
     penalizeIncorrect,
     timesCorrect,
     delayCorrect,
-    delayIncorrect;
+    delayIncorrect,
+    ignoreParenthesis,
+    ignoreCapital;
 
 ipcRenderer.on("globalSettings:getAll", (e, settings) => {
     showInfo = settings.showInfo;
@@ -114,18 +114,17 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
     penalizeIncorrect = settings.penalizeIncorrect;
     delayCorrect = settings.delayCorrect;
     delayIncorrect = settings.delayIncorrect;
+    ignoreParenthesis = settings.ignoreParenthesis;
+    ignoreCapital = settings.ignoreCapital;
 });
 
 // ------------Pairs Stuff-------------
 // handles pairs data
-let promptLang, answerLang;
+//TODO this should not be done this way, should create a global var that stores bunch settings
+let promptLang, answerLang, pairOrder;
 ipcRenderer.on("bunch:getAll", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs)); //deep copy
-    for (x = 0; x < pairs.length; x++) {
-        // if (!(pairs[x].calls === 0 && pairs[x].revCalls === 0)) {
-        pairsRef[x] = pairs[x]; //reference
-        // }
-    }
+    createPairsRef(bunch.pairOrder);
 
     document.getElementById("standard").checked = bunch.pairOrder.standard;
     document.getElementById("reversed").checked = bunch.pairOrder.reversed;
@@ -140,36 +139,37 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
 
     currentReversed = bunch.pairOrder.reversed;
 
+    pairOrder = bunch.pairOrder;
+
     updateHTML();
 
     studyComplete = bunch.complete;
-    if (studyComplete === true) {
+    if (studyComplete) {
         inResetMenu = true;
         displayStudyAgain();
-    } else if (studyComplete === false) {
-        removeCompleteCards(bunch.pairOrder);
+    } else if (!studyComplete) {
         displayCard();
     }
 });
 
 //removes cards that have 0 calls on current mode when !complete
-function removeCompleteCards(pairOrder) {
+function createPairsRef(pairOrder) {
     if (pairOrder.standard) {
-        for (x = 0; x < pairsRef.length; x++) {
-            if (pairsRef[x].calls === 0) {
-                pairsRef.splice(x, 1);
+        for (x = 0; x < pairs.length; x++) {
+            if (pairs[x].calls > 0) {
+                pairsRef.push(pairs[x]); //"Objects and arrays are pushed as a pointer to the original object"
             }
         }
     } else if (pairOrder.reversed) {
-        for (x = 0; x < pairsRef.length; x++) {
-            if (pairsRef[x].revCalls === 0) {
-                pairsRef.splice(x, 1);
+        for (x = 0; x < pairs.length; x++) {
+            if (pairs[x].revCalls > 0) {
+                pairsRef.push(pairs[x]);
             }
         }
     } else if (pairOrder.bothsr || pairOrder.bothrs) {
-        for (x = 0; x < pairsRef.length; x++) {
-            if (pairsRef[x].calls === 0 && pairsRef[x].revCalls === 0) {
-                pairsRef.splice(x, 1);
+        for (x = 0; x < pairs.length; x++) {
+            if (pairs[x].calls > 0 || pairs[x].revCalls > 0) {
+                pairsRef.push(pairs[x]);
             }
         }
     }
@@ -228,9 +228,20 @@ function generateCalls() {
         }
     }
     setPairs();
+    createPairsRef(pairOrder);
     displayCard();
     console.log("Pairs", pairs);
 }
+
+document.getElementById("prompt").addEventListener("click", () => {
+    const lang = currentReversed ? answerLang : promptLang;
+    say(currentReversed ? currentPair.answer : currentPair.prompt, lang);
+});
+
+document.getElementById("answer").addEventListener("click", () => {
+    const lang = currentReversed ? promptLang : answerLang;
+    say(currentReversed ? currentPair.prompt : currentPair.answer, lang);
+});
 
 var lastPrompt;
 function displayCard() {
@@ -290,7 +301,7 @@ function keyListener(e) {
         setComplete();
         inResetMenu = false;
         updateHTML();
-        generateCalls();
+        generateCalls(); //generateCalls calls display card, thus update html must be called before
         //i chnaged the line below from an if to an else if. i dont think it shoudl cause any issues
     } else if (document.getElementById("ask-flashcard").checked) {
         answersManager(key);
@@ -344,6 +355,7 @@ function say(string, lang) {
     window.speechSynthesis.speak(msg);
 }
 
+//TODO make into one function w callincorrect
 function callsCorrect() {
     console.log("Correct");
     callsString = currentReversed ? "revCalls" : "calls";
@@ -398,11 +410,20 @@ function typedShowAnswer() {
     answerShown = true;
     document.getElementById("bottom-text").innerText =
         "Press Enter to Continue";
-    const userAnswer = document.getElementById("answer-input").value;
 
-    const answer = currentReversed ? currentPair.prompt : currentPair.answer;
+    let userAnswer = document.getElementById("answer-input").value;
+    let answer = currentReversed ? currentPair.prompt : currentPair.answer;
 
-    if (userAnswer == answer) {
+    const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
+    parsedAnswer = ignoreParenthesis ? answer.replace(rmp, "").trim() : answer; //trim() removes trailing whitespaces
+
+    if (ignoreCapital) {
+        answer = answer.toLowerCase();
+        userAnswer = userAnswer.toLowerCase();
+        parsedAnswer = parsedAnswer.toLowerCase();
+    }
+
+    if (userAnswer == answer || userAnswer == parsedAnswer) {
         callsCorrect();
         if (delayCorrect == 0) {
             resetPage();
@@ -499,14 +520,14 @@ function resetPage() {
 }
 
 function setPairs() {
-    ipcRenderer.send("bunch:set", title, {
+    ipcRenderer.send("bunch:set", id, {
         key: "pairs",
         value: pairs,
     });
 }
 
 function setComplete() {
-    ipcRenderer.send("bunch:set", title, {
+    ipcRenderer.send("bunch:set", id, {
         key: "complete",
         value: studyComplete,
     });

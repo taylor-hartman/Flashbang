@@ -61,6 +61,14 @@ a {
             color: var(--highlight, $highlight);
         }
 
+        h3 {
+            width: 100%;
+            text-align: left;
+            margin-left: 5%;
+            text-decoration: underline;
+            color: var(--highlight, $highlight);
+        }
+
         .theme-holder {
             margin-top: 3vh;
             width: 80vw;

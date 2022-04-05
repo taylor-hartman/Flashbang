@@ -283,6 +283,10 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
             pairs.push({ prompt: "", answer: "" });
         }
     }
+
+    document.getElementById("prompt-lang").value = bunch.promptLang;
+    document.getElementById("answer-lang").value = bunch.answerLang;
+
     generatePairsHTML();
 });
 

@@ -71,6 +71,20 @@ document.getElementById("delay-incorrect").addEventListener("change", () => {
     });
 });
 
+document.getElementById("ignore-parenthesis").addEventListener("change", () => {
+    ipcRenderer.send("globalSettings:set", {
+        key: "ignoreParenthesis",
+        value: document.getElementById("ignore-parenthesis").checked,
+    });
+});
+
+document.getElementById("ignore-capital").addEventListener("change", () => {
+    ipcRenderer.send("globalSettings:set", {
+        key: "ignoreCapital",
+        value: document.getElementById("ignore-capital").checked,
+    });
+});
+
 document.getElementById("sort-home-by").addEventListener("change", () => {
     ipcRenderer.send("globalSettings:set", {
         key: "sortHomeBy",
@@ -94,5 +108,10 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
         settings.penalizeIncorrect;
     document.getElementById("delay-correct").value = settings.delayCorrect;
     document.getElementById("delay-incorrect").value = settings.delayIncorrect;
+
+    document.getElementById("ignore-parenthesis").checked =
+        settings.ignoreParenthesis;
+    document.getElementById("ignore-capital").checked = settings.ignoreCapital;
+
     document.getElementById("sort-home-by").value = settings.sortHomeBy;
 });

@@ -46,7 +46,8 @@ a {
 h2 {
   font-size: 1.4rem;
   text-align: center;
-  width: 83%;
+  max-width: 83%;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar {

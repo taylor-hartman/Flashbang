@@ -92,6 +92,14 @@ a {
   color: var(--highlight, #393e41);
 }
 
+.main-container .section h3 {
+  width: 100%;
+  text-align: left;
+  margin-left: 5%;
+  text-decoration: underline;
+  color: var(--highlight, #393e41);
+}
+
 .main-container .section .theme-holder {
   margin-top: 3vh;
   width: 80vw;

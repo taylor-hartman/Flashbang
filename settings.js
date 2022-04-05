@@ -20,6 +20,8 @@ class Settings {
             penalizeIncorrect: true,
             delayCorrect: 1,
             delayIncorrect: 0,
+            ignoreParenthesis: 1,
+            ignoreCapital: 1,
             sortHomeBy: "lastUsed",
         };
 

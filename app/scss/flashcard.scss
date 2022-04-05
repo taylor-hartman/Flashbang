@@ -37,7 +37,8 @@ h2 {
     //this is for answer and promtp
     font-size: $card-font-size;
     text-align: center;
-    width: 83%;
+    max-width: 83%;
+    cursor: pointer;
 }
 
 ::-webkit-scrollbar {
