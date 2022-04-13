@@ -116,6 +116,7 @@ document.getElementById("plus").addEventListener("click", (e) => {
 document.getElementById("clear-btn").addEventListener("click", (e) => {
     e.preventDefault();
     document.getElementById("delete-menu").classList.remove("hide");
+    document.getElementById("delete-menu").scrollIntoView();
     // setTimeout(() => {
     //     document.getElementById("delete-menu").classList.add("hide");
     // }, 5000);
@@ -140,21 +141,26 @@ document.getElementById("new-bunch-form").addEventListener("submit", (e) => {
     e.preventDefault();
     if (titleValid(document.getElementById("title-input").value)) {
         const bunch = makeBunch();
-        if (editing) {
-            //id = id
-            ipcRenderer.send("bunch:save", bunch);
-        } else {
-            ipcRenderer.send("bunch:submit", bunch); //id = newly generated id
+        if (pairsLenValid(bunch.pairs.length)) {
+            //at least 1 pair
+            if (editing) {
+                //id = id
+                ipcRenderer.send("bunch:save", bunch);
+            } else {
+                ipcRenderer.send("bunch:submit", bunch); //id = newly generated id
+            }
+            ipcRenderer.send("returnToIndex");
         }
-        ipcRenderer.send("returnToIndex");
     }
 });
 
-function backBtnToIndex(e) {
-    e.preventDefault();
+function backBtnToIndex() {
     const bunch = makeBunch();
     if (editing) {
-        if (titleValid(document.getElementById("title-input").value)) {
+        if (
+            titleValid(document.getElementById("title-input").value) &&
+            pairsLenValid(bunch.pairs.length) //at least 1 pair
+        ) {
             ipcRenderer.send("bunch:save", bunch); //id = id
             ipcRenderer.send("returnToIndex");
         }
@@ -270,6 +276,23 @@ function titleValid(t) {
     return result;
 }
 
+let pairsLenTimeOut;
+function pairsLenValid(len) {
+    if (len != 0) {
+        return true;
+    } else {
+        clearTimeout(pairsLenTimeOut);
+        document.getElementById("title-valid-message").innerText =
+            "Bunch must contain at least one pair";
+        document.getElementById("title-valid-message").classList.remove("hide");
+        pairsLenTimeOut = setTimeout(() => {
+            document
+                .getElementById("title-valid-message")
+                .classList.add("hide");
+        }, 3000);
+    }
+}
+
 ipcRenderer.send("bunch:getAll", id);
 
 ipcRenderer.on("bunch:getAll", (e, bunch) => {
@@ -352,24 +375,21 @@ function generatePairsHTML() {
 
 //--------Import Stuff---------
 document.getElementById("top-right-btn").addEventListener("click", () => {
-    if (!importMenuOpen) {
-        document.getElementById("import-form").classList.remove("hide");
-        document
-            .getElementsByClassName("new-bunch-container")[0]
-            .classList.add("hide");
+    document.getElementById("top-right-btn").classList.add("hide");
+    document.getElementById("import-form").classList.remove("hide");
+    document
+        .getElementsByClassName("new-bunch-container")[0]
+        .classList.add("hide");
 
-        editingPairs = false;
-        adjustEditing();
+    editingPairs = false;
+    adjustEditing();
 
-        saveInternal();
-        importMenuOpen = true;
-    } else {
-        //TODO get rid of this hide the icon or move it
-        closeImportMenu();
-    }
+    saveInternal();
+    importMenuOpen = true;
 });
 
 function closeImportMenu() {
+    document.getElementById("top-right-btn").classList.remove("hide");
     document.getElementById("import-form").classList.add("hide");
     document
         .getElementsByClassName("new-bunch-container")[0]
@@ -386,12 +406,13 @@ function closeExportMenu() {
 }
 
 document.getElementById("back-btn").addEventListener("click", (e) => {
+    e.preventDefault();
     if (importMenuOpen) {
         closeImportMenu();
     } else if (exportMenuOpen) {
         closeExportMenu();
     } else {
-        backBtnToIndex(e); //TODO idky passing this e in
+        backBtnToIndex();
     }
 });
 
@@ -446,6 +467,7 @@ function parseImport() {
         //TODO calls must be added in editing mode
         pairs = pairs.concat(importPairs);
         closeImportMenu();
+        document.getElementById("import-text").value = ""; //clears input
     } catch {
         document
             .getElementById("import-valid-message")
@@ -457,28 +479,6 @@ function parseImport() {
                 .classList.add("hide");
         }, 3000);
     }
-}
-
-function closeImportMenu() {
-    document.getElementById("import-text").value = "";
-    document.getElementById("import-form").classList.add("hide");
-    document
-        .getElementsByClassName("new-bunch-container")[0]
-        .classList.remove("hide");
-    //TODO p sure this is not necissary anymore
-    document.getElementById("top-right-btn").innerHTML = `
-        <svg
-            width="24px"
-            height="24px"
-            viewBox="0 0 24 24"
-            version="1.2"
-            baseProfile="tiny"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path d="M15 12h-2v-2c0-.553-.447-1-1-1s-1 .447-1 1v2h-2c-.553 0-1 .447-1 1s.447 1 1 1h2v2c0 .553.447 1 1 1s1-.447 1-1v-2h2c.553 0 1-.447 1-1s-.447-1-1-1zM19.707 7.293l-4-4c-.187-.188-.441-.293-.707-.293h-8c-1.654 0-3 1.346-3 3v12c0 1.654 1.346 3 3 3h10c1.654 0 3-1.346 3-3v-10c0-.266-.105-.52-.293-.707zm-2.121.707h-1.086c-.827 0-1.5-.673-1.5-1.5v-1.086l2.586 2.586zm-.586 11h-10c-.552 0-1-.448-1-1v-12c0-.552.448-1 1-1h7v1.5c0 1.379 1.121 2.5 2.5 2.5h1.5v9c0 .552-.448 1-1 1z" />
-        </svg>`;
-
-    importMenuOpen = false;
 }
 
 //----------Export Stuff--------------

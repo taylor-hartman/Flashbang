@@ -120,6 +120,18 @@ a {
             }
         }
 
+        .text-size-container {
+            width: 100%;
+            height: 30px;
+            margin: 1vh 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            .size-option {
+            }
+        }
+
         .setting-holder {
             width: 100%;
             display: flex;
@@ -137,7 +149,7 @@ a {
                 margin: 1vh 0;
 
                 input {
-                    width: 3rem;
+                    width: 4rem;
                     text-align: center;
                     border: 2px solid var(--highlight, $highlight);
                     border-radius: 3px;
@@ -163,7 +175,7 @@ a {
         background: none;
         border: 2px solid var(--highlight, $highlight);
         border-radius: 3px;
-        padding: 0.3rem;
+        padding: 3.9px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -176,7 +188,7 @@ a {
 
     #end-bar {
         width: 100%;
-        margin-top: 0.5rem;
+        margin-top: 6.5px;
         display: flex;
         flex-direction: row;
         align-items: center;

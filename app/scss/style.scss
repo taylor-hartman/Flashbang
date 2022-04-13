@@ -8,6 +8,10 @@
     color: var(--text, $text);
 }
 
+html {
+    font-size: 16.9px;
+}
+
 body {
     background: var(--background);
 }
@@ -81,7 +85,7 @@ a {
     bottom: calc(25% - 20px);
 
     a {
-        margin: 0 0.3rem;
+        margin: 0 3.9px;
     }
 
     .delete-btn {
@@ -126,7 +130,7 @@ a {
             border: solid 2px var(--highlight, $highlight);
             border-radius: 3px;
             width: 10%;
-            padding: 0.1rem;
+            padding: 1.3px;
         }
     }
 }
@@ -167,7 +171,7 @@ a {
     top: 8px;
     right: 34px;
     text-align: left;
-    padding: 0.1rem;
+    padding: 1.3px;
     min-width: 50px;
     // border-radius: 20px;
     width: fit-content;
@@ -281,16 +285,16 @@ a {
     flex-direction: column;
 
     h3 {
-        font-size: 1.3rem;
-        line-height: 1.5rem;
-        max-height: 3rem;
+        font-size: 1rem;
+        line-height: 1.2rem;
+        max-height: 2.4rem;
         width: 100%;
         overflow: hidden;
         overflow-wrap: break-word;
     }
     p {
-        font-size: 1rem;
-        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        margin-top: 6.5px;
     }
 }
 
@@ -328,11 +332,11 @@ a {
 // }
 
 #scroll-forward {
-    right: 1rem;
+    right: 13px;
 }
 
 #scroll-back {
-    left: 1rem;
+    left: 13px;
 }
 
 .hide {
@@ -348,7 +352,7 @@ a {
     flex-direction: column;
 
     h3 {
-        font-size: 1.3rem;
+        font-size: 1rem;
         text-align: center;
     }
 }

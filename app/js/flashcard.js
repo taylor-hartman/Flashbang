@@ -168,6 +168,9 @@ function updateHTML() {
     document.getElementById("ask-flashcard").checked = questionType.flashcard;
     document.getElementById("ask-typed").checked = questionType.typed;
 
+    const root = document.querySelector(":root");
+    root.style.fontSize = `${settings.studyFontSize}px`;
+
     if (studyComplete) {
         //study again menu is open bc bunch is complete
         inResetMenu = true;
@@ -238,10 +241,13 @@ var lastPrompt;
 function setCurrentPair() {
     let index = Math.floor(Math.random() * pairsRef.length);
 
+    let count = 0;
     if (pairsRef.length > 1) {
-        while (pairsRef[index].prompt === lastPrompt) {
+        while (pairsRef[index].prompt === lastPrompt && count < 5) {
+            //TODO shoudl be better way to do this
             //TODO i feel like this while loop is not effiecient
             index = Math.floor(Math.random() * pairsRef.length);
+            count += 1; //after five trys j continue anyway (need this for repeat prompts)
         }
         lastPrompt = pairsRef[index].prompt;
     }
@@ -329,11 +335,12 @@ function answerManager(e) {
             if (e.key === "2" || e.key === " ") {
                 //Answer is right
                 updateCalls(true);
+                resetPage(); //this must stay inside if bc otherwise resets on any key
             } else if (e.key === "1") {
                 //answer is wrong
                 updateCalls(false);
+                resetPage(); //this must stay inside if bc otherwise resets on any key
             }
-            resetPage();
         }
     } else if (questionType.typed) {
         if (!answerShown) {
@@ -354,6 +361,7 @@ function answerManager(e) {
 var noTimeout; //used for incorrect forced delay
 
 function say(type) {
+    window.speechSynthesis.cancel(); //stops all previous call
     let lang, string;
     if (type == "prompt") {
         lang = currentReversed ? answerLang : promptLang;
@@ -377,7 +385,7 @@ function updateCalls(correct) {
             currentPair[callsString] -= 1;
             if (currentPair["calls"] === 0 && currentPair["revCalls"] === 0) {
                 const index = pairsRef.indexOf(currentPair);
-                pairsRef.splice(index, 1); //TODO this is splicing from og array too (also does in iwr)
+                pairsRef.splice(index, 1);
             }
         }
     } else {
@@ -401,9 +409,10 @@ function iWasRight() {
     callsString = currentReversed ? "revCalls" : "calls";
 
     if (prevNumCalls === settings.timesCorrect) {
-        currentPair[callsString] -= 1;
+        //if calls was as high as possible
+        currentPair[callsString] -= 1; //only take away one bc the initial incorrect did nothing
     } else {
-        currentPair[callsString] -= 2;
+        currentPair[callsString] -= 2; //one to correct initial incorrect and one for rigth answer
     }
 
     if (currentPair["calls"] === 0 && currentPair["revCalls"] === 0) {

@@ -101,7 +101,8 @@ $construction-placeholder: darken($construction-text, 25%);
 $construction-btn-hover: darken($construction-highlight, 40%);
 
 //TODO must stay at 1.4 rn because status button doesnt work at other sizes
-$card-font-size: 1.4rem;
+// $card-font-size: 1.4rem;
+$card-font-size: 26px;
 
 $hex-width: 150px;
 $hex-side: $hex-width / 1.73;

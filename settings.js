@@ -11,7 +11,8 @@ class Settings {
         var defaults;
         //settings only changable in settings.html
         this.path = path.join(userDataPath + "/settings.json");
-        defaults = {
+
+        this.defaults = {
             theme: "light",
             strikeThrough: true,
             showInfo: true,
@@ -20,6 +21,7 @@ class Settings {
             penalizeIncorrect: true,
             delayCorrect: 1,
             delayIncorrect: 0,
+            studyFontSize: 18,
             ignoreParenthesis: 1,
             ignoreCapital: 1,
             sortHomeBy: "lastUsed",
@@ -47,6 +49,11 @@ class Settings {
 
     setAll(val) {
         this.data = val;
+        fs.writeFileSync(this.path, JSON.stringify(this.data));
+    }
+
+    resetDefault() {
+        this.data = JSON.parse(JSON.stringify(this.defaults));
         fs.writeFileSync(this.path, JSON.stringify(this.data));
     }
 }

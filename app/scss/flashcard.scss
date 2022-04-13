@@ -35,7 +35,7 @@ a {
 
 h2 {
     //this is for answer and promtp
-    font-size: $card-font-size;
+    font-size: 1rem;
     text-align: center;
     max-width: 83%;
     cursor: pointer;
@@ -99,8 +99,8 @@ h2 {
     height: fit-content;
     border-radius: 3px;
     border: 2px solid var(--highlight, $highlight);
-    padding: 0.1rem 0 0.4rem 0.5rem;
-    font-size: 1.3rem;
+    padding: 1.3px 0 5.2px 6.5px;
+    font-size: 16px;
 
     .row-container {
         margin-top: 3px;
@@ -127,7 +127,7 @@ h2 {
     padding-left: 25px;
     margin-bottom: 12px;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 15.6px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -148,8 +148,8 @@ h2 {
     position: absolute;
     top: 0;
     left: 0;
-    height: 1.2rem;
-    width: 1.2rem;
+    height: 15.6px;
+    width: 15.6px;
     background-color: var(--highlight, $highlight);
     border-radius: 3px;
 }
@@ -178,12 +178,12 @@ h2 {
 
 /* Style the checkmark/indicator */
 .checkbox-container .checkmark:after {
-    left: 0.38rem;
-    top: 0.18rem;
-    width: 0.24rem;
-    height: 0.48rem;
+    left: 4.94px;
+    top: 2.34px;
+    width: 3.12px;
+    height: 6.24px;
     border: solid var(--background, $background);
-    border-width: 0 0.2rem 0.2rem 0;
+    border-width: 0 2.6px 2.6px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
@@ -192,6 +192,7 @@ h2 {
 
 #flashcard-container {
     #bottom-text {
+        font-size: 13px;
         position: absolute;
         bottom: 10px;
         text-align: center;
@@ -199,12 +200,12 @@ h2 {
     }
 
     #answer-input {
-        width: 40vw;
+        width: calc(40vw + ((1rem - 18px) * 8));
         margin-top: 6vh;
         border: 2px solid var(--highlight, $highlight);
         border-radius: 3px;
-        padding: 0.3rem;
-        font-size: $card-font-size;
+        padding: 3.9px;
+        font-size: 1rem;
         text-align: center;
         font-weight: bold;
         &:focus {
@@ -214,21 +215,23 @@ h2 {
 
     #status-block {
         position: absolute;
-        margin-top: calc(6vh + 3px); //margin + border of answer-inpit
+        margin-top: calc(6vh + 6.9px); //margin + border of answer-inpit
         margin-left: calc(
-            -1 * (6vh + 5px)
+            -1 * (1rem + 8.9px)
         ); // neagtive margin + border of answer-input, then added 2 px so not touching border
-        height: 2rem; //1.4 + 0.3 * 2 from #answer-input
-        width: 2rem;
+        height: calc(1rem + 3.9px); //1.4 + 0.3 * 2 from #answer-input
+        width: calc(1rem + 3.9px);
         display: inline-block;
         border-radius: 3px;
         text-align: center;
         vertical-align: middle;
-        line-height: 2rem; //set equal to height of this item to center text vertically
+        line-height: calc(
+            1rem + 3.9px
+        ); //set equal to height of this item to center text vertically
         font-size: 1.6rem;
         font-weight: bold;
         color: var(--highlight, $highlight);
-        // background: $correct-green;
+        background-color: var(--background, $background);
     }
 
     //idfk why i cant do this without container
@@ -239,7 +242,8 @@ h2 {
 
     #iwr-btn {
         position: absolute;
-        right: 30vw;
+        // right: 30vw;
+        right: calc((100vw - (40vw + ((1rem - 18px) * 8))) / 2);
         background: none;
         color: var(--highlight, $highlight);
         border: none;
@@ -251,12 +255,12 @@ h2 {
     }
 
     .typed-answer {
-        width: 40%;
+        width: calc(40vw + ((1rem - 18px) * 8));
         border: 2px solid var(--highlight, $highlight);
         border-top: none;
         border-radius: 3px;
-        padding: 0.3rem;
-        font-size: $card-font-size;
+        padding: 3.9px;
+        font-size: 1rem;
         text-align: center;
     }
 

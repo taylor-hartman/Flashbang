@@ -152,6 +152,24 @@ a {
   pointer-events: none;
 }
 
+.main-container .section .text-size-container {
+  width: 100%;
+  height: 30px;
+  margin: 1vh 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
 .main-container .section .setting-holder {
   width: 100%;
   display: -webkit-box;
@@ -189,7 +207,7 @@ a {
 }
 
 .main-container .section .setting-holder .setting input {
-  width: 3rem;
+  width: 4rem;
   text-align: center;
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
@@ -212,7 +230,7 @@ a {
   background: none;
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
-  padding: 0.3rem;
+  padding: 3.9px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -232,7 +250,7 @@ a {
 
 .main-container #end-bar {
   width: 100%;
-  margin-top: 0.5rem;
+  margin-top: 6.5px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

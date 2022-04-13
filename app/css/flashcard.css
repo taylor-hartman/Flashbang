@@ -44,7 +44,7 @@ a {
 }
 
 h2 {
-  font-size: 1.4rem;
+  font-size: 1rem;
   text-align: center;
   max-width: 83%;
   cursor: pointer;
@@ -118,8 +118,8 @@ h2 {
   height: fit-content;
   border-radius: 3px;
   border: 2px solid var(--highlight, #393e41);
-  padding: 0.1rem 0 0.4rem 0.5rem;
-  font-size: 1.3rem;
+  padding: 1.3px 0 5.2px 6.5px;
+  font-size: 16px;
 }
 
 #options-menu .row-container {
@@ -150,7 +150,7 @@ h2 {
   padding-left: 25px;
   margin-bottom: 12px;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 15.6px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -171,8 +171,8 @@ h2 {
   position: absolute;
   top: 0;
   left: 0;
-  height: 1.2rem;
-  width: 1.2rem;
+  height: 15.6px;
+  width: 15.6px;
   background-color: var(--highlight, #393e41);
   border-radius: 3px;
 }
@@ -191,17 +191,18 @@ h2 {
 
 /* Style the checkmark/indicator */
 .checkbox-container .checkmark:after {
-  left: 0.38rem;
-  top: 0.18rem;
-  width: 0.24rem;
-  height: 0.48rem;
+  left: 4.94px;
+  top: 2.34px;
+  width: 3.12px;
+  height: 6.24px;
   border: solid var(--background, #e7e6e1);
-  border-width: 0 0.2rem 0.2rem 0;
+  border-width: 0 2.6px 2.6px 0;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 
 #flashcard-container #bottom-text {
+  font-size: 13px;
   position: absolute;
   bottom: 10px;
   text-align: center;
@@ -209,12 +210,12 @@ h2 {
 }
 
 #flashcard-container #answer-input {
-  width: 40vw;
+  width: calc(40vw + ((1rem - 18px) * 8));
   margin-top: 6vh;
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
-  padding: 0.3rem;
-  font-size: 1.4rem;
+  padding: 3.9px;
+  font-size: 1rem;
   text-align: center;
   font-weight: bold;
 }
@@ -225,18 +226,19 @@ h2 {
 
 #flashcard-container #status-block {
   position: absolute;
-  margin-top: calc(6vh + 3px);
-  margin-left: calc( -1 * (6vh + 5px));
-  height: 2rem;
-  width: 2rem;
+  margin-top: calc(6vh + 6.9px);
+  margin-left: calc( -1 * (1rem + 8.9px));
+  height: calc(1rem + 3.9px);
+  width: calc(1rem + 3.9px);
   display: inline-block;
   border-radius: 3px;
   text-align: center;
   vertical-align: middle;
-  line-height: 2rem;
+  line-height: calc( 1rem + 3.9px);
   font-size: 1.6rem;
   font-weight: bold;
   color: var(--highlight, #393e41);
+  background-color: var(--background, #e7e6e1);
 }
 
 #flashcard-container #iwr-btn-container {
@@ -246,7 +248,7 @@ h2 {
 
 #flashcard-container #iwr-btn {
   position: absolute;
-  right: 30vw;
+  right: calc((100vw - (40vw + ((1rem - 18px) * 8))) / 2);
   background: none;
   color: var(--highlight, #393e41);
   border: none;
@@ -259,12 +261,12 @@ h2 {
 }
 
 #flashcard-container .typed-answer {
-  width: 40%;
+  width: calc(40vw + ((1rem - 18px) * 8));
   border: 2px solid var(--highlight, #393e41);
   border-top: none;
   border-radius: 3px;
-  padding: 0.3rem;
-  font-size: 1.4rem;
+  padding: 3.9px;
+  font-size: 1rem;
   text-align: center;
 }
 

@@ -7,6 +7,10 @@
   color: var(--text, #393e41);
 }
 
+html {
+  font-size: 16.9px;
+}
+
 body {
   background: var(--background);
 }
@@ -109,7 +113,7 @@ a {
 }
 
 .edit-icons-container a {
-  margin: 0 0.3rem;
+  margin: 0 3.9px;
 }
 
 .edit-icons-container .delete-btn:hover {
@@ -164,7 +168,7 @@ a {
   border: solid 2px var(--highlight, #393e41);
   border-radius: 3px;
   width: 10%;
-  padding: 0.1rem;
+  padding: 1.3px;
 }
 
 #delete-menu #delete-btns-container button:hover {
@@ -209,7 +213,7 @@ a {
   top: 8px;
   right: 34px;
   text-align: left;
-  padding: 0.1rem;
+  padding: 1.3px;
   min-width: 50px;
   width: -webkit-fit-content;
   width: -moz-fit-content;
@@ -306,17 +310,17 @@ a {
 }
 
 .hex-content h3 {
-  font-size: 1.3rem;
-  line-height: 1.5rem;
-  max-height: 3rem;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  max-height: 2.4rem;
   width: 100%;
   overflow: hidden;
   overflow-wrap: break-word;
 }
 
 .hex-content p {
-  font-size: 1rem;
-  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  margin-top: 6.5px;
 }
 
 .hex-center:hover {
@@ -344,11 +348,11 @@ a {
 }
 
 #scroll-forward {
-  right: 1rem;
+  right: 13px;
 }
 
 #scroll-back {
-  left: 1rem;
+  left: 13px;
 }
 
 .hide {
@@ -372,6 +376,6 @@ a {
 }
 
 .no-bunches-hex-content h3 {
-  font-size: 1.3rem;
+  font-size: 1rem;
   text-align: center;
 }

@@ -71,6 +71,23 @@ document.getElementById("delay-incorrect").addEventListener("change", () => {
     });
 });
 
+document.getElementById("study-font-size").addEventListener("change", () => {
+    var value = document.getElementById("study-font-size").value;
+    re = /^\d{1,2}(\.\d{1,2})?$/; //makes sure is number between 0 and 100 (exclusive) with max two decimals
+    const testedvalue = re.test(value) ? value : 18; //18 is default value
+    if (testedvalue > 35) {
+        value = 35;
+    } else if (testedvalue < 12) {
+        value = 12;
+    } else {
+        value = testedvalue;
+    }
+    ipcRenderer.send("globalSettings:set", {
+        key: "studyFontSize",
+        value: parseFloat(value, 10),
+    });
+});
+
 document.getElementById("ignore-parenthesis").addEventListener("change", () => {
     ipcRenderer.send("globalSettings:set", {
         key: "ignoreParenthesis",
@@ -108,6 +125,7 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
         settings.penalizeIncorrect;
     document.getElementById("delay-correct").value = settings.delayCorrect;
     document.getElementById("delay-incorrect").value = settings.delayIncorrect;
+    document.getElementById("study-font-size").value = settings.studyFontSize;
 
     document.getElementById("ignore-parenthesis").checked =
         settings.ignoreParenthesis;
