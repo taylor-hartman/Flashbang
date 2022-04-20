@@ -29,6 +29,10 @@ ipcRenderer.on("globalSettings:gettimesCorrect", (e, val) => {
     timesCorrect = val;
 });
 
+document.getElementById("scroll-down-btn").addEventListener("click", () => {
+    document.getElementById("submit-add-bar").scrollIntoView();
+});
+
 //---------------Editing stuff------------------
 document.getElementById("edit-pairs").addEventListener("click", (e) => {
     editingPairs = !editingPairs;
@@ -109,7 +113,7 @@ document.getElementById("plus").addEventListener("click", (e) => {
 
     const pairElems = document.getElementsByClassName("pair");
     const yPos = pairElems[pairElems.length - 1].getBoundingClientRect().top;
-    window.scrollTo(0, yPos);
+    document.getElementById("submit-add-bar").scrollIntoView();
 });
 
 //---stuff for clearing---

@@ -105,13 +105,31 @@
                     <span class="checkmark"></span>
                 </label>
             </div>
+            <div class="separator"></div>
+            <div class="row-container">
+                <label for="say-prompt">Say Prompt</label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="say-prompt" />
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <div class="row-container">
+                <label for="say-answer">Say Answer</label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="say-answer" />
+                    <span class="checkmark"></span>
+                </label>
+            </div>
         </div>
 
         <div class="container main-container" id="flashcard-container">
             <h2 id="prompt"></h2>
             <div class="hide" id="main-separator"></div>
             <h2 class="hide" id="answer"></h2>
-            <p id="bottom-text">Press Space to Reveal Answer</p>
+            <div class="bottom-container">
+                <p id="remaining-text"></p>
+                <p id="bottom-text">Press Space to Reveal Answer</p>
+            </div>
         </div>
         <script src="js/flashcard.js"></script>
         <script src="js/themeManager.js"></script>

@@ -120,6 +120,7 @@ h2 {
   border: 2px solid var(--highlight, #393e41);
   padding: 1.3px 0 5.2px 6.5px;
   font-size: 16px;
+  background-color: var(--background, #e7e6e1);
 }
 
 #options-menu .row-container {
@@ -203,10 +204,33 @@ h2 {
 
 #flashcard-container #bottom-text {
   font-size: 13px;
-  position: absolute;
-  bottom: 10px;
   text-align: center;
   color: var(--highlight, #393e41);
+}
+
+#flashcard-container #remaining-text {
+  font-size: 13px;
+  text-align: center;
+  color: var(--highlight, #393e41);
+}
+
+#flashcard-container .bottom-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  position: absolute;
+  bottom: 10px;
+  height: 50px;
 }
 
 #flashcard-container #answer-input {
@@ -277,4 +301,8 @@ h2 {
 
 .hide {
   visibility: hidden;
+}
+
+.undisplay {
+  display: none;
 }

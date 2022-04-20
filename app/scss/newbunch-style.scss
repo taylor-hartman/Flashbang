@@ -167,6 +167,15 @@ input {
     }
 }
 
+#scroll-down-btn {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 #top-right-btn {
     &:hover {
         cursor: pointer;

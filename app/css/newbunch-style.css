@@ -214,6 +214,16 @@ input {
   cursor: pointer;
 }
 
+#scroll-down-btn {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+}
+
+#scroll-down-btn:hover {
+  cursor: pointer;
+}
+
 #top-right-btn {
   position: fixed;
   top: 5px;

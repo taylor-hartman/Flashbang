@@ -36,6 +36,8 @@ class BunchStorage {
                 flashcard: true,
                 typed: false,
             },
+            sayPrompt: false,
+            sayAnswer: false,
         };
         this.data = parseDataFile(this.path, this.defaults);
     }

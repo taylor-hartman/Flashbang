@@ -27,6 +27,13 @@ document.getElementById("show-info").addEventListener("change", () => {
     });
 });
 
+document.getElementById("show-remaining").addEventListener("change", () => {
+    ipcRenderer.send("globalSettings:set", {
+        key: "showRemaining",
+        value: document.getElementById("show-remaining").checked,
+    });
+});
+
 document.getElementById("show-iwr").addEventListener("change", () => {
     ipcRenderer.send("globalSettings:set", {
         key: "showIwr",
@@ -120,6 +127,7 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
     document.getElementById("strike-through").checked = settings.strikeThrough;
     document.getElementById("show-iwr").checked = settings.showIwr;
     document.getElementById("show-info").checked = settings.showInfo;
+    document.getElementById("show-remaining").checked = settings.showRemaining;
     document.getElementById("times-correct").value = settings.timesCorrect;
     document.getElementById("penalize-incorrect").checked =
         settings.penalizeIncorrect;

@@ -101,6 +101,7 @@ h2 {
     border: 2px solid var(--highlight, $highlight);
     padding: 1.3px 0 5.2px 6.5px;
     font-size: 16px;
+    background-color: var(--background, $background);
 
     .row-container {
         margin-top: 3px;
@@ -193,10 +194,24 @@ h2 {
 #flashcard-container {
     #bottom-text {
         font-size: 13px;
-        position: absolute;
-        bottom: 10px;
         text-align: center;
         color: var(--highlight, $highlight);
+    }
+
+    #remaining-text {
+        font-size: 13px;
+        text-align: center;
+        color: var(--highlight, $highlight);
+    }
+
+    .bottom-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        position: absolute;
+        bottom: 10px;
+        height: 50px;
     }
 
     #answer-input {
@@ -272,4 +287,8 @@ h2 {
 
 .hide {
     visibility: hidden;
+}
+
+.undisplay {
+    display: none;
 }

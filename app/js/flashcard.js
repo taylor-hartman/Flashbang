@@ -14,6 +14,7 @@ var currentReversed; // bool if the currentPair is asked standard or reversed
 let pairsRef = []; //array of references to each pair
 
 let settings; //all study settings
+let bunchSettings = {}; //all bunch settings
 
 const url = document.location.href;
 const id = url.split("?")[1].split("=")[1].replaceAll("%20", " "); //gets the id of bunch from query string
@@ -74,7 +75,7 @@ function onOrderChange() {
             bothrs: document.getElementById("bothrs").checked,
         },
     });
-    pairOrder = {
+    bunchSettings.pairOrder = {
         //TODO this should be done via get req to main
         standard: document.getElementById("standard").checked,
         reversed: document.getElementById("reversed").checked,
@@ -98,14 +99,33 @@ function onQuestionTypeChange() {
             typed: document.getElementById("ask-typed").checked,
         },
     });
-    questionType = {
+    bunchSettings.questionType = {
         //TODO should be updated w get to main
         flashcard: document.getElementById("ask-flashcard").checked,
         typed: document.getElementById("ask-typed").checked,
     };
     updateHTML();
+    updateRemainingText();
     setCurrentPair();
 }
+
+document.getElementById("say-prompt").addEventListener("change", () => {
+    ipcRenderer.send("bunch:set", id, {
+        key: "sayPrompt",
+        value: document.getElementById("say-prompt").checked,
+    });
+    // bunchSettings.sayPrompt = ipcRenderer.send("bunch:get", id, "sayPrompt");
+    bunchSettings.sayPrompt = document.getElementById("say-prompt").checked;
+});
+
+document.getElementById("say-answer").addEventListener("change", () => {
+    ipcRenderer.send("bunch:set", id, {
+        key: "sayAnswer",
+        value: document.getElementById("say-answer").checked,
+    });
+    // bunchSettings.sayAnswer = ipcRenderer.send("bunch:get", id, "sayAnswer");
+    bunchSettings.sayAnswer = document.getElementById("say-answer").checked;
+});
 
 //-----------Settings Stuff------------
 ipcRenderer.on("globalSettings:getAll", (e, settingsIn) => {
@@ -115,19 +135,19 @@ ipcRenderer.on("globalSettings:getAll", (e, settingsIn) => {
 // ------------Pairs Stuff-------------
 // handles pairs data
 //TODO this should not be done this way, should create a global var that stores bunch settings
-let promptLang, answerLang;
-let pairOrder, questionType;
 ipcRenderer.on("bunch:getAll", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs)); //deep copy
 
-    promptLang = bunch.promptLang;
-    answerLang = bunch.answerLang;
+    bunchSettings.promptLang = bunch.promptLang;
+    bunchSettings.answerLang = bunch.answerLang;
+
+    bunchSettings.pairOrder = bunch.pairOrder;
+    bunchSettings.questionType = bunch.questionType;
+
+    bunchSettings.sayPrompt = bunch.sayPrompt;
+    bunchSettings.sayAnswer = bunch.sayAnswer;
 
     currentReversed = bunch.pairOrder.reversed;
-
-    pairOrder = bunch.pairOrder;
-    questionType = bunch.questionType;
-
     studyComplete = bunch.complete;
 
     updateHTML();
@@ -137,19 +157,22 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
 
 function createPairsRef() {
     pairsRef = [];
-    if (pairOrder.standard) {
+    if (bunchSettings.pairOrder.standard) {
         for (x = 0; x < pairs.length; x++) {
             if (pairs[x].calls > 0) {
                 pairsRef.push(pairs[x]); //"Objects and arrays are pushed as a pointer to the original object"
             }
         }
-    } else if (pairOrder.reversed) {
+    } else if (bunchSettings.pairOrder.reversed) {
         for (x = 0; x < pairs.length; x++) {
             if (pairs[x].revCalls > 0) {
                 pairsRef.push(pairs[x]);
             }
         }
-    } else if (pairOrder.bothsr || pairOrder.bothrs) {
+    } else if (
+        bunchSettings.pairOrder.bothsr ||
+        bunchSettings.pairOrder.bothrs
+    ) {
         for (x = 0; x < pairs.length; x++) {
             if (pairs[x].calls > 0 || pairs[x].revCalls > 0) {
                 pairsRef.push(pairs[x]);
@@ -157,16 +180,25 @@ function createPairsRef() {
         }
     }
     setCurrentPair();
+    updateRemainingText();
 }
 
 function updateHTML() {
     /*updates all html that depends on bunch content/settings */
-    document.getElementById("standard").checked = pairOrder.standard;
-    document.getElementById("reversed").checked = pairOrder.reversed;
-    document.getElementById("bothsr").checked = pairOrder.bothsr;
-    document.getElementById("bothrs").checked = pairOrder.bothrs;
-    document.getElementById("ask-flashcard").checked = questionType.flashcard;
-    document.getElementById("ask-typed").checked = questionType.typed;
+    document.getElementById("standard").checked =
+        bunchSettings.pairOrder.standard;
+    document.getElementById("reversed").checked =
+        bunchSettings.pairOrder.reversed;
+    document.getElementById("bothsr").checked = bunchSettings.pairOrder.bothsr;
+    document.getElementById("bothrs").checked = bunchSettings.pairOrder.bothrs;
+
+    document.getElementById("ask-flashcard").checked =
+        bunchSettings.questionType.flashcard;
+    document.getElementById("ask-typed").checked =
+        bunchSettings.questionType.typed;
+
+    document.getElementById("say-prompt").checked = bunchSettings.sayPrompt;
+    document.getElementById("say-answer").checked = bunchSettings.sayAnswer;
 
     const root = document.querySelector(":root");
     root.style.fontSize = `${settings.studyFontSize}px`;
@@ -177,15 +209,21 @@ function updateHTML() {
         var fcc = document.getElementById("flashcard-container");
         fcc.innerHTML = `<h2 id="end-dialogue">Bunch Complete <br> Press Space to Reset Progress</h2>`;
     } else {
-        if (questionType.flashcard) {
+        if (bunchSettings.questionType.flashcard) {
             document.getElementById("flashcard-container").innerHTML = `
         <h2 class="flashcard-margin" id="prompt"></h2>
        <div class="hide" id="main-separator"></div>
        <h2 class="hide" id="answer"></h2>
-       <p ${
-           settings.showInfo ? "" : 'class="hide"'
-       } id="bottom-text">Press Space to Reveal Answer</p>`;
-        } else if (questionType.typed) {
+       <div class="bottom-container">
+            <p ${
+                settings.showRemaining ? "" : 'class="undisplay"'
+            }id="remaining-text"></p>
+            
+            <p ${
+                settings.showInfo ? "" : 'class="undisplay"'
+            } id="bottom-text">Press Space to Reveal Answer</p>
+        </div>`;
+        } else if (bunchSettings.questionType.typed) {
             document.getElementById(
                 "flashcard-container"
             ).innerHTML = `<h2 class="typed-margin" id="prompt">Lorem</h2>
@@ -195,9 +233,17 @@ function updateHTML() {
         </div>
         <h2 class="hide typed-answer" id="answer">Lorem</h2>
         <div class="hide" id="iwr-btn-container"><button id="iwr-btn">I was right</button></div>
-        <p ${
-            settings.showInfo ? "" : 'class="hide"'
-        } id="bottom-text">Press Enter to Answer</p>`;
+
+        <div class="bottom-container">
+            
+            <p ${
+                settings.showRemaining ? "" : 'class="undisplay"'
+            }id="remaining-text"></p>
+
+            <p ${
+                settings.showInfo ? "" : 'class="undisplay"'
+            } id="bottom-text">Press Enter to Answer</p>
+        </div>`;
 
             document
                 .getElementById("iwr-btn")
@@ -216,17 +262,17 @@ function updateHTML() {
 }
 
 function generateCalls() {
-    if (pairOrder.bothrs || pairOrder.bothsr) {
+    if (bunchSettings.pairOrder.bothrs || bunchSettings.pairOrder.bothsr) {
         for (x = 0; x < pairs.length; x++) {
             pairs[x].calls = settings.timesCorrect;
             pairs[x].revCalls = settings.timesCorrect;
         }
-    } else if (pairOrder.reversed) {
+    } else if (bunchSettings.pairOrder.reversed) {
         for (x = 0; x < pairs.length; x++) {
             pairs[x].calls = 0;
             pairs[x].revCalls = settings.timesCorrect;
         }
-    } else if (pairOrder.standard) {
+    } else if (bunchSettings.pairOrder.standard) {
         for (x = 0; x < pairs.length; x++) {
             pairs[x].calls = settings.timesCorrect;
             pairs[x].revCalls = 0;
@@ -259,7 +305,7 @@ function setCurrentPair() {
 function displayCard() {
     if (!studyComplete) {
         //this is called from bunch:getAll when studyis complete sometimes. this is to stop it from that
-        if (pairOrder.bothrs) {
+        if (bunchSettings.pairOrder.bothrs) {
             //if it is reversed then standard, then we need to flip order
             if (currentPair.revCalls > 0) {
                 currentReversed = true; //TODO should not be set here
@@ -326,7 +372,7 @@ function exitResetMenu() {
 }
 
 function answerManager(e) {
-    if (questionType.flashcard) {
+    if (bunchSettings.questionType.flashcard) {
         if (!answerShown) {
             if (e.key === " ") {
                 showAnswer();
@@ -342,7 +388,7 @@ function answerManager(e) {
                 resetPage(); //this must stay inside if bc otherwise resets on any key
             }
         }
-    } else if (questionType.typed) {
+    } else if (bunchSettings.questionType.typed) {
         if (!answerShown) {
             if (e.key === "Enter") {
                 showAnswer();
@@ -361,18 +407,34 @@ function answerManager(e) {
 var noTimeout; //used for incorrect forced delay
 
 function say(type) {
-    window.speechSynthesis.cancel(); //stops all previous call
-    let lang, string;
-    if (type == "prompt") {
-        lang = currentReversed ? answerLang : promptLang;
-        string = currentReversed ? currentPair.answer : currentPair.prompt;
-    } else if (type == "answer") {
-        lang = currentReversed ? promptLang : answerLang;
-        string = currentReversed ? currentPair.prompt : currentPair.answer;
+    //inputs type "prompt" for prompt; "answer" for answer
+    if (
+        (type == "answer" && bunchSettings.sayAnswer) ||
+        (type == "prompt" && bunchSettings.sayPrompt)
+    ) {
+        window.speechSynthesis.cancel(); //stops all previous call
+        let lang, string;
+        if (type == "prompt") {
+            lang = currentReversed
+                ? bunchSettings.answerLang
+                : bunchSettings.promptLang;
+            string = currentReversed ? currentPair.answer : currentPair.prompt;
+        } else if (type == "answer") {
+            lang = currentReversed
+                ? bunchSettings.promptLang
+                : bunchSettings.answerLang;
+            string = currentReversed ? currentPair.prompt : currentPair.answer;
+        }
+
+        const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
+        string = settings.ignoreParenthesis
+            ? string.replace(rmp, "").trim()
+            : string;
+
+        var msg = new SpeechSynthesisUtterance(string);
+        msg.lang = lang;
+        window.speechSynthesis.speak(msg);
     }
-    var msg = new SpeechSynthesisUtterance(string);
-    msg.lang = lang;
-    window.speechSynthesis.speak(msg);
 }
 
 //TODO make into one function w callincorrect
@@ -426,14 +488,14 @@ function iWasRight() {
 //TODO decide if you are making dif functions or using if statements
 var correctTimeout, incorrectTimeout;
 function showAnswer() {
-    if (questionType.flashcard) {
+    if (bunchSettings.questionType.flashcard) {
         document.querySelector("#main-separator").classList.remove("hide");
         document.getElementById("answer").classList.remove("hide");
         document.getElementById("bottom-text").innerText =
             "Incorrect: Press 1 \n Correct: Press 2 or Space";
         answerShown = true;
         say("answer");
-    } else if (questionType.typed) {
+    } else if (bunchSettings.questionType.typed) {
         document.getElementById("answer-input").blur();
         document.getElementById("answer-input").readOnly = true;
         answerShown = true;
@@ -504,16 +566,28 @@ function styleAnswer(correct) {
     }
 }
 
+function updateRemainingText() {
+    if (settings.showRemaining) {
+        let remainingCount = 0;
+        for (x = 0; x < pairsRef.length; x++) {
+            remainingCount += pairsRef[x].revCalls + pairsRef[x].calls;
+        }
+        document.getElementById(
+            "remaining-text"
+        ).innerText = `${remainingCount} remaining`;
+    }
+}
+
 function resetPage() {
     console.log("Pairs", pairs);
     console.log("PairsRef", pairsRef);
     if (pairsRef.length > 0) {
-        if (questionType.flashcard) {
+        if (bunchSettings.questionType.flashcard) {
             document.querySelector("#main-separator").classList.add("hide");
             document.getElementById("answer").classList.add("hide");
             document.getElementById("bottom-text").innerText =
                 "Press Space to Reveal Answer";
-        } else if (questionType.typed) {
+        } else if (bunchSettings.questionType.typed) {
             const input = document.getElementById("answer-input");
             input.readOnly = false;
             input.style.border = `2px solid var(--highlight, #393e41)`;
@@ -526,6 +600,7 @@ function resetPage() {
             document.getElementById("bottom-text").innerText =
                 "Press Enter to Answer";
         }
+        updateRemainingText();
         createPairsRef();
     } else {
         //when complete

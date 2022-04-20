@@ -16,6 +16,7 @@ class Settings {
             theme: "light",
             strikeThrough: true,
             showInfo: true,
+            showRemaining: true,
             showIwr: true,
             timesCorrect: 2,
             penalizeIncorrect: true,
