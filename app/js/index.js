@@ -6,11 +6,16 @@ window.onload = () => {
     ipcRenderer.send("bunchdata:get");
 };
 
-document
-    .getElementById("scroll-forward")
-    .addEventListener("click", scrollForward);
+ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
+    //TODO redundant conversion before and after get
+    bunches = JSON.parse(JSON.stringify(bunchesData));
+    makeIndexPage();
+});
 
-document.getElementById("scroll-back").addEventListener("click", scrollBack);
+//#region Edit/Delete
+/* -------------------------------------------------------------------------- */
+/*                                   Edit/Delete                              */
+/* -------------------------------------------------------------------------- */
 
 var editShown = false;
 document.getElementById("edit-bunch-btn").addEventListener("click", () => {
@@ -18,26 +23,6 @@ document.getElementById("edit-bunch-btn").addEventListener("click", () => {
     updateEditIcons();
 });
 
-function updateEditIcons() {
-    const iconContainers = document.getElementsByClassName(
-        "edit-icons-container"
-    );
-    if (editShown) {
-        //if not shown then show
-        for (x = 0; x < iconContainers.length; x++) {
-            iconContainers[x].classList.remove("hide");
-            iconContainers[x]
-                .getElementsByClassName("delete-btn")[0]
-                .addEventListener("click", deleteBunch);
-        }
-    } else {
-        for (x = 0; x < iconContainers.length; x++) {
-            iconContainers[x].classList.add("hide");
-        }
-    }
-}
-
-//-----------------------Delete Bunches---------------------------
 let bunchID; //the id of the bunch to be deleted
 function deleteBunch(e) {
     const fileTitle = e.target.getAttribute("bunch-title");
@@ -61,8 +46,12 @@ document.getElementById("yes-delete").addEventListener("click", () => {
 document.getElementById("no-delete").addEventListener("click", () => {
     document.getElementById("delete-menu").classList.add("hide");
 });
-//-----------------------------------------------
-//------------------Search Stuff--------------------------
+//#endregion
+
+//#region Search
+/* -------------------------------------------------------------------------- */
+/*                                   Search                                   */
+/* -------------------------------------------------------------------------- */
 var searchInputShown = false;
 document.getElementById("search-bunch-btn").addEventListener("click", () => {
     searchInputShown = !searchInputShown;
@@ -92,28 +81,41 @@ document.getElementById("search-input").addEventListener("input", () => {
         makeIndexPage();
     }
 });
+//#endregion
 
-//-----------------------------------------------
-ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
-    //TODO redundant conversion before and after get
-    bunches = JSON.parse(JSON.stringify(bunchesData));
-    makeIndexPage();
+//#region Sort
+/* -------------------------------------------------------------------------- */
+/*                                   Sort                                     */
+/* -------------------------------------------------------------------------- */
+//pass by reference
+function sortByDate(input) {
+    input.sort(function (a, b) {
+        var dateA = new Date(a.lastUsed),
+            dateB = new Date(b.lastUsed);
+        return dateB - dateA;
+    });
+}
+
+function sortByName(input) {
+    input.sort(function (a, b) {
+        var title1 = a.title,
+            title2 = b.title;
+        return title1.localeCompare(title2, undefined, { numeric: true });
+    });
+}
+
+let sortHomeBy;
+ipcRenderer.send("globalSettings:get", "sortHomeBy");
+ipcRenderer.on("globalSettings:getsortHomeBy", (e, val) => {
+    //Study
+    sortHomeBy = val;
 });
+//#endregion
 
-function scrollForward() {
-    if (pageNumber < bunchesCurrent.length / 7 - 1) {
-        pageNumber += 1;
-        makeIndexPage();
-    }
-}
-
-function scrollBack() {
-    if (pageNumber > 0) {
-        pageNumber -= 1;
-        makeIndexPage();
-    }
-}
-
+//#region HTML Generation
+/* -------------------------------------------------------------------------- */
+/*                               HTML Generation                              */
+/* -------------------------------------------------------------------------- */
 function makeIndexPage() {
     if (document.getElementById("search-input").value === "") {
         bunchesCurrent = bunches;
@@ -135,23 +137,6 @@ function makeIndexPage() {
     populateHexs(bunchesCurrent.slice(pageNumber * 7, (pageNumber + 1) * 7));
     scrollButtonControl();
     updateEditIcons();
-}
-
-//pass by reference
-function sortByDate(input) {
-    input.sort(function (a, b) {
-        var dateA = new Date(a.lastUsed),
-            dateB = new Date(b.lastUsed);
-        return dateB - dateA;
-    });
-}
-
-function sortByName(input) {
-    input.sort(function (a, b) {
-        var title1 = a.title,
-            title2 = b.title;
-        return title1.localeCompare(title2, undefined, { numeric: true });
-    });
 }
 
 function generateHTML(num) {
@@ -372,6 +357,37 @@ function insertElement(row, index, bunch) {
         [index].querySelector(".delete-btn")
         .setAttribute("bunch-id", `${bunch.id}`);
 }
+//#endregion
+
+//#region Button Management
+/* -------------------------------------------------------------------------- */
+/*                              Button Management                             */
+/* -------------------------------------------------------------------------- */
+function updateEditIcons() {
+    const iconContainers = document.getElementsByClassName(
+        "edit-icons-container"
+    );
+    if (editShown) {
+        //if not shown then show
+        for (x = 0; x < iconContainers.length; x++) {
+            iconContainers[x].classList.remove("hide");
+            iconContainers[x]
+                .getElementsByClassName("delete-btn")[0]
+                .addEventListener("click", deleteBunch);
+        }
+    } else {
+        for (x = 0; x < iconContainers.length; x++) {
+            iconContainers[x].classList.add("hide");
+        }
+    }
+}
+
+/* ----------------------------- Scroll Buttons ----------------------------- */
+document
+    .getElementById("scroll-forward")
+    .addEventListener("click", scrollForward);
+
+document.getElementById("scroll-back").addEventListener("click", scrollBack);
 
 function scrollButtonControl() {
     if (pageNumber === 0) {
@@ -387,9 +403,17 @@ function scrollButtonControl() {
     }
 }
 
-let sortHomeBy;
-ipcRenderer.send("globalSettings:get", "sortHomeBy");
-ipcRenderer.on("globalSettings:getsortHomeBy", (e, val) => {
-    //Study
-    sortHomeBy = val;
-});
+function scrollForward() {
+    if (pageNumber < bunchesCurrent.length / 7 - 1) {
+        pageNumber += 1;
+        makeIndexPage();
+    }
+}
+
+function scrollBack() {
+    if (pageNumber > 0) {
+        pageNumber -= 1;
+        makeIndexPage();
+    }
+}
+//#endregion

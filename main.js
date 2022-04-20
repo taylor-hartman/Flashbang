@@ -3,6 +3,10 @@ const BunchStorage = require("./bunchStorage");
 const Settings = require("./settings");
 const fs = require("fs");
 
+//#region Electron/Window Management
+/* -------------------------------------------------------------------------- */
+/*                         Electron/Window Management                         */
+/* -------------------------------------------------------------------------- */
 // Set env
 process.env.NODE_ENV = "development";
 
@@ -116,8 +120,15 @@ app.on("activate", () => {
     }
 });
 
-ipcMain.on("returnToIndex", returnToIndexPage);
+app.allowRendererProcessReuse = true;
+//#endregion
 
+//#region Bunch Requests
+/* -------------------------------------------------------------------------- */
+/*                               Bunch Requests                               */
+/* -------------------------------------------------------------------------- */
+
+/* ---------------------------------- Save ---------------------------------- */
 //saves new bunch when the back button is pressed
 ipcMain.on("newbunch:save", (e, bunch) => {
     const bunchStorage = new BunchStorage({
@@ -188,26 +199,16 @@ ipcMain.on("bunch:submit", (e, bunch) => {
     fs.unlink(newBunch, () => {});
 });
 
-ipcMain.on("bunch:delete", (e, fileName) => {
-    const userDataPath = app.getPath("userData");
-    var filePath = userDataPath + "/bunches/" + fileName + ".json";
-    fs.unlink(filePath, () => {});
+/* ----------------------------------- Get ---------------------------------- */
+//pass bunch title of "" for defaults
+ipcMain.on("bunch:get", (e, id, key) => {
+    const bunchStorage = new BunchStorage({ fileName: id });
+    e.reply(`bunch:get${key}`, bunchStorage.get(key));
 });
 
 ipcMain.on("bunch:getAll", (e, id) => {
     const bunchStorage = new BunchStorage({ fileName: id });
     e.reply("bunch:getAll", bunchStorage.getAll());
-});
-
-ipcMain.on("bunch:set", (e, id, input) => {
-    const bunchStorage = new BunchStorage({ fileName: id });
-    bunchStorage.set(input.key, input.value);
-});
-
-//pass bunch title of "" for defaults
-ipcMain.on("bunch:get", (e, id, key) => {
-    const bunchStorage = new BunchStorage({ fileName: id });
-    e.reply(`bunch:get${key}`, bunchStorage.get(key));
 });
 
 ipcMain.on("bunchdata:get", sendBunchData);
@@ -247,12 +248,25 @@ function sendBunchData() {
     }
 }
 
-function returnToIndexPage() {
-    mainWindow.loadFile("./app/index.html");
-}
+/* --------------------------------- Set/Delete --------------------------------- */
+ipcMain.on("bunch:delete", (e, fileName) => {
+    const userDataPath = app.getPath("userData");
+    var filePath = userDataPath + "/bunches/" + fileName + ".json";
+    fs.unlink(filePath, () => {});
+});
 
-//----------Global Settings----------
+ipcMain.on("bunch:set", (e, id, input) => {
+    const bunchStorage = new BunchStorage({ fileName: id });
+    bunchStorage.set(input.key, input.value);
+});
+//#endregion
 
+//#region Settings Requests
+/* -------------------------------------------------------------------------- */
+/*                              Settings Requests                             */
+/* -------------------------------------------------------------------------- */
+
+/* ----------------------------------- Get ---------------------------------- */
 ipcMain.on("globalSettings:get", (e, key) => {
     // mainWindow.webContents.send("settings:getAll", globalSettings.getAll());
     e.reply(`globalSettings:get${key}`, globalSettings.get(key));
@@ -263,6 +277,7 @@ ipcMain.on("globalSettings:getAll", (e) => {
     e.reply("globalSettings:getAll", globalSettings.getAll());
 });
 
+/* ------------------------------- Set/Delete ------------------------------- */
 ipcMain.on("globalSettings:set", (e, input) => {
     globalSettings.set(input.key, input.value);
     e.reply("globalSettings:getAll", globalSettings.getAll());
@@ -279,5 +294,11 @@ ipcMain.on("globalSettings:resetDefaults", (e) => {
     e.reply("globalSettings:getAll", globalSettings.getAll());
     e.reply("globalSettings:gettheme", globalSettings.get("theme"));
 });
+//#endregion
 
-app.allowRendererProcessReuse = true;
+//TODO this shouldnt exist
+ipcMain.on("returnToIndex", returnToIndexPage);
+
+function returnToIndexPage() {
+    mainWindow.loadFile("./app/index.html");
+}

@@ -5,19 +5,26 @@
 
 const { ipcRenderer } = require("electron");
 
+let settings; //all study settings
+let bunchSettings = {}; //all bunch settings
+
 var answerShown = false,
     studyComplete = false;
-inResetMenu = false;
+
 var pairs; //pairs is all pairs in bunch, current pair is the one currently being displayed
 var menuToggled = false;
 var currentReversed; // bool if the currentPair is asked standard or reversed
 let pairsRef = []; //array of references to each pair
 
-let settings; //all study settings
-let bunchSettings = {}; //all bunch settings
-
 const url = document.location.href;
 const id = url.split("?")[1].split("=")[1].replaceAll("%20", " "); //gets the id of bunch from query string
+
+let inResetMenu = false;
+
+//#region Event Handlers
+/* -------------------------------------------------------------------------- */
+/*                               Event Handlers                               */
+/* -------------------------------------------------------------------------- */
 
 //TODO could likely be chnaged do document.addEventListener('DOMContentLoaded', ()) and be faster
 window.onload = () => {
@@ -35,7 +42,6 @@ window.onload = () => {
     ipcRenderer.send("bunch:getAll", id);
 };
 
-//----------buttons listners--------------
 //edit button
 document.getElementById("edit-bunch-btn").addEventListener("click", () => {
     document
@@ -115,6 +121,7 @@ document.getElementById("say-prompt").addEventListener("change", () => {
         value: document.getElementById("say-prompt").checked,
     });
     // bunchSettings.sayPrompt = ipcRenderer.send("bunch:get", id, "sayPrompt");
+    //TODO do this with get request, the above does not work for some reason
     bunchSettings.sayPrompt = document.getElementById("say-prompt").checked;
 });
 
@@ -124,8 +131,27 @@ document.getElementById("say-answer").addEventListener("change", () => {
         value: document.getElementById("say-answer").checked,
     });
     // bunchSettings.sayAnswer = ipcRenderer.send("bunch:get", id, "sayAnswer");
+    //TODO do this with get request, the above does not work for some reason
     bunchSettings.sayAnswer = document.getElementById("say-answer").checked;
 });
+
+window.addEventListener("keydown", keyListener);
+function keyListener(e) {
+    e = e || window.e; //capture the e, and ensure we have an e
+    var key = e.key; //find the key that was pressed
+    if (key === "Escape" || (!inResetMenu && studyComplete && key === " ")) {
+        window.location.href = "index.html";
+        return;
+    } else if (inResetMenu && key === " ") {
+        exitResetMenu();
+    } else {
+        answerManager(e);
+    }
+
+    if (menuToggled) {
+        toggleMenu();
+    }
+}
 
 //-----------Settings Stuff------------
 ipcRenderer.on("globalSettings:getAll", (e, settingsIn) => {
@@ -133,8 +159,6 @@ ipcRenderer.on("globalSettings:getAll", (e, settingsIn) => {
 });
 
 // ------------Pairs Stuff-------------
-// handles pairs data
-//TODO this should not be done this way, should create a global var that stores bunch settings
 ipcRenderer.on("bunch:getAll", (e, bunch) => {
     pairs = JSON.parse(JSON.stringify(bunch.pairs)); //deep copy
 
@@ -154,6 +178,45 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
 
     createPairsRef();
 });
+
+function setPairs() {
+    ipcRenderer.send("bunch:set", id, {
+        key: "pairs",
+        value: pairs,
+    });
+}
+
+function setComplete() {
+    ipcRenderer.send("bunch:set", id, {
+        key: "complete",
+        value: studyComplete,
+    });
+}
+//#endregion
+
+//#region Bunch Management
+/* -------------------------------------------------------------------------- */
+/*                              Bunch Management                              */
+/* -------------------------------------------------------------------------- */
+
+let lastPrompt;
+function setCurrentPair() {
+    let index = Math.floor(Math.random() * pairsRef.length);
+
+    let count = 0;
+    if (pairsRef.length > 1) {
+        while (pairsRef[index].prompt === lastPrompt && count < 5) {
+            //TODO shoudl be better way to do this
+            //TODO i feel like this while loop is not effiecient
+            index = Math.floor(Math.random() * pairsRef.length);
+            count += 1; //after five trys j continue anyway (need this for repeat prompts)
+        }
+        lastPrompt = pairsRef[index].prompt;
+    }
+    currentPair = pairsRef[index];
+
+    displayCard();
+}
 
 function createPairsRef() {
     pairsRef = [];
@@ -182,6 +245,201 @@ function createPairsRef() {
     setCurrentPair();
     updateRemainingText();
 }
+
+function generateCalls() {
+    if (bunchSettings.pairOrder.bothrs || bunchSettings.pairOrder.bothsr) {
+        for (x = 0; x < pairs.length; x++) {
+            pairs[x].calls = settings.timesCorrect;
+            pairs[x].revCalls = settings.timesCorrect;
+        }
+    } else if (bunchSettings.pairOrder.reversed) {
+        for (x = 0; x < pairs.length; x++) {
+            pairs[x].calls = 0;
+            pairs[x].revCalls = settings.timesCorrect;
+        }
+    } else if (bunchSettings.pairOrder.standard) {
+        for (x = 0; x < pairs.length; x++) {
+            pairs[x].calls = settings.timesCorrect;
+            pairs[x].revCalls = 0;
+        }
+    }
+    setPairs();
+    createPairsRef();
+    console.log("Pairs", pairs);
+}
+
+let prevNumCalls;
+function updateCalls(correct) {
+    if (correct) {
+        console.log("Correct");
+        callsString = currentReversed ? "revCalls" : "calls";
+        if (currentPair[callsString] > 0) {
+            currentPair[callsString] -= 1;
+            if (currentPair["calls"] === 0 && currentPair["revCalls"] === 0) {
+                const index = pairsRef.indexOf(currentPair);
+                pairsRef.splice(index, 1);
+            }
+        }
+    } else {
+        console.log("Inorrect");
+        callsString = currentReversed ? "revCalls" : "calls";
+        prevNumCalls = currentPair[callsString];
+        if (
+            currentPair[callsString] !== 0 &&
+            currentPair[callsString] < settings.timesCorrect &&
+            settings.penalizeIncorrect
+        ) {
+            currentPair[callsString] += 1;
+        }
+    }
+}
+
+var noTimeout; //used for incorrect forced delay
+function iWasRight() {
+    clearTimeout(incorrectTimeout);
+    noTimeout = true;
+
+    callsString = currentReversed ? "revCalls" : "calls";
+
+    if (prevNumCalls === settings.timesCorrect) {
+        //if calls was as high as possible
+        currentPair[callsString] -= 1; //only take away one bc the initial incorrect did nothing
+    } else {
+        currentPair[callsString] -= 2; //one to correct initial incorrect and one for rigth answer
+    }
+
+    if (currentPair["calls"] === 0 && currentPair["revCalls"] === 0) {
+        const index = pairsRef.indexOf(currentPair);
+        pairsRef.splice(index, 1);
+    }
+
+    resetPage();
+}
+
+//TODO decide if you are making dif functions or using if statements
+var correctTimeout, incorrectTimeout;
+function showAnswer() {
+    if (bunchSettings.questionType.flashcard) {
+        document.querySelector("#main-separator").classList.remove("hide");
+        document.getElementById("answer").classList.remove("hide");
+        document.getElementById("bottom-text").innerText =
+            "Incorrect: Press 1 \n Correct: Press 2 or Space";
+        answerShown = true;
+        say("answer");
+    } else if (bunchSettings.questionType.typed) {
+        document.getElementById("answer-input").blur();
+        document.getElementById("answer-input").readOnly = true;
+        answerShown = true;
+        document.getElementById("bottom-text").innerText =
+            "Press Enter to Continue";
+
+        let userAnswer = document.getElementById("answer-input").value;
+        let answer = currentReversed ? currentPair.prompt : currentPair.answer;
+
+        const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
+        parsedAnswer = settings.ignoreParenthesis
+            ? answer.replace(rmp, "").trim()
+            : answer; //trim() removes trailing whitespaces
+
+        if (settings.ignoreCapital) {
+            answer = answer.toLowerCase();
+            userAnswer = userAnswer.toLowerCase();
+            parsedAnswer = parsedAnswer.toLowerCase();
+        }
+
+        if (userAnswer == answer || userAnswer == parsedAnswer) {
+            updateCalls(true);
+            if (settings.delayCorrect == 0) {
+                resetPage();
+            } else {
+                styleAnswer(true);
+                correctTimeout = setTimeout(
+                    resetPage,
+                    settings.delayCorrect * 1000
+                );
+            }
+        } else {
+            noTimeout = false;
+            incorrectTimeout = setTimeout(() => {
+                noTimeout = true;
+            }, settings.delayIncorrect * 1000);
+            updateCalls(false);
+            styleAnswer(false);
+            say("answer");
+        }
+    }
+}
+
+function answerManager(e) {
+    if (bunchSettings.questionType.flashcard) {
+        if (!answerShown) {
+            if (e.key === " ") {
+                showAnswer();
+            }
+        } else {
+            if (e.key === "2" || e.key === " ") {
+                //Answer is right
+                updateCalls(true);
+                resetPage(); //this must stay inside if bc otherwise resets on any key
+            } else if (e.key === "1") {
+                //answer is wrong
+                updateCalls(false);
+                resetPage(); //this must stay inside if bc otherwise resets on any key
+            }
+        }
+    } else if (bunchSettings.questionType.typed) {
+        if (!answerShown) {
+            if (e.key === "Enter") {
+                showAnswer();
+            }
+        } else {
+            if (e.key === "Enter" && noTimeout) {
+                clearTimeout(correctTimeout);
+                resetPage();
+            } else if (e.metaKey && e.key === "d") {
+                iWasRight();
+            }
+        }
+    }
+}
+
+function say(type) {
+    //inputs type "prompt" for prompt; "answer" for answer
+    if (
+        (type == "answer" && bunchSettings.sayAnswer) ||
+        (type == "prompt" && bunchSettings.sayPrompt)
+    ) {
+        window.speechSynthesis.cancel(); //stops all previous call
+        let lang, string;
+        if (type == "prompt") {
+            lang = currentReversed
+                ? bunchSettings.answerLang
+                : bunchSettings.promptLang;
+            string = currentReversed ? currentPair.answer : currentPair.prompt;
+        } else if (type == "answer") {
+            lang = currentReversed
+                ? bunchSettings.promptLang
+                : bunchSettings.answerLang;
+            string = currentReversed ? currentPair.prompt : currentPair.answer;
+        }
+
+        const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
+        string = settings.ignoreParenthesis
+            ? string.replace(rmp, "").trim()
+            : string;
+
+        var msg = new SpeechSynthesisUtterance(string);
+        msg.lang = lang;
+        window.speechSynthesis.speak(msg);
+    }
+}
+
+//#endregion
+
+//#region HTML Management
+/* -------------------------------------------------------------------------- */
+/*                               HTML Management                              */
+/* -------------------------------------------------------------------------- */
 
 function updateHTML() {
     /*updates all html that depends on bunch content/settings */
@@ -261,47 +519,6 @@ function updateHTML() {
     }
 }
 
-function generateCalls() {
-    if (bunchSettings.pairOrder.bothrs || bunchSettings.pairOrder.bothsr) {
-        for (x = 0; x < pairs.length; x++) {
-            pairs[x].calls = settings.timesCorrect;
-            pairs[x].revCalls = settings.timesCorrect;
-        }
-    } else if (bunchSettings.pairOrder.reversed) {
-        for (x = 0; x < pairs.length; x++) {
-            pairs[x].calls = 0;
-            pairs[x].revCalls = settings.timesCorrect;
-        }
-    } else if (bunchSettings.pairOrder.standard) {
-        for (x = 0; x < pairs.length; x++) {
-            pairs[x].calls = settings.timesCorrect;
-            pairs[x].revCalls = 0;
-        }
-    }
-    setPairs();
-    createPairsRef();
-    console.log("Pairs", pairs);
-}
-
-var lastPrompt;
-function setCurrentPair() {
-    let index = Math.floor(Math.random() * pairsRef.length);
-
-    let count = 0;
-    if (pairsRef.length > 1) {
-        while (pairsRef[index].prompt === lastPrompt && count < 5) {
-            //TODO shoudl be better way to do this
-            //TODO i feel like this while loop is not effiecient
-            index = Math.floor(Math.random() * pairsRef.length);
-            count += 1; //after five trys j continue anyway (need this for repeat prompts)
-        }
-        lastPrompt = pairsRef[index].prompt;
-    }
-    currentPair = pairsRef[index];
-
-    displayCard();
-}
-
 function displayCard() {
     if (!studyComplete) {
         //this is called from bunch:getAll when studyis complete sometimes. this is to stop it from that
@@ -344,201 +561,6 @@ function displayCard() {
     }
 }
 
-window.addEventListener("keydown", keyListener);
-function keyListener(e) {
-    e = e || window.e; //capture the e, and ensure we have an e
-    var key = e.key; //find the key that was pressed
-    if (key === "Escape" || (!inResetMenu && studyComplete && key === " ")) {
-        window.location.href = "index.html";
-        return;
-    } else if (inResetMenu && key === " ") {
-        exitResetMenu();
-    } else {
-        answerManager(e);
-    }
-
-    if (menuToggled) {
-        toggleMenu();
-    }
-}
-
-function exitResetMenu() {
-    //if the user wishes to reset progress
-    studyComplete = false;
-    setComplete();
-    inResetMenu = false;
-    updateHTML();
-    generateCalls(); //generateCalls calls createPairsRef, thus updatehtml must be called before
-}
-
-function answerManager(e) {
-    if (bunchSettings.questionType.flashcard) {
-        if (!answerShown) {
-            if (e.key === " ") {
-                showAnswer();
-            }
-        } else {
-            if (e.key === "2" || e.key === " ") {
-                //Answer is right
-                updateCalls(true);
-                resetPage(); //this must stay inside if bc otherwise resets on any key
-            } else if (e.key === "1") {
-                //answer is wrong
-                updateCalls(false);
-                resetPage(); //this must stay inside if bc otherwise resets on any key
-            }
-        }
-    } else if (bunchSettings.questionType.typed) {
-        if (!answerShown) {
-            if (e.key === "Enter") {
-                showAnswer();
-            }
-        } else {
-            if (e.key === "Enter" && noTimeout) {
-                clearTimeout(correctTimeout);
-                resetPage();
-            } else if (e.metaKey && e.key === "d") {
-                iWasRight();
-            }
-        }
-    }
-}
-
-var noTimeout; //used for incorrect forced delay
-
-function say(type) {
-    //inputs type "prompt" for prompt; "answer" for answer
-    if (
-        (type == "answer" && bunchSettings.sayAnswer) ||
-        (type == "prompt" && bunchSettings.sayPrompt)
-    ) {
-        window.speechSynthesis.cancel(); //stops all previous call
-        let lang, string;
-        if (type == "prompt") {
-            lang = currentReversed
-                ? bunchSettings.answerLang
-                : bunchSettings.promptLang;
-            string = currentReversed ? currentPair.answer : currentPair.prompt;
-        } else if (type == "answer") {
-            lang = currentReversed
-                ? bunchSettings.promptLang
-                : bunchSettings.answerLang;
-            string = currentReversed ? currentPair.prompt : currentPair.answer;
-        }
-
-        const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
-        string = settings.ignoreParenthesis
-            ? string.replace(rmp, "").trim()
-            : string;
-
-        var msg = new SpeechSynthesisUtterance(string);
-        msg.lang = lang;
-        window.speechSynthesis.speak(msg);
-    }
-}
-
-//TODO make into one function w callincorrect
-let prevNumCalls;
-function updateCalls(correct) {
-    if (correct) {
-        console.log("Correct");
-        callsString = currentReversed ? "revCalls" : "calls";
-        if (currentPair[callsString] > 0) {
-            currentPair[callsString] -= 1;
-            if (currentPair["calls"] === 0 && currentPair["revCalls"] === 0) {
-                const index = pairsRef.indexOf(currentPair);
-                pairsRef.splice(index, 1);
-            }
-        }
-    } else {
-        console.log("Inorrect");
-        callsString = currentReversed ? "revCalls" : "calls";
-        prevNumCalls = currentPair[callsString];
-        if (
-            currentPair[callsString] !== 0 &&
-            currentPair[callsString] < settings.timesCorrect &&
-            settings.penalizeIncorrect
-        ) {
-            currentPair[callsString] += 1;
-        }
-    }
-}
-
-function iWasRight() {
-    clearTimeout(incorrectTimeout);
-    noTimeout = true;
-
-    callsString = currentReversed ? "revCalls" : "calls";
-
-    if (prevNumCalls === settings.timesCorrect) {
-        //if calls was as high as possible
-        currentPair[callsString] -= 1; //only take away one bc the initial incorrect did nothing
-    } else {
-        currentPair[callsString] -= 2; //one to correct initial incorrect and one for rigth answer
-    }
-
-    if (currentPair["calls"] === 0 && currentPair["revCalls"] === 0) {
-        const index = pairsRef.indexOf(currentPair);
-        pairsRef.splice(index, 1);
-    }
-
-    resetPage();
-}
-
-//TODO decide if you are making dif functions or using if statements
-var correctTimeout, incorrectTimeout;
-function showAnswer() {
-    if (bunchSettings.questionType.flashcard) {
-        document.querySelector("#main-separator").classList.remove("hide");
-        document.getElementById("answer").classList.remove("hide");
-        document.getElementById("bottom-text").innerText =
-            "Incorrect: Press 1 \n Correct: Press 2 or Space";
-        answerShown = true;
-        say("answer");
-    } else if (bunchSettings.questionType.typed) {
-        document.getElementById("answer-input").blur();
-        document.getElementById("answer-input").readOnly = true;
-        answerShown = true;
-        document.getElementById("bottom-text").innerText =
-            "Press Enter to Continue";
-
-        let userAnswer = document.getElementById("answer-input").value;
-        let answer = currentReversed ? currentPair.prompt : currentPair.answer;
-
-        const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
-        parsedAnswer = settings.ignoreParenthesis
-            ? answer.replace(rmp, "").trim()
-            : answer; //trim() removes trailing whitespaces
-
-        if (settings.ignoreCapital) {
-            answer = answer.toLowerCase();
-            userAnswer = userAnswer.toLowerCase();
-            parsedAnswer = parsedAnswer.toLowerCase();
-        }
-
-        if (userAnswer == answer || userAnswer == parsedAnswer) {
-            updateCalls(true);
-            if (settings.delayCorrect == 0) {
-                resetPage();
-            } else {
-                styleAnswer(true);
-                correctTimeout = setTimeout(
-                    resetPage,
-                    settings.delayCorrect * 1000
-                );
-            }
-        } else {
-            noTimeout = false;
-            incorrectTimeout = setTimeout(() => {
-                noTimeout = true;
-            }, settings.delayIncorrect * 1000);
-            updateCalls(false);
-            styleAnswer(false);
-            say("answer");
-        }
-    }
-}
-
 function styleAnswer(correct) {
     if (correct) {
         const input = document.getElementById("answer-input");
@@ -566,6 +588,36 @@ function styleAnswer(correct) {
     }
 }
 
+function resetHTML() {
+    if (bunchSettings.questionType.flashcard) {
+        document.querySelector("#main-separator").classList.add("hide");
+        document.getElementById("answer").classList.add("hide");
+        document.getElementById("bottom-text").innerText =
+            "Press Space to Reveal Answer";
+    } else if (bunchSettings.questionType.typed) {
+        const input = document.getElementById("answer-input");
+        input.readOnly = false;
+        input.style.border = `2px solid var(--highlight, #393e41)`;
+        input.focus();
+        input.value = "";
+        input.style.textDecoration = "none";
+        document.getElementById("status-block").classList.add("hide");
+        document.getElementById("answer").classList.add("hide");
+        document.getElementById("iwr-btn-container").classList.add("hide");
+        document.getElementById("bottom-text").innerText =
+            "Press Enter to Answer";
+    }
+}
+
+function studyCompleteHTML() {
+    var fcc = document.getElementById("flashcard-container");
+    const bottomText = document.getElementById("bottom-text");
+    bottomText.innerText = "Press Space to Return Home";
+    fcc.innerHTML = `<h2 id="end-dialogue">Bunch Study Complete!</h2>`;
+    fcc.innerHTML += bottomText.outerHTML;
+    document.getElementById("options-btn").classList.add("hide");
+}
+
 function updateRemainingText() {
     if (settings.showRemaining) {
         let remainingCount = 0;
@@ -577,58 +629,31 @@ function updateRemainingText() {
         ).innerText = `${remainingCount} remaining`;
     }
 }
+//#endregion
+
+//#region Resets
+/* -------------------------------------------------------------------------- */
+/*                                   Resets                                   */
+/* -------------------------------------------------------------------------- */
+function exitResetMenu() {
+    //if the user wishes to reset progress
+    studyComplete = false;
+    setComplete();
+    inResetMenu = false;
+    updateHTML();
+    generateCalls(); //generateCalls calls createPairsRef, thus updatehtml must be called before
+}
 
 function resetPage() {
-    console.log("Pairs", pairs);
-    console.log("PairsRef", pairsRef);
     if (pairsRef.length > 0) {
-        if (bunchSettings.questionType.flashcard) {
-            document.querySelector("#main-separator").classList.add("hide");
-            document.getElementById("answer").classList.add("hide");
-            document.getElementById("bottom-text").innerText =
-                "Press Space to Reveal Answer";
-        } else if (bunchSettings.questionType.typed) {
-            const input = document.getElementById("answer-input");
-            input.readOnly = false;
-            input.style.border = `2px solid var(--highlight, #393e41)`;
-            input.focus();
-            input.value = "";
-            input.style.textDecoration = "none";
-            document.getElementById("status-block").classList.add("hide");
-            document.getElementById("answer").classList.add("hide");
-            document.getElementById("iwr-btn-container").classList.add("hide");
-            document.getElementById("bottom-text").innerText =
-                "Press Enter to Answer";
-        }
+        resetHTML();
         updateRemainingText();
         createPairsRef();
     } else {
-        //when complete
-        //else if pairsRef.length <= 0 aka if study complete
-        //flashcard container
-        var fcc = document.getElementById("flashcard-container");
-        const bottomText = document.getElementById("bottom-text");
-        bottomText.innerText = "Press Space to Return Home";
-        fcc.innerHTML = `<h2 id="end-dialogue">Bunch Study Complete!</h2>`;
-        fcc.innerHTML += bottomText.outerHTML;
-        document.getElementById("options-btn").classList.add("hide");
+        studyCompleteHTML();
         studyComplete = true;
         setComplete();
     }
-
     setPairs();
 }
-
-function setPairs() {
-    ipcRenderer.send("bunch:set", id, {
-        key: "pairs",
-        value: pairs,
-    });
-}
-
-function setComplete() {
-    ipcRenderer.send("bunch:set", id, {
-        key: "complete",
-        value: studyComplete,
-    });
-}
+//#endregion

@@ -1,6 +1,6 @@
 const ipcRenderer = require("electron").ipcRenderer;
 
-//-------Themes-------
+/* ----------------------------- Theme Settings ----------------------------- */
 const palettes = document.getElementsByClassName("palette");
 for (x = 0; x < palettes.length; x++) {
     palettes[x].addEventListener("click", changeTheme);
@@ -12,7 +12,7 @@ function changeTheme(e) {
     ipcRenderer.send("background:set");
 }
 
-//-------Study-------
+/* ----------------------------- Study Settings ----------------------------- */
 document.getElementById("strike-through").addEventListener("change", () => {
     ipcRenderer.send("globalSettings:set", {
         key: "strikeThrough",
@@ -120,10 +120,11 @@ document.getElementById("reset-btn").addEventListener("click", () => {
     ipcRenderer.send("globalSettings:resetDefaults");
 });
 
-//-------Get Settings-------
+/* ------------------------------ IPC Requests ------------------------------ */
 ipcRenderer.send("globalSettings:getAll");
 ipcRenderer.on("globalSettings:getAll", (e, settings) => {
-    //Study
+    //----Study----
+    //general
     document.getElementById("strike-through").checked = settings.strikeThrough;
     document.getElementById("show-iwr").checked = settings.showIwr;
     document.getElementById("show-info").checked = settings.showInfo;
@@ -134,10 +135,11 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
     document.getElementById("delay-correct").value = settings.delayCorrect;
     document.getElementById("delay-incorrect").value = settings.delayIncorrect;
     document.getElementById("study-font-size").value = settings.studyFontSize;
-
+    //type
     document.getElementById("ignore-parenthesis").checked =
         settings.ignoreParenthesis;
     document.getElementById("ignore-capital").checked = settings.ignoreCapital;
 
+    //----Homepage----
     document.getElementById("sort-home-by").value = settings.sortHomeBy;
 });
