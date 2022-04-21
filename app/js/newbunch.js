@@ -1,4 +1,5 @@
 const ipcRenderer = require("electron").ipcRenderer;
+const querystring = require("querystring");
 
 let pairs;
 let id;
@@ -6,14 +7,11 @@ let id;
 let importMenuOpen = false,
     exportMenuOpen = false;
 
-try {
-    const url = document.location.href;
-    id = url.split("?")[1].split("=")[1]; //gets the id of bunch from query string
-    id = id.replaceAll("%20", " ");
-} catch {
-    //there is no ? or = in the new bunch btn so it throws err
-    id = ".new_bunch";
-}
+const url = document.location.href;
+const query = url.split("?")[1];
+parsedQuery = querystring.parse(query, "&", "=");
+id = parsedQuery.id;
+accesedFrom = parsedQuery.from; //page where the edit button was hit
 
 const editing = id !== ".new_bunch"; //true if editing; false if new bunch
 
@@ -30,7 +28,7 @@ document.getElementById("back-btn").addEventListener("click", (e) => {
     } else if (exportMenuOpen) {
         closeExportMenu();
     } else {
-        backBtnToIndex();
+        backBtnExit();
     }
 });
 
@@ -673,12 +671,12 @@ document.getElementById("new-bunch-form").addEventListener("submit", (e) => {
             } else {
                 ipcRenderer.send("bunch:submit", bunch); //id = newly generated id
             }
-            ipcRenderer.send("returnToIndex");
+            exitPage();
         }
     }
 });
 
-function backBtnToIndex() {
+function backBtnExit() {
     const bunch = makeBunch();
     if (editing) {
         if (
@@ -686,11 +684,19 @@ function backBtnToIndex() {
             pairsLenValid(bunch.pairs.length) //at least 1 pair
         ) {
             ipcRenderer.send("bunch:save", bunch); //id = id
-            ipcRenderer.send("returnToIndex");
+            exitPage();
         }
     } else {
         ipcRenderer.send("newbunch:save", bunch); //id = ".new_bunch"
-        ipcRenderer.send("returnToIndex");
+        exitPage();
+    }
+}
+
+function exitPage() {
+    if (accesedFrom == "flashcard") {
+        window.location.href = `flashcard.html?id=${id}`;
+    } else {
+        window.location.href = `index.html`;
     }
 }
 

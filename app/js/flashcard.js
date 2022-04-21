@@ -46,7 +46,7 @@ window.onload = () => {
 document.getElementById("edit-bunch-btn").addEventListener("click", () => {
     document
         .getElementById("edit-bunch-btn")
-        .setAttribute("href", `newbunch.html?id=${id}`);
+        .setAttribute("href", `newbunch.html?id=${id}&from=flashcard`);
 });
 
 //options button
@@ -62,7 +62,7 @@ function toggleMenu() {
 }
 
 document.getElementById("back-btn").addEventListener("click", () => {
-    ipcRenderer.send("returnToIndex");
+    window.location.href = `index.html`;
 });
 
 //pair order

@@ -175,9 +175,10 @@ ipcMain.on("bunch:save", (e, bunch) => {
 //when a newbunch is submitted
 ipcMain.on("bunch:submit", (e, bunch) => {
     //generate id
-    var count = 0;
+    let count = 0;
     const userDataPath = app.getPath("userData");
     var filePath = userDataPath + "/bunches/" + count + ".json";
+
     while (fs.existsSync(filePath)) {
         count += 1;
         filePath = userDataPath + "/bunches/" + count + ".json";
@@ -295,10 +296,3 @@ ipcMain.on("globalSettings:resetDefaults", (e) => {
     e.reply("globalSettings:gettheme", globalSettings.get("theme"));
 });
 //#endregion
-
-//TODO this shouldnt exist
-ipcMain.on("returnToIndex", returnToIndexPage);
-
-function returnToIndexPage() {
-    mainWindow.loadFile("./app/index.html");
-}

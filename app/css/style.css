@@ -146,6 +146,7 @@ a {
 }
 
 #delete-menu h3 {
+  font-size: 13px;
   overflow: hidden;
   text-align: center;
 }
