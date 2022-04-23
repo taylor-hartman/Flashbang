@@ -135,6 +135,17 @@ document.getElementById("say-answer").addEventListener("change", () => {
     bunchSettings.sayAnswer = document.getElementById("say-answer").checked;
 });
 
+document.getElementById("show-pinyin").addEventListener("change", () => {
+    ipcRenderer.send("bunch:set", id, {
+        key: "showPinyin",
+        value: document.getElementById("show-pinyin").checked,
+    });
+    //TODO do this with get request,
+    bunchSettings.showPinyin = document.getElementById("show-pinyin").checked;
+
+    updatePromptPinyin();
+});
+
 window.addEventListener("keydown", keyListener);
 function keyListener(e) {
     e = e || window.e; //capture the e, and ensure we have an e
@@ -170,6 +181,8 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
 
     bunchSettings.sayPrompt = bunch.sayPrompt;
     bunchSettings.sayAnswer = bunch.sayAnswer;
+
+    bunchSettings.showPinyin = bunch.showPinyin;
 
     currentReversed = bunch.pairOrder.reversed;
     studyComplete = bunch.complete;
@@ -484,6 +497,14 @@ function updateHTML() {
     document.getElementById("say-prompt").checked = bunchSettings.sayPrompt;
     document.getElementById("say-answer").checked = bunchSettings.sayAnswer;
 
+    if (pinyinLang(bunchSettings.promptLang)) {
+        document
+            .getElementById("pinyin-option-section")
+            .classList.remove("undisplay");
+        document.getElementById("show-pinyin").checked =
+            bunchSettings.showPinyin;
+    }
+
     const root = document.querySelector(":root");
     root.style.fontSize = `${settings.studyFontSize}px`;
 
@@ -550,24 +571,32 @@ function updateHTML() {
 
         //event listeners for piniyn
         document.getElementById("prompt").addEventListener("mouseenter", () => {
-            if (
-                (!currentReversed &&
-                    (bunchSettings.promptLang == "zh-CN" ||
-                        bunchSettings.promptLang == "zh-HK" ||
-                        bunchSettings.promptLang == "zh-TW")) ||
-                (currentReversed &&
-                    (bunchSettings.answerLang == "zh-CN" ||
-                        bunchSettings.answerLang == "zh-HK" ||
-                        bunchSettings.answerLang == "zh-TW"))
-            ) {
-                addPinYinText(document.getElementById("prompt").innerText);
-                document.getElementById("pinyin-text").classList.remove("hide");
-            }
+            updatePromptPinyin();
         });
 
         document.getElementById("prompt").addEventListener("mouseleave", () => {
-            document.getElementById("pinyin-text").classList.add("hide");
+            updatePromptPinyin();
         });
+
+        if (bunchSettings.showPinyin) {
+            updatePromptPinyin();
+        }
+    }
+}
+
+function updatePromptPinyin() {
+    if (bunchSettings.showPinyin)
+        if (
+            (!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
+            (currentReversed && pinyinLang(bunchSettings.answerLang))
+        ) {
+            addPinYinText(document.getElementById("prompt").innerText);
+            document.getElementById("pinyin-text").classList.remove("hide");
+        } else {
+            document.getElementById("pinyin-text").classList.add("hide");
+        }
+    else {
+        document.getElementById("pinyin-text").classList.add("hide");
     }
 }
 
@@ -606,7 +635,7 @@ function displayCard() {
                     currentPair.prompt;
             }
         }
-
+        updatePromptPinyin();
         sayChecked(currentReversed ? "answer" : "prompt");
 
         answerShown = false;
@@ -725,3 +754,7 @@ function resetPage() {
     setPairs();
 }
 //#endregion
+
+function pinyinLang(lang) {
+    return lang == "zh-CN" || lang == "zh-HK" || lang == "zh-TW";
+}
