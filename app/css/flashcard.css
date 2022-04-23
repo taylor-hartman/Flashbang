@@ -43,13 +43,6 @@ a {
   text-decoration: none;
 }
 
-h2 {
-  font-size: 1rem;
-  text-align: center;
-  max-width: 83%;
-  cursor: pointer;
-}
-
 ::-webkit-scrollbar {
   display: none;
 }
@@ -73,14 +66,6 @@ h2 {
 .main-container {
   width: 100vw;
   height: 100vh;
-}
-
-.typed-margin {
-  margin-top: -5vh;
-}
-
-.flashcard-margin {
-  margin-top: -10vh;
 }
 
 #main-separator {
@@ -202,19 +187,7 @@ h2 {
   transform: rotate(45deg);
 }
 
-#flashcard-container #bottom-text {
-  font-size: 13px;
-  text-align: center;
-  color: var(--highlight, #393e41);
-}
-
-#flashcard-container #remaining-text {
-  font-size: 13px;
-  text-align: center;
-  color: var(--highlight, #393e41);
-}
-
-#flashcard-container .bottom-container {
+#flashcard-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -225,17 +198,64 @@ h2 {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding-bottom: 10vh;
+}
+
+#flashcard-container h2 {
+  font-size: 1rem;
+  text-align: center;
+  max-width: 83%;
+  cursor: pointer;
+}
+
+#flashcard-container #prompt-container {
+  width: 83%;
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#flashcard-container #pinyin-container {
+  width: 83%;
+  height: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+#flashcard-container #pinyin-text {
+  width: 83%;
   position: absolute;
-  bottom: 10px;
-  height: 50px;
+  font-size: 0.85rem;
+  line-height: 0.85rem;
+  max-height: 0.85rem;
+  overflow: hidden;
 }
 
 #flashcard-container #answer-input {
   width: calc(40vw + ((1rem - 18px) * 8));
-  margin-top: 6vh;
+  margin-top: 5vh;
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
   padding: 3.9px;
@@ -250,7 +270,7 @@ h2 {
 
 #flashcard-container #status-block {
   position: absolute;
-  margin-top: calc(6vh + 6.9px);
+  margin-top: calc(5vh + 6.9px);
   margin-left: calc( -1 * (1rem + 8.9px));
   height: calc(1rem + 3.9px);
   width: calc(1rem + 3.9px);
@@ -297,6 +317,39 @@ h2 {
 #flashcard-container #end-dialogue {
   position: absolute;
   top: 40vh;
+}
+
+#bottom-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  position: absolute;
+  bottom: 10px;
+  height: 50px;
+  width: 50vw;
+  left: 25vw;
+}
+
+#bottom-container #bottom-text {
+  font-size: 13px;
+  text-align: center;
+  color: var(--highlight, #393e41);
+}
+
+#bottom-container #remaining-text {
+  font-size: 13px;
+  text-align: center;
+  color: var(--highlight, #393e41);
 }
 
 .hide {

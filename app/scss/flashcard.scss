@@ -33,14 +33,6 @@ a {
     // cursor: default;
 }
 
-h2 {
-    //this is for answer and promtp
-    font-size: 1rem;
-    text-align: center;
-    max-width: 83%;
-    cursor: pointer;
-}
-
 ::-webkit-scrollbar {
     display: none;
 }
@@ -55,15 +47,6 @@ h2 {
 .main-container {
     width: 100vw;
     height: 100vh;
-    // margin-top: -3.5%;
-}
-
-.typed-margin {
-    margin-top: -5vh;
-}
-
-.flashcard-margin {
-    margin-top: -10vh;
 }
 
 #main-separator {
@@ -192,31 +175,50 @@ h2 {
 //-----------end checkbox stuff-------------
 
 #flashcard-container {
-    #bottom-text {
-        font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 10vh; //doesnt look good perfectly centered
+
+    h2 {
+        //this is for answer and prompt
+        font-size: 1rem;
         text-align: center;
-        color: var(--highlight, $highlight);
+        max-width: 83%;
+        cursor: pointer;
     }
 
-    #remaining-text {
-        font-size: 13px;
+    #prompt-container {
+        width: 83%;
         text-align: center;
-        color: var(--highlight, $highlight);
-    }
-
-    .bottom-container {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #pinyin-container {
+        width: 83%;
+        height: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+
+    #pinyin-text {
+        width: 83%;
         position: absolute;
-        bottom: 10px;
-        height: 50px;
+        font-size: 0.85rem;
+        line-height: 0.85rem;
+        max-height: 0.85rem;
+        overflow: hidden;
     }
 
     #answer-input {
         width: calc(40vw + ((1rem - 18px) * 8));
-        margin-top: 6vh;
+        margin-top: 5vh;
         border: 2px solid var(--highlight, $highlight);
         border-radius: 3px;
         padding: 3.9px;
@@ -230,7 +232,7 @@ h2 {
 
     #status-block {
         position: absolute;
-        margin-top: calc(6vh + 6.9px); //margin + border of answer-inpit
+        margin-top: calc(5vh + 6.9px); //margin + border of answer-inpit
         margin-left: calc(
             -1 * (1rem + 8.9px)
         ); // neagtive margin + border of answer-input, then added 2 px so not touching border
@@ -282,6 +284,30 @@ h2 {
     #end-dialogue {
         position: absolute;
         top: 40vh;
+    }
+}
+
+#bottom-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: 10px;
+    height: 50px;
+    width: 50vw;
+    left: 25vw;
+
+    #bottom-text {
+        font-size: 13px;
+        text-align: center;
+        color: var(--highlight, $highlight);
+    }
+
+    #remaining-text {
+        font-size: 13px;
+        text-align: center;
+        color: var(--highlight, $highlight);
     }
 }
 
