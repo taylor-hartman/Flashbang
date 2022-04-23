@@ -91,6 +91,33 @@ input {
   width: 46%;
 }
 
+.pinyin-menu-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0.5rem 0 0.8rem 0;
+  width: 70vw;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-right: 1rem;
+  padding-left: 1.3rem;
+}
+
+.pinyin-menu-content p {
+  display: inline;
+}
+
+.pinyin-menu-content .pinyin-half {
+  background: none;
+  width: 46%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
 .pair {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -518,4 +545,62 @@ form {
 
 .undisplay {
   display: none;
+}
+
+/* The container */
+.checkbox-container {
+  display: block;
+  position: relative;
+  margin-right: 2.5vw;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1.2rem;
+  width: 1.2rem;
+  background-color: var(--highlight, #393e41);
+  border-radius: 3px;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+  left: 0.38rem;
+  top: 0.18rem;
+  width: 0.24rem;
+  height: 0.48rem;
+  border: solid var(--background, #e7e6e1);
+  border-width: 0 0.2rem 0.2rem 0;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
 }

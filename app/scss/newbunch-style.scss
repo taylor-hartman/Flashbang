@@ -74,6 +74,26 @@ input {
     }
 }
 
+.pinyin-menu-content {
+    display: flex;
+    margin: 0.5rem 0 0.8rem 0;
+    width: 70vw;
+    justify-content: space-between;
+    padding-right: 1rem;
+    padding-left: 1.3rem;
+
+    p {
+        display: inline;
+    }
+
+    .pinyin-half {
+        background: none;
+        width: 46%;
+        display: flex;
+        justify-content: space-around;
+    }
+}
+
 .pair {
     display: flex;
     margin: 0.5rem 0 0.8rem 0;
@@ -394,3 +414,75 @@ form {
 .undisplay {
     display: none;
 }
+
+//----------Checkbox Stuff----------
+/* The container */
+.checkbox-container {
+    display: block;
+    position: relative;
+    // padding-left: 25px;
+    margin-right: 2.5vw;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.2rem;
+    width: 1.2rem;
+    background-color: var(--highlight, $highlight);
+    border-radius: 3px;
+}
+
+// On mouse-over
+// .checkbox-container:hover input ~ .checkmark {
+//     background-color: var(--btn-hover, $btn-hover);
+// }
+
+// //When the checkbox is checked
+// .checkbox-container input:checked ~ .checkmark {
+//     background-color: var(--highlight, $highlight);
+// }
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+    left: 0.38rem;
+    top: 0.18rem;
+    width: 0.24rem;
+    height: 0.48rem;
+    border: solid var(--background, $background);
+    border-width: 0 0.2rem 0.2rem 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+//-----------end checkbox stuff-------------
