@@ -23,8 +23,9 @@ class Settings {
             delayCorrect: 1,
             delayIncorrect: 0,
             studyFontSize: 18,
-            ignoreParenthesis: 1,
-            ignoreCapital: 1,
+            ignoreParenthesis: true,
+            useSlash: true,
+            ignoreCapital: true,
             sortHomeBy: "lastUsed",
         };
 

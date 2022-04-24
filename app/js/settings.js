@@ -102,6 +102,13 @@ document.getElementById("ignore-parenthesis").addEventListener("change", () => {
     });
 });
 
+document.getElementById("use-slash").addEventListener("change", () => {
+    ipcRenderer.send("globalSettings:set", {
+        key: "useSlash",
+        value: document.getElementById("use-slash").checked,
+    });
+});
+
 document.getElementById("ignore-capital").addEventListener("change", () => {
     ipcRenderer.send("globalSettings:set", {
         key: "ignoreCapital",
@@ -138,6 +145,7 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
     //type
     document.getElementById("ignore-parenthesis").checked =
         settings.ignoreParenthesis;
+    document.getElementById("use-slash").checked = settings.useSlash;
     document.getElementById("ignore-capital").checked = settings.ignoreCapital;
 
     //----Homepage----

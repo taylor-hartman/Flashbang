@@ -347,32 +347,78 @@ function showAnswer() {
         document.getElementById("bottom-text").innerText =
             "Press Enter to Continue";
 
-        let userAnswer = document.getElementById("answer-input").value;
+        let userAnswer = document.getElementById("answer-input").value.trim();
         let answer = currentReversed ? currentPair.prompt : currentPair.answer;
 
-        const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
-        parsedAnswer = settings.ignoreParenthesis
-            ? answer.replace(rmp, "").trim()
-            : answer; //trim() removes trailing whitespaces
+        const re = /\([^)]*\) */g; //removes parenthesis and text btw them
 
-        if (settings.ignoreCapital) {
-            answer = answer.toLowerCase();
-            userAnswer = userAnswer.toLowerCase();
-            parsedAnswer = parsedAnswer.toLowerCase();
-        }
+        //if the answer is: "ans1 (1) / ans2 (2)", with all settings we should accept:
+        //"ans1 (1) / ans2 (2)", "ans1 / ans2", "ans1 (1)", "ans2 (2)", "ans1", "ans2"
 
-        if (userAnswer == answer || userAnswer == parsedAnswer) {
-            updateCalls(true);
-            if (settings.delayCorrect == 0) {
-                resetPage();
-            } else {
-                styleAnswer(true);
-                correctTimeout = setTimeout(
-                    resetPage,
-                    settings.delayCorrect * 1000
-                );
+        let answers;
+        if (settings.useSlash) {
+            answers = answer.split("/");
+
+            for (x = 0; x < answers.length; x++) {
+                answers[x] = answers[x].trim();
+            }
+
+            if (answers.length > 1) {
+                answers.unshift(answer); //appends full answer to position 0
             }
         } else {
+            answers = [];
+            answers.push(answer);
+        }
+
+        let toBeAdded = [];
+
+        if (settings.ignoreParenthesis) {
+            for (x = 0; x < answers.length; x++) {
+                const val = answers[x].replace(re, "").trim();
+                if (!answers.includes(val)) {
+                    toBeAdded.push(val);
+                }
+            }
+        }
+
+        answers = answers.concat(toBeAdded);
+        toBeAdded = [];
+
+        if (settings.ignoreCapital) {
+            for (x = 0; x < answers.length; x++) {
+                const val = answers[x].toLowerCase();
+                if (!answers.includes(val)) {
+                    toBeAdded.push(val);
+                }
+            }
+        }
+
+        answers = answers.concat(toBeAdded);
+        toBeAdded = [];
+
+        for (x = 0; x < answers.length; x++) {
+            console.log(answers[x]);
+        }
+
+        let set = false;
+        for (x = 0; x < answers.length; x++) {
+            if (userAnswer == answers[x]) {
+                updateCalls(true);
+                if (settings.delayCorrect == 0) {
+                    resetPage();
+                } else {
+                    styleAnswer(true);
+                    correctTimeout = setTimeout(
+                        resetPage,
+                        settings.delayCorrect * 1000
+                    );
+                }
+                set = true;
+                break;
+            }
+        }
+        if (!set) {
             noTimeout = false;
             incorrectTimeout = setTimeout(() => {
                 noTimeout = true;
