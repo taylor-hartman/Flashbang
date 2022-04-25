@@ -685,9 +685,11 @@ let titleTimeout;
 function titleValid(t) {
     // re = /^[0-9a-z]/i; //must start with alpha numeric
     if (t === "") {
+        //fails title is empty
         document.getElementById("title-valid-message").innerText =
             "Title cannot be empty";
         document.getElementById("title-valid-message").classList.remove("hide");
+        window.scrollTo(0, 0);
         clearTimeout(titleTimeout);
         titleTimeout = setTimeout(() => {
             document
@@ -709,6 +711,7 @@ function titleValid(t) {
         document.getElementById("title-valid-message").innerText =
             "Title cannot contain <>/\\";
         document.getElementById("title-valid-message").classList.remove("hide");
+        window.scrollTo(0, 0);
         clearTimeout(titleTimeout);
         titleTimeout = setTimeout(() => {
             document
@@ -721,6 +724,7 @@ function titleValid(t) {
     document.getElementById("title-valid-message").innerText =
         "Title cannot begin with . or space";
     document.getElementById("title-valid-message").classList.remove("hide");
+    window.scrollTo(0, 0);
     clearTimeout(titleTimeout);
     titleTimeout = setTimeout(() => {
         document.getElementById("title-valid-message").classList.add("hide");
@@ -737,6 +741,7 @@ function pairsLenValid(len) {
         document.getElementById("title-valid-message").innerText =
             "Bunch must contain at least one pair";
         document.getElementById("title-valid-message").classList.remove("hide");
+        window.scrollTo(0, 0);
         pairsLenTimeOut = setTimeout(() => {
             document
                 .getElementById("title-valid-message")

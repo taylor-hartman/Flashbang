@@ -41,8 +41,13 @@ a {
 .new-bunch-container {
     display: flex;
     justify-content: center;
-    padding-top: 25vh;
-    padding-bottom: 25vh;
+    padding-top: 20vh;
+    padding-bottom: 20vh;
+    width: 100vw;
+}
+
+#new-bunch-form {
+    width: 75%;
 }
 
 input {
@@ -61,7 +66,7 @@ input {
 #lang-select {
     display: flex;
     margin: 0.5rem 0 0.8rem 0;
-    width: 70vw;
+    width: 100%;
     justify-content: space-between;
     padding-right: 1rem;
     padding-left: 1.3rem;
@@ -357,7 +362,7 @@ form {
     position: absolute;
     width: 80vw;
     left: 10vw;
-    top: 15vh;
+    top: 10vh;
     display: flex;
     align-items: center;
     justify-content: center;

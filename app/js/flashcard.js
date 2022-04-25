@@ -386,6 +386,7 @@ function showAnswer() {
         toBeAdded = [];
 
         if (settings.ignoreCapital) {
+            userAnswer = userAnswer.toLowerCase();
             for (x = 0; x < answers.length; x++) {
                 const val = answers[x].toLowerCase();
                 if (!answers.includes(val)) {
@@ -741,8 +742,9 @@ function studyCompleteHTML() {
     const bottomText = document.getElementById("bottom-text");
     bottomText.innerText = "Press Space to Return Home";
     fcc.innerHTML = `<h2 id="end-dialogue">Bunch Study Complete!</h2>`;
-    fcc.innerHTML += bottomText.outerHTML;
+    document.getElementById("bottom-text").classList.remove("undisplay");
     document.getElementById("options-btn").classList.add("hide");
+    document.getElementById("remaining-text").classList.add("undisplay");
 }
 
 function addPinYinText(val) {

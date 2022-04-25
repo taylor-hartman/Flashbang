@@ -54,8 +54,13 @@ a {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding-top: 25vh;
-  padding-bottom: 25vh;
+  padding-top: 20vh;
+  padding-bottom: 20vh;
+  width: 100vw;
+}
+
+#new-bunch-form {
+  width: 75%;
 }
 
 input {
@@ -76,7 +81,7 @@ input {
   display: -ms-flexbox;
   display: flex;
   margin: 0.5rem 0 0.8rem 0;
-  width: 70vw;
+  width: 100%;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
@@ -456,7 +461,7 @@ form {
   position: absolute;
   width: 80vw;
   left: 10vw;
-  top: 15vh;
+  top: 10vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
