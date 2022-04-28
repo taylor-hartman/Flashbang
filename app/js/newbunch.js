@@ -99,7 +99,9 @@ function generatePairsHTML() {
         } else {
             newPair.setAttribute(
                 "calls",
-                pairOrder.standard || pairOrder.both ? timesCorrect : 0
+                pairOrder.standard || pairOrder.bothsr || pairOrder.bothrs
+                    ? timesCorrect
+                    : 0
             );
         }
 
@@ -108,7 +110,9 @@ function generatePairsHTML() {
         } else {
             newPair.setAttribute(
                 "revCalls",
-                pairOrder.reversed || pairOrder.both ? timesCorrect : 0
+                pairOrder.reversed || pairOrder.bothsr || pairOrder.bothrs
+                    ? timesCorrect
+                    : 0
             );
         }
 
@@ -138,6 +142,13 @@ function generatePairsHTML() {
         document.getElementById("pair-container").appendChild(newPair);
     }
 
+    // const htmlPairs = document.getElementsByClassName("pair");
+    // for (x = 0; x < htmlPairs.length; x++) {
+    //     htmlPairs[x].addEventListener("change", (e) => {
+    //         resetPairCalls(e);
+    //         console.log(pairOrder);
+    //     });
+    // }
     // showPinYinMenu(); //showpinyinmenu must be done after generatePairsHTML
 
     //     //adds event listeners after clear
@@ -152,12 +163,37 @@ function generatePairsHTML() {
     //     }
 }
 
+// function resetPairCalls(e) {
+//     e.target
+//         .closest(".pair")
+//         .setAttribute(
+//             "calls",
+//             pairOrder.standard || pairOrder.bothsr || pairOrder.bothrs
+//                 ? timesCorrect
+//                 : 0
+//         );
+//     e.target
+//         .closest(".pair")
+//         .setAttribute(
+//             "revCalls",
+//             pairOrder.reversed || pairOrder.bothsr || pairOrder.bothrs
+//                 ? timesCorrect
+//                 : 0
+//         );
+// }
+
 function refactorIndicies() {
     const indicies = document.getElementsByClassName("index");
     for (x = 0; x < indicies.length; x++) {
         indicies[x].innerText = x + 1;
     }
 }
+//#endregion
+
+//#region
+/* -------------------------------------------------------------------------- */
+/*                         Unused Pinyin and Language                         */
+/* -------------------------------------------------------------------------- */
 
 // function showPinYinMenu() {
 //     //called at end of generatePairsHTML()
@@ -446,11 +482,15 @@ document.getElementById("plus").addEventListener("click", (e) => {
 
     newPair.setAttribute(
         "calls",
-        pairOrder.standard || pairOrder.both ? timesCorrect : 0
+        pairOrder.standard || pairOrder.bothsr || pairOrder.bothrs
+            ? timesCorrect
+            : 0
     );
     newPair.setAttribute(
         "revCalls",
-        pairOrder.reversed || pairOrder.both ? timesCorrect : 0
+        pairOrder.reversed || pairOrder.bothsr || pairOrder.bothrs
+            ? timesCorrect
+            : 0
     );
 
     newPair.innerHTML = `

@@ -99,6 +99,10 @@ const menu = [
             },
         ],
     },
+    {
+        label: "Study",
+        submenu: [{ label: "I was right", accelerator: "CmdOrCtrl+D" }],
+    },
     ...(isDev
         ? [
               {

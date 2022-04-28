@@ -457,7 +457,10 @@ function answerManager(e) {
             if (e.key === "Enter" && noTimeout) {
                 clearTimeout(correctTimeout);
                 resetPage();
-            } else if (e.metaKey && e.key === "d") {
+            } else if (
+                (e.metaKey && e.key.toLowerCase() === "d") ||
+                (e.ctrlKey && e.key.toLowerCase() === "d")
+            ) {
                 iWasRight();
             }
         }
@@ -583,7 +586,7 @@ function updateHTML() {
                 <h2 id="prompt">Lorem</h2>
             </div>
             <div class="input-container">
-                    <input type="text" id="answer-input" />
+                    <input type="text" id="answer-input"/>
                     <div class="hide" id="status-block">&#10004</div>
             </div>
             <h2 class="hide typed-answer" id="answer">Lorem</h2>

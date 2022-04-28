@@ -93,7 +93,7 @@ input {
   background: none;
   border: 1px solid var(--highlight, #393e41);
   border-radius: 3px;
-  width: 46%;
+  width: 46.5%;
 }
 
 .pinyin-menu-content {
@@ -115,7 +115,7 @@ input {
 
 .pinyin-menu-content .pinyin-half {
   background: none;
-  width: 46%;
+  width: 46.5%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -152,7 +152,7 @@ input {
   border-bottom: 1px solid var(--highlight, #393e41);
   padding: 0.3rem;
   font-size: 1.2rem;
-  width: 46%;
+  width: 46.5%;
 }
 
 #submit-add-bar {

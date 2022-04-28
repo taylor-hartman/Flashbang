@@ -107,6 +107,7 @@ a {
 
 #options-menu {
   position: absolute;
+  z-index: 10;
   top: 30px;
   right: 8px;
   width: 25%;
@@ -266,7 +267,8 @@ a {
 }
 
 #flashcard-container #answer-input {
-  width: calc(40vw + ((1rem - 18px) * 8));
+  width: 40vw;
+  max-width: 70vw;
   margin-top: 5vh;
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
@@ -317,7 +319,7 @@ a {
 }
 
 #flashcard-container .typed-answer {
-  width: calc(40vw + ((1rem - 18px) * 8));
+  width: 40vw;
   border: 2px solid var(--highlight, #393e41);
   border-top: none;
   border-radius: 3px;

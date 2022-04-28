@@ -84,6 +84,7 @@ a {
 
 #options-menu {
     position: absolute;
+    z-index: 10;
     top: 30px;
     right: 8px;
     width: 25%;
@@ -225,7 +226,8 @@ a {
     }
 
     #answer-input {
-        width: calc(40vw + ((1rem - 18px) * 8));
+        width: 40vw;
+        max-width: 70vw;
         margin-top: 5vh;
         border: 2px solid var(--highlight, $highlight);
         border-radius: 3px;
@@ -280,7 +282,7 @@ a {
     }
 
     .typed-answer {
-        width: calc(40vw + ((1rem - 18px) * 8));
+        width: 40vw;
         border: 2px solid var(--highlight, $highlight);
         border-top: none;
         border-radius: 3px;

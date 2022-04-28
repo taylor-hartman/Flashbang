@@ -75,7 +75,7 @@ input {
         background: none;
         border: 1px solid var(--highlight, $highlight);
         border-radius: 3px;
-        width: 46%;
+        width: 46.5%;
     }
 }
 
@@ -93,7 +93,7 @@ input {
 
     .pinyin-half {
         background: none;
-        width: 46%;
+        width: 46.5%;
         display: flex;
         justify-content: space-around;
     }
@@ -118,7 +118,7 @@ input {
             border-bottom: 1px solid var(--highlight, $highlight);
             padding: 0.3rem;
             font-size: 1.2rem;
-            width: 46%;
+            width: 46.5%;
         }
     }
 }
