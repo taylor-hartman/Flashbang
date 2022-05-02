@@ -66,13 +66,6 @@ document.getElementById("title-input").addEventListener("change", () => {
     titleValid(document.getElementById("title-input").value);
 });
 
-// document
-//     .getElementById("prompt-lang")
-//     .addEventListener("change", showPinYinMenu);
-// document
-//     .getElementById("answer-lang")
-//     .addEventListener("change", showPinYinMenu);
-
 //#endregion
 
 //#region HTML Management
@@ -142,26 +135,6 @@ function generatePairsHTML() {
             </div>`;
         document.getElementById("pair-container").appendChild(newPair);
     }
-
-    // const htmlPairs = document.getElementsByClassName("pair");
-    // for (x = 0; x < htmlPairs.length; x++) {
-    //     htmlPairs[x].addEventListener("change", (e) => {
-    //         resetPairCalls(e);
-    //         console.log(pairOrder);
-    //     });
-    // }
-    // showPinYinMenu(); //showpinyinmenu must be done after generatePairsHTML
-
-    //     //adds event listeners after clear
-    //     if (document.getElementById("auto-pinyin-prompt").checked) {
-    //         const htmlPrompts = document.getElementsByClassName("prompt");
-    //         addPinyinInputListeners(htmlPrompts);
-    //     }
-
-    //     if (document.getElementById("auto-pinyin-answer").checked) {
-    //         const htmlAnswers = document.getElementsByClassName("answer");
-    //         addPinyinInputListeners(htmlAnswers);
-    //     }
 }
 
 // function resetPairCalls(e) {
@@ -195,70 +168,6 @@ function refactorIndicies() {
 /* -------------------------------------------------------------------------- */
 /*                         Unused Pinyin and Language                         */
 /* -------------------------------------------------------------------------- */
-
-// function showPinYinMenu() {
-//     //called at end of generatePairsHTML()
-//     let menuShown = false;
-//     if (
-//         document.getElementById("prompt-lang").value == "zh-CN" ||
-//         document.getElementById("prompt-lang").value == "zh-HK" ||
-//         document.getElementById("prompt-lang").value == "zh-TW"
-//     ) {
-//         document.getElementById("pinyin-menu").classList.remove("undisplay");
-//         document.getElementById("pinyin-half-prompt").classList.remove("hide");
-//         menuShown = true;
-//     }
-
-//     if (
-//         document.getElementById("answer-lang").value == "zh-CN" ||
-//         document.getElementById("answer-lang").value == "zh-HK" ||
-//         document.getElementById("answer-lang").value == "zh-TW"
-//     ) {
-//         document.getElementById("pinyin-menu").classList.remove("undisplay");
-//         document.getElementById("pinyin-half-answer").classList.remove("hide");
-//         menuShown = true;
-//     }
-
-//     if (!menuShown) {
-//         document.getElementById("pinyin-menu").classList.add("undisplay");
-//         document.getElementById("pinyin-half-prompt").classList.add("hide");
-//         document.getElementById("pinyin-half-answer").classList.add("hide");
-//     }
-// }
-
-// document.getElementById("auto-pinyin-prompt").addEventListener("change", () => {
-//     const htmlPrompts = document.getElementsByClassName("prompt");
-//     if (document.getElementById("auto-pinyin-prompt").checked) {
-//         addPinyinInputListeners(htmlPrompts);
-//     } else {
-//         removePinyinInputListeners(htmlPrompts);
-//     }
-// });
-
-// document.getElementById("auto-pinyin-answer").addEventListener("change", () => {
-//     const htmlAnswers = document.getElementsByClassName("answer");
-//     if (document.getElementById("auto-pinyin-answer").checked) {
-//         addPinyinInputListeners(htmlAnswers);
-//     } else {
-//         removePinyinInputListeners(htmlAnswers);
-//     }
-// });
-
-// function removePinyinInputListeners(elemList) {
-//     for (x = 0; x < elemList.length; x++) {
-//         elemList[x].removeEventListener("blur", addPinYinText);
-//     }
-// }
-
-// function addPinyinInputListeners(elemList) {
-//     for (x = 0; x < elemList.length; x++) {
-//         addPinyinInputListener(elemList[x]);
-//     }
-// }
-
-// function addPinyinInputListener(elem) {
-//     elem.addEventListener("blur", addPinYinText);
-// }
 
 // generateLangHTML();
 // function generateLangHTML() {
@@ -516,14 +425,6 @@ document.getElementById("plus").addEventListener("click", (e) => {
         </a>
         </div>`;
 
-    // if (document.getElementById("auto-pinyin-prompt").checked) {
-    //     addPinyinInputListener(newPair.getElementsByClassName("prompt")[0]);
-    // }
-
-    // if (document.getElementById("auto-pinyin-answer").checked) {
-    //     addPinyinInputListener(newPair.getElementsByClassName("answer")[0]);
-    // }
-
     if (editingPairs) {
         const deleteBtn = newPair.getElementsByClassName("pair-delete-btn")[0];
 
@@ -708,22 +609,6 @@ document
 /* -------------------------------------------------------------------------- */
 /*                           parsing and validation                           */
 /* -------------------------------------------------------------------------- */
-
-// function addPinYinText(e) {
-//     let val = e.target.value;
-//     if (val.trim() != "") {
-//         if (val.includes("(") && val.includes(")")) {
-//             const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
-//             val = val.replace(rmp, "").trim();
-//         }
-//         // * @param str Chinese character to be converted
-//         // * @param splitter separated characters, separated by spaces by default
-//         // * @param withtone return Whether the result contains tones, the default is
-//         // * @param polyphone Whether polyphone supports polyphones, the default is no
-//         e.target.value =
-//             val + ` (${pinyinUtil.getPinyin(val, " ", true, false)})`;
-//     }
-// }
 
 let titleTimeout;
 function titleValid(t) {

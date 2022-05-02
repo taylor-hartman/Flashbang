@@ -79,26 +79,6 @@ input {
     }
 }
 
-.pinyin-menu-content {
-    display: flex;
-    margin: 0.5rem 0 0.8rem 0;
-    width: 70vw;
-    justify-content: space-between;
-    padding-right: 1rem;
-    padding-left: 1.3rem;
-
-    p {
-        display: inline;
-    }
-
-    .pinyin-half {
-        background: none;
-        width: 46.5%;
-        display: flex;
-        justify-content: space-around;
-    }
-}
-
 .pair {
     display: flex;
     margin: 0.5rem 0 0.8rem 0;
