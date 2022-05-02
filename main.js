@@ -8,11 +8,10 @@ const fs = require("fs");
 /*                         Electron/Window Management                         */
 /* -------------------------------------------------------------------------- */
 // Set env
-process.env.NODE_ENV = "development";
-// process.env.NODE_ENV = "production";
+// process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "production";
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false;
-// const isDev = false;
 const isMac = process.platform === "darwin" ? true : false;
 
 let mainWindow;
@@ -190,7 +189,6 @@ ipcMain.on("bunch:submit", (e, bunch) => {
         filePath = userDataPath + "/bunches/" + count + ".json";
     }
 
-    console.log(count);
     const bunchStorage = new BunchStorage({
         fileName: count,
     });
