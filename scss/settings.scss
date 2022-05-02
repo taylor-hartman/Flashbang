@@ -138,6 +138,16 @@ a {
             justify-content: center;
             padding-top: 2vh;
 
+            #sound-section {
+                #sound-internal {
+                    width: 80vw;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                }
+            }
+
             .setting {
                 width: 75vw;
                 display: flex;
@@ -196,6 +206,10 @@ a {
             right: 0;
         }
     }
+}
+
+.undisplay {
+    display: none;
 }
 
 #light {

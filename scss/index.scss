@@ -16,6 +16,15 @@ body {
     background: var(--background);
 }
 
+// .titlebar {
+//     background-color: #f0f0f0;
+//     height: 25px;
+//     border-bottom: 1px solid #d0d0d0;
+//     -webkit-app-region: drag; /* Allow user to drag the window using this titlebar */
+//     -webkit-user-select: none; /* Prevent user from selecting things */
+//     user-select: none;
+// }
+
 ::placeholder {
     color: var(--placeholder, $placeholder);
 }

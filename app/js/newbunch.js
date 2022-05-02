@@ -38,6 +38,7 @@ document.getElementById("top-right-btn").addEventListener("click", () => {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.add("hide");
+    document.getElementById("scroll-down-btn").classList.add("hide");
 
     editingPairs = false;
     adjustEditing();
@@ -594,7 +595,7 @@ function parseImport() {
         const pairSeparator =
             pairSeparatorInput.value === "" ? "\n" : pairSeparatorInput.value;
 
-        const importVals = document.getElementById("import-text").value;
+        const importVals = document.getElementById("import-text").value.trim();
         const pairsStrings = importVals.split(pairSeparator);
         const importPairs = [];
         for (x = 0; x < pairsStrings.length; x++) {
@@ -627,6 +628,7 @@ function closeImportMenu() {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.remove("hide");
+    document.getElementById("scroll-down-btn").classList.remove("hide");
     importMenuOpen = false;
 }
 
@@ -642,6 +644,7 @@ document.getElementById("export-btn").addEventListener("click", () => {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.add("hide");
+    document.getElementById("scroll-down-btn").classList.add("hide");
 
     exportMenuOpen = true;
 
@@ -666,7 +669,6 @@ function updateExport() {
     textArea.value = "";
     for (x = 0; x < pairs.length - 1; x++) {
         textArea.value += `${pairs[x].prompt}${termSeparator}${pairs[x].answer}${pairSeparator}`;
-        console.log("lmao");
     }
     textArea.value += `${pairs[x].prompt}${termSeparator}${pairs[x].answer}`;
 }
@@ -688,6 +690,8 @@ function closeExportMenu() {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.remove("hide");
+    document.getElementById("scroll-down-btn").classList.remove("hide");
+
     exportMenuOpen = false;
 }
 
@@ -865,7 +869,6 @@ function makeBunch() {
     };
 
     bunch.pairs = JSON.parse(JSON.stringify(makePairs()));
-    console.log(bunch.pairs);
 
     return bunch;
 }

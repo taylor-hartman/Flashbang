@@ -116,6 +116,21 @@ document.getElementById("ignore-capital").addEventListener("change", () => {
     });
 });
 
+if (navigator.userAgent.indexOf("Win") != -1) {
+    document.getElementById("sound-section").classList.remove("undisplay");
+    document.getElementById("sound-text").innerText =
+        "In order to use text to speech, the desired lanaguge must be added to Windows in the settings app under Time & language -> Langauge & region -> Language";
+    console.log("win");
+} else if (
+    navigator.userAgent.indexOf("X11") != -1 ||
+    navigator.userAgent.indexOf("Linux") != -1
+) {
+    console.log("linux");
+    document.getElementById("sound-section").classList.remove("undisplay");
+    document.getElementById("sound-text").innerText =
+        "Text to speech may not function properly on all Linux and UNIX Operating Systems :(";
+}
+
 document.getElementById("sort-home-by").addEventListener("change", () => {
     ipcRenderer.send("globalSettings:set", {
         key: "sortHomeBy",

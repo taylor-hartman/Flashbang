@@ -29,7 +29,7 @@ class Settings {
             sortHomeBy: "lastUsed",
         };
 
-        this.data = parseDataFile(this.path, defaults);
+        this.data = parseDataFile(this.path, this.defaults);
 
         //create file if dne
         if (!fs.existsSync(this.path)) {

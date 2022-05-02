@@ -1,19 +1,24 @@
 {
     "name": "flashbang",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "description": "flashcard app",
     "main": "main.js",
     "scripts": {
         "start": "electron .",
         "dev": "nodemon --exec electron .",
-        "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
-        "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"APP NAME\"",
-        "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=false --out=release-builds"
+        "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds",
+        "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=icons/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\"",
+        "package-linux": "electron-packager . flashbang --overwrite --platform=linux --arch=x64 --icon=icons/1024x1024.png --prune=false --out=release-builds",
+        "create-debian-installer": "electron-installer-debian --src release-builds/flashbang-linux-x64/ --arch amd64 --config debian.json"
     },
-    "author": "Taylow Hartman",
+    "author": "Taylor Hartman",
     "license": "ISC",
     "devDependencies": {
         "elctron": "^0.0.1-security",
-        "electron": "^16.0.5"
+        "electron": "^16.0.5",
+        "electron-winstaller": "^5.0.0"
+    },
+    "dependencies": {
+        "electron-packager": "^15.5.1"
     }
 }

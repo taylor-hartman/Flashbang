@@ -9,6 +9,7 @@ const fs = require("fs");
 /* -------------------------------------------------------------------------- */
 // Set env
 process.env.NODE_ENV = "development";
+// process.env.NODE_ENV = "production";
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false;
 // const isDev = false;
@@ -43,13 +44,14 @@ ipcMain.on("background:set", () => {
 
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: "Flashbang",
+        title: "flashbang",
         width: isDev ? 875 : 625,
         height: 425,
         icon: "./assets/icons/icon.png",
-        resizable: false,
+        resizable: true,
         backgroundColor: backgroundLookUp[theme],
         // titleBarStyle: "hidden",
+        // frame: false,
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
@@ -179,7 +181,7 @@ ipcMain.on("bunch:save", (e, bunch) => {
 //when a newbunch is submitted
 ipcMain.on("bunch:submit", (e, bunch) => {
     //generate id
-    let count = 0;
+    let count = 1;
     const userDataPath = app.getPath("userData");
     var filePath = userDataPath + "/bunches/" + count + ".json";
 
@@ -188,6 +190,7 @@ ipcMain.on("bunch:submit", (e, bunch) => {
         filePath = userDataPath + "/bunches/" + count + ".json";
     }
 
+    console.log(count);
     const bunchStorage = new BunchStorage({
         fileName: count,
     });

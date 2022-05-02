@@ -10,7 +10,6 @@ let bunchSettings = {}; //all bunch settings
 
 var answerShown = false,
     studyComplete = false;
-
 var pairs; //pairs is all pairs in bunch, current pair is the one currently being displayed
 var menuToggled = false;
 var currentReversed; // bool if the currentPair is asked standard or reversed
@@ -150,7 +149,10 @@ window.addEventListener("keydown", keyListener);
 function keyListener(e) {
     e = e || window.e; //capture the e, and ensure we have an e
     var key = e.key; //find the key that was pressed
-    if (key === "Escape" || (!inResetMenu && studyComplete && key === " ")) {
+    if (
+        key === "Escape" ||
+        (!inResetMenu && studyComplete && (key === " " || key === "Enter"))
+    ) {
         window.location.href = "index.html";
         return;
     } else if (inResetMenu && key === " ") {
@@ -279,13 +281,11 @@ function generateCalls() {
     }
     setPairs();
     createPairsRef();
-    console.log("Pairs", pairs);
 }
 
 let prevNumCalls;
 function updateCalls(correct) {
     if (correct) {
-        console.log("Correct");
         callsString = currentReversed ? "revCalls" : "calls";
         if (currentPair[callsString] > 0) {
             currentPair[callsString] -= 1;
@@ -295,7 +295,6 @@ function updateCalls(correct) {
             }
         }
     } else {
-        console.log("Inorrect");
         callsString = currentReversed ? "revCalls" : "calls";
         prevNumCalls = currentPair[callsString];
         if (
@@ -397,10 +396,6 @@ function showAnswer() {
 
         answers = answers.concat(toBeAdded);
         toBeAdded = [];
-
-        for (x = 0; x < answers.length; x++) {
-            console.log(answers[x]);
-        }
 
         let set = false;
         for (x = 0; x < answers.length; x++) {
@@ -619,14 +614,55 @@ function updateHTML() {
             sayClicked("answer");
         });
 
-        //event listeners for piniyn
-        document.getElementById("prompt").addEventListener("mouseenter", () => {
-            updatePromptPinyin();
-        });
+        if (
+            pinyinLang(bunchSettings.promptLang) ||
+            pinyinLang(bunchSettings.answerLang)
+        ) {
+            document
+                .getElementById("pinyin-text")
+                .addEventListener("click", () => {
+                    addPinYinText(
+                        document.getElementById("prompt").innerText,
+                        true
+                    );
+                });
 
-        document.getElementById("prompt").addEventListener("mouseleave", () => {
-            updatePromptPinyin();
-        });
+            //event listeners for piniyn
+            document
+                .getElementById("prompt")
+                .addEventListener("mouseenter", () => {
+                    if (!bunchSettings.showPinyin) {
+                        if (
+                            (!currentReversed &&
+                                pinyinLang(bunchSettings.promptLang)) ||
+                            (currentReversed &&
+                                pinyinLang(bunchSettings.answerLang))
+                        ) {
+                            addPinYinText(
+                                document.getElementById("prompt").innerText,
+                                false
+                            );
+                            document
+                                .getElementById("pinyin-text")
+                                .classList.remove("hide");
+                        } else {
+                            document
+                                .getElementById("pinyin-text")
+                                .classList.add("hide");
+                        }
+                    }
+                });
+
+            document
+                .getElementById("prompt")
+                .addEventListener("mouseleave", () => {
+                    if (!bunchSettings.showPinyin) {
+                        document
+                            .getElementById("pinyin-text")
+                            .classList.add("hide");
+                    }
+                });
+        }
 
         if (bunchSettings.showPinyin) {
             updatePromptPinyin();
@@ -640,7 +676,7 @@ function updatePromptPinyin() {
             (!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
             (currentReversed && pinyinLang(bunchSettings.answerLang))
         ) {
-            addPinYinText(document.getElementById("prompt").innerText);
+            addPinYinText(document.getElementById("prompt").innerText, false);
             document.getElementById("pinyin-text").classList.remove("hide");
         } else {
             document.getElementById("pinyin-text").classList.add("hide");
@@ -743,14 +779,14 @@ function resetHTML() {
 function studyCompleteHTML() {
     var fcc = document.getElementById("flashcard-container");
     const bottomText = document.getElementById("bottom-text");
-    bottomText.innerText = "Press Space to Return Home";
+    bottomText.innerText = "Press Space or Enter to Return Home";
     fcc.innerHTML = `<h2 id="end-dialogue">Bunch Study Complete!</h2>`;
     document.getElementById("bottom-text").classList.remove("undisplay");
     document.getElementById("options-btn").classList.add("hide");
     document.getElementById("remaining-text").classList.add("undisplay");
 }
 
-function addPinYinText(val) {
+function addPinYinText(val, poly) {
     if (val.trim() != "") {
         if (val.includes("(") && val.includes(")")) {
             const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
@@ -760,9 +796,12 @@ function addPinYinText(val) {
         // * @param splitter separated characters, separated by spaces by default
         // * @param withtone return Whether the result contains tones, the default is
         // * @param polyphone Whether polyphone supports polyphones, the default is no
-        document.getElementById(
-            "pinyin-text"
-        ).innerText = `${pinyinUtil.getPinyin(val, " ", true, false)}`;
+        document.getElementById("pinyin-text").innerText = poly
+            ? `${pinyinUtil.getPinyin(val, " ", true, poly)}`.replaceAll(
+                  ",",
+                  " / "
+              )
+            : `${pinyinUtil.getPinyin(val, " ", true, false)}`;
     }
 }
 
@@ -807,5 +846,6 @@ function resetPage() {
 //#endregion
 
 function pinyinLang(lang) {
+    //returns bool representing if lang is a pinyin lang
     return lang == "zh-CN" || lang == "zh-HK" || lang == "zh-TW";
 }
