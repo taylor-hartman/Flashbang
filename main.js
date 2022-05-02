@@ -8,8 +8,8 @@ const fs = require("fs");
 /*                         Electron/Window Management                         */
 /* -------------------------------------------------------------------------- */
 // Set env
-// process.env.NODE_ENV = "development";
-process.env.NODE_ENV = "production";
+process.env.NODE_ENV = "development";
+// process.env.NODE_ENV = "production";
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false;
 const isMac = process.platform === "darwin" ? true : false;
@@ -24,7 +24,7 @@ const backgroundLookUp = {
     light: "#e7e6e1",
     dark: "#222831",
     "lemon-mint": "#fffdde",
-    "sea-mist": "#c4f8f0",
+    lab: "#a583ea",
     beehive: "#ffc600",
     houseplant: "#a7ff83",
     cafe: "#f4dfba",
@@ -74,11 +74,11 @@ function createMainWindow() {
 app.on("ready", () => {
     createMainWindow();
 
-    const mainMenu = Menu.buildFromTemplate(menu);
+    const mainMenu = Menu.buildFromTemplate(standardMenu);
     Menu.setApplicationMenu(mainMenu);
 });
 
-const menu = [
+const standardMenu = [
     ...(isMac ? [{ role: "appMenu" }] : []),
     {
         label: "Edit",
@@ -100,13 +100,48 @@ const menu = [
             },
         ],
     },
-    {
-        label: "Study",
-        submenu: [{ label: "I was right", accelerator: "CmdOrCtrl+D" }],
-    },
-    ...(isDev
-        ? [
-              {
+];
+
+let menu;
+
+ipcMain.on("updateMenu", (e, type) => {
+    menu = JSON.parse(JSON.stringify(standardMenu));
+    switch (type) {
+        case "study-typed":
+            menu.push({
+                label: "Study",
+                submenu: [{ label: "I Was Right", accelerator: "CmdOrCtrl+D" }],
+            });
+            break;
+        // case "study-flashcard":
+        //     menu.push({
+        //         label: "Study",
+        //         submenu: [
+        //             { label: "Show Answer", accelerator: "Space" },
+        //             { label: "Answer Correct", accelerator: "2" },
+        //             { label: "Answer Incorrect", accelerator: "1" },
+        //         ],
+        //     });
+        //     break;
+        case "newbunch":
+            menu.push({
+                label: "Navigation",
+                submenu: [
+                    { label: "Scroll To Top", accelerator: "CmdOrCtrl+Up" },
+                    {
+                        label: "Scroll To Bottom",
+                        accelerator: "CmdOrCtrl+Down",
+                    },
+                ],
+            });
+            break;
+        case "standard":
+            break;
+    }
+
+    menu.push(
+        isDev
+            ? {
                   label: "Developer",
                   submenu: [
                       { role: "reload" },
@@ -114,10 +149,12 @@ const menu = [
                       { type: "separator" },
                       { role: "toggledevtools" },
                   ],
-              },
-          ]
-        : []),
-];
+              }
+            : {}
+    );
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
+});
 
 app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {

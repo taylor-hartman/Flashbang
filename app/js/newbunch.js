@@ -19,6 +19,7 @@ const editing = id !== ".new_bunch"; //true if editing; false if new bunch
 /* -------------------------------------------------------------------------- */
 /*                               Event Handlers                               */
 /* -------------------------------------------------------------------------- */
+ipcRenderer.send("updateMenu", "newbunch");
 
 /* ----------------------------- corner buttons ----------------------------- */
 document.getElementById("back-btn").addEventListener("click", (e) => {
@@ -38,17 +39,12 @@ document.getElementById("top-right-btn").addEventListener("click", () => {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.add("hide");
-    document.getElementById("scroll-down-btn").classList.add("hide");
 
     editingPairs = false;
     adjustEditing();
 
     saveInternal();
     importMenuOpen = true;
-});
-
-document.getElementById("scroll-down-btn").addEventListener("click", () => {
-    document.getElementById("submit-add-bar").scrollIntoView();
 });
 
 /* -------------------------------------------------------------------------- */
@@ -256,7 +252,6 @@ document.getElementById("plus").addEventListener("click", (e) => {
 
     document.getElementById("pair-container").appendChild(newPair);
 
-    const pairElems = document.getElementsByClassName("pair");
     document.getElementById("submit-add-bar").scrollIntoView();
 });
 
@@ -347,7 +342,6 @@ function closeImportMenu() {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.remove("hide");
-    document.getElementById("scroll-down-btn").classList.remove("hide");
     importMenuOpen = false;
 }
 
@@ -363,7 +357,6 @@ document.getElementById("export-btn").addEventListener("click", () => {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.add("hide");
-    document.getElementById("scroll-down-btn").classList.add("hide");
 
     exportMenuOpen = true;
 
@@ -409,7 +402,6 @@ function closeExportMenu() {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.remove("hide");
-    document.getElementById("scroll-down-btn").classList.remove("hide");
 
     exportMenuOpen = false;
 }

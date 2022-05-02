@@ -109,6 +109,7 @@ function onQuestionTypeChange() {
         flashcard: document.getElementById("ask-flashcard").checked,
         typed: document.getElementById("ask-typed").checked,
     };
+    updateMenu();
     updateHTML();
     updateRemainingText();
     setCurrentPair();
@@ -176,6 +177,8 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
     currentReversed = bunch.pairOrder.reversed;
     studyComplete = bunch.complete;
 
+    updateMenu();
+
     updateHTML();
 
     createPairsRef();
@@ -195,6 +198,13 @@ function setComplete() {
     });
 }
 
+function updateMenu() {
+    if (bunchSettings.questionType.flashcard) {
+        ipcRenderer.send("updateMenu", "standard");
+    } else {
+        ipcRenderer.send("updateMenu", "study-typed");
+    }
+}
 //#endregion
 
 //#region Bunch Management
@@ -209,8 +219,6 @@ function setCurrentPair() {
     let count = 0;
     if (pairsRef.length > 1) {
         while (pairsRef[index].prompt === lastPrompt && count < 5) {
-            //TODO shoudl be better way to do this
-            //TODO i feel like this while loop is not effiecient
             index = Math.floor(Math.random() * pairsRef.length);
             count += 1; //after five trys j continue anyway (need this for repeat prompts)
         }
@@ -316,7 +324,6 @@ function iWasRight() {
     resetPage();
 }
 
-//TODO decide if you are making dif functions or using if statements
 var correctTimeout, incorrectTimeout;
 function showAnswer() {
     if (bunchSettings.questionType.flashcard) {
@@ -606,7 +613,6 @@ function displayCard() {
         } else {
             if (currentPair.calls > 0) {
                 //this is ok because calls is set to zero for reversed
-                //TODO should probably make into one thing and not two tho
                 currentReversed = false;
                 document.getElementById("prompt").innerText =
                     currentPair.prompt;

@@ -2,6 +2,8 @@ const ipcRenderer = require("electron").ipcRenderer;
 var pageNumber = 0;
 var bunches, matchingBunches; //bunches is all bunches; matchingBunches is bunches that match a search result
 
+ipcRenderer.send("updateMenu", "standard");
+
 window.onload = () => {
     ipcRenderer.send("bunchdata:get");
 };

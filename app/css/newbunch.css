@@ -229,6 +229,16 @@ input {
   cursor: pointer;
 }
 
+#scroll-up-btn {
+  position: fixed;
+  bottom: 5px;
+  left: 5px;
+}
+
+#scroll-up-btn:hover {
+  cursor: pointer;
+}
+
 #top-right-btn {
   position: fixed;
   top: 5px;

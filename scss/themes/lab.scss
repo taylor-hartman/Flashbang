@@ -1,0 +1,12 @@
+@import "../variables";
+
+:root {
+    --text: #{$lab-text};
+    --highlight: #{$lab-highlight};
+    --primary: #{$lab-primary};
+    --secondary: #{$lab-secondary};
+    --background: #{$lab-background};
+
+    --placeholder: #{$lab-placeholder};
+    --btn-hover: #{$lab-btn-hover};
+}
