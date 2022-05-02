@@ -242,30 +242,6 @@ a {
           flex-direction: column;
 }
 
-#flashcard-container #pinyin-container {
-  width: 83%;
-  height: 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  margin-bottom: 0.5rem;
-}
-
-#flashcard-container #pinyin-text {
-  width: 83%;
-  position: absolute;
-  font-size: 0.85rem;
-  line-height: 0.85rem;
-  max-height: 0.85rem;
-  overflow: hidden;
-}
-
 #flashcard-container #answer-input {
   width: 40vw;
   max-width: 70vw;
