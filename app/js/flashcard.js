@@ -135,6 +135,17 @@ document.getElementById("say-answer").addEventListener("change", () => {
     bunchSettings.sayAnswer = document.getElementById("say-answer").checked;
 });
 
+document.getElementById("show-pinyin").addEventListener("change", () => {
+    ipcRenderer.send("bunch:set", id, {
+        key: "showPinyin",
+        value: document.getElementById("show-pinyin").checked,
+    });
+    //TODO do this with get request,
+    bunchSettings.showPinyin = document.getElementById("show-pinyin").checked;
+
+    updatePromptPinyin();
+});
+
 window.addEventListener("keydown", keyListener);
 function keyListener(e) {
     e = e || window.e; //capture the e, and ensure we have an e
@@ -173,6 +184,8 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
 
     bunchSettings.sayPrompt = bunch.sayPrompt;
     bunchSettings.sayAnswer = bunch.sayAnswer;
+
+    bunchSettings.showPinyin = bunch.showPinyin;
 
     currentReversed = bunch.pairOrder.reversed;
     studyComplete = bunch.complete;
@@ -536,6 +549,14 @@ function updateHTML() {
     document.getElementById("say-prompt").checked = bunchSettings.sayPrompt;
     document.getElementById("say-answer").checked = bunchSettings.sayAnswer;
 
+    if (pinyinLang(bunchSettings.promptLang)) {
+        document
+            .getElementById("pinyin-option-section")
+            .classList.remove("undisplay");
+        document.getElementById("show-pinyin").checked =
+            bunchSettings.showPinyin;
+    }
+
     const root = document.querySelector(":root");
     root.style.fontSize = `${settings.studyFontSize}px`;
 
@@ -547,7 +568,12 @@ function updateHTML() {
     } else {
         if (bunchSettings.questionType.flashcard) {
             document.getElementById("flashcard-container").innerHTML = `
-            <h2 class="" id="prompt"></h2>
+            <div id="prompt-container"> 
+                <div id="pinyin-container">
+                    <p class="hide" id="pinyin-text"></p>
+                </div>
+                <h2 class="" id="prompt"></h2>
+            </div>
             <div class="hide" id="main-separator"></div>
             <h2 class="hide" id="answer"></h2>`;
 
@@ -555,7 +581,12 @@ function updateHTML() {
                 "10vh";
         } else if (bunchSettings.questionType.typed) {
             document.getElementById("flashcard-container").innerHTML = `
-            <h2 id="prompt">Lorem</h2>
+            <div id="prompt-container"> 
+                <div id="pinyin-container">
+                    <p class="hide" id="pinyin-text"></p>
+                </div>
+                <h2 id="prompt">Lorem</h2>
+            </div>
             <div class="input-container">
                     <input type="text" id="answer-input"/>
                     <div class="hide" id="status-block">&#10004</div>
@@ -589,6 +620,76 @@ function updateHTML() {
         document.getElementById("answer").addEventListener("click", () => {
             sayClicked("answer");
         });
+
+        if (
+            pinyinLang(bunchSettings.promptLang) ||
+            pinyinLang(bunchSettings.answerLang)
+        ) {
+            document
+                .getElementById("pinyin-text")
+                .addEventListener("click", () => {
+                    addPinYinText(
+                        document.getElementById("prompt").innerText,
+                        true
+                    );
+                });
+
+            //event listeners for piniyn
+            document
+                .getElementById("prompt")
+                .addEventListener("mouseenter", () => {
+                    if (!bunchSettings.showPinyin) {
+                        if (
+                            (!currentReversed &&
+                                pinyinLang(bunchSettings.promptLang)) ||
+                            (currentReversed &&
+                                pinyinLang(bunchSettings.answerLang))
+                        ) {
+                            addPinYinText(
+                                document.getElementById("prompt").innerText,
+                                false
+                            );
+                            document
+                                .getElementById("pinyin-text")
+                                .classList.remove("hide");
+                        } else {
+                            document
+                                .getElementById("pinyin-text")
+                                .classList.add("hide");
+                        }
+                    }
+                });
+
+            document
+                .getElementById("prompt")
+                .addEventListener("mouseleave", () => {
+                    if (!bunchSettings.showPinyin) {
+                        document
+                            .getElementById("pinyin-text")
+                            .classList.add("hide");
+                    }
+                });
+        }
+
+        if (bunchSettings.showPinyin) {
+            updatePromptPinyin();
+        }
+    }
+}
+
+function updatePromptPinyin() {
+    if (bunchSettings.showPinyin)
+        if (
+            (!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
+            (currentReversed && pinyinLang(bunchSettings.answerLang))
+        ) {
+            addPinYinText(document.getElementById("prompt").innerText, false);
+            document.getElementById("pinyin-text").classList.remove("hide");
+        } else {
+            document.getElementById("pinyin-text").classList.add("hide");
+        }
+    else {
+        document.getElementById("pinyin-text").classList.add("hide");
     }
 }
 
@@ -626,6 +727,7 @@ function displayCard() {
                     currentPair.prompt;
             }
         }
+        updatePromptPinyin();
         sayChecked(currentReversed ? "answer" : "prompt");
 
         answerShown = false;
@@ -690,6 +792,25 @@ function studyCompleteHTML() {
     document.getElementById("remaining-text").classList.add("undisplay");
 }
 
+function addPinYinText(val, poly) {
+    if (val.trim() != "") {
+        if (val.includes("(") && val.includes(")")) {
+            const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
+            val = val.replace(rmp, "").trim();
+        }
+        // * @param str Chinese character to be converted
+        // * @param splitter separated characters, separated by spaces by default
+        // * @param withtone return Whether the result contains tones, the default is
+        // * @param polyphone Whether polyphone supports polyphones, the default is no
+        document.getElementById("pinyin-text").innerText = poly
+            ? `${pinyinUtil.getPinyin(val, " ", true, poly)}`.replaceAll(
+                  ",",
+                  " / "
+              )
+            : `${pinyinUtil.getPinyin(val, " ", true, false)}`;
+    }
+}
+
 function updateRemainingText() {
     if (settings.showRemaining && !inResetMenu) {
         let remainingCount = 0;
@@ -729,3 +850,8 @@ function resetPage() {
     setPairs();
 }
 //#endregion
+
+function pinyinLang(lang) {
+    //returns bool representing if lang is a pinyin lang
+    return lang == "zh-CN" || lang == "zh-HK" || lang == "zh-TW";
+}

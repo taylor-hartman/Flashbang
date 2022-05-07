@@ -207,6 +207,24 @@ a {
         flex-direction: column;
     }
 
+    #pinyin-container {
+        width: 83%;
+        height: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+
+    #pinyin-text {
+        width: 83%;
+        position: absolute;
+        font-size: 0.85rem;
+        line-height: 0.85rem;
+        max-height: 0.85rem;
+        overflow: hidden;
+    }
+
     #answer-input {
         width: 40vw;
         max-width: 70vw;
