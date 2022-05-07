@@ -8,18 +8,18 @@ const fs = require("fs");
 /*                         Electron/Window Management                         */
 /* -------------------------------------------------------------------------- */
 // Set env
-process.env.NODE_ENV = "development";
-// process.env.NODE_ENV = "production";
+// process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "production";
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false;
 const isMac = process.platform === "darwin" ? true : false;
 
 let mainWindow;
 
-//HACK....this is painful wtf
-//-----------background flash fix------------
 const globalSettings = new Settings("global");
 
+//HACK....this is painful wtf
+//-----------background flash fix------------
 const backgroundLookUp = {
     light: "#e7e6e1",
     dark: "#222831",
@@ -139,19 +139,17 @@ ipcMain.on("updateMenu", (e, type) => {
             break;
     }
 
-    menu.push(
-        isDev
-            ? {
-                  label: "Developer",
-                  submenu: [
-                      { role: "reload" },
-                      { role: "forcereload" },
-                      { type: "separator" },
-                      { role: "toggledevtools" },
-                  ],
-              }
-            : {}
-    );
+    if (isDev) {
+        menu.push({
+            label: "Developer",
+            submenu: [
+                { role: "reload" },
+                { role: "forcereload" },
+                { type: "separator" },
+                { role: "toggledevtools" },
+            ],
+        });
+    }
 
     Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
 });

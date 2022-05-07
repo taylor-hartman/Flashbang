@@ -1,24 +1,27 @@
-const createWindowsInstaller =
-    require("electron-winstaller").createWindowsInstaller;
-const path = require("path");
+// C:\Users\sdkca\Desktop\electron-workspace\build.js
+var electronInstaller = require("electron-winstaller");
 
-getInstallerConfig()
-    .then(createWindowsInstaller)
-    .catch((error) => {
-        console.error(error.message || error);
-        process.exit(1);
-    });
+// In this case, we can use relative paths
+var settings = {
+    // Specify the folder where the built app is located
+    appDirectory: "./release-builds/flashbang-win32-ia32",
+    // Specify the existing folder where
+    outputDirectory: "./release-builds",
+    // The name of the Author of the app (the name of your company)
+    authors: "taylor hartman",
+    // The name of the executable of your built
+    exe: "./flashbang.exe",
+};
 
-function getInstallerConfig() {
-    console.log("creating windows installer");
+resultPromise = electronInstaller.createWindowsInstaller(settings);
 
-    return Promise.resolve({
-        appDirectory: "/release-builds/flashbang-win32-ia32",
-        authors: "taylor hartman",
-        noMsi: true,
-        outputDirectory: "/windows-build",
-        exe: "flashbang.exe",
-        setupExe: "flashbang.exe",
-        setupIcon: "/icons/icon.ico",
-    });
-}
+resultPromise.then(
+    () => {
+        console.log(
+            "The installers of your application were succesfully created !"
+        );
+    },
+    (e) => {
+        console.log(`Well, sometimes you are not so lucky: ${e.message}`);
+    }
+);

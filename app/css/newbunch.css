@@ -96,6 +96,33 @@ input {
   width: 46.5%;
 }
 
+.pinyin-menu-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0.5rem 0 0.8rem 0;
+  width: 70vw;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-right: 1rem;
+  padding-left: 1.3rem;
+}
+
+.pinyin-menu-content p {
+  display: inline;
+}
+
+.pinyin-menu-content .pinyin-half {
+  background: none;
+  width: 46.5%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
 .pair {
   display: -webkit-box;
   display: -ms-flexbox;
