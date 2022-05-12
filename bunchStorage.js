@@ -38,6 +38,7 @@ class BunchStorage {
             },
             sayPrompt: false,
             sayAnswer: false,
+            hideParaText: false,
         };
         this.data = parseDataFile(this.path, this.defaults);
     }

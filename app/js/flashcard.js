@@ -144,6 +144,19 @@ document.getElementById("show-pinyin").addEventListener("change", () => {
     bunchSettings.showPinyin = document.getElementById("show-pinyin").checked;
 
     updatePromptPinyin();
+    displayCard();
+});
+
+document.getElementById("hide-para-text").addEventListener("change", () => {
+    ipcRenderer.send("bunch:set", id, {
+        key: "hideParaText",
+        value: document.getElementById("hide-para-text").checked,
+    });
+    //TODO do this with get request,
+    bunchSettings.hideParaText =
+        document.getElementById("hide-para-text").checked;
+
+    displayCard();
 });
 
 window.addEventListener("keydown", keyListener);
@@ -184,6 +197,8 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
 
     bunchSettings.sayPrompt = bunch.sayPrompt;
     bunchSettings.sayAnswer = bunch.sayAnswer;
+
+    bunchSettings.hideParaText = bunch.hideParaText;
 
     bunchSettings.showPinyin = bunch.showPinyin;
 
@@ -549,6 +564,9 @@ function updateHTML() {
     document.getElementById("say-prompt").checked = bunchSettings.sayPrompt;
     document.getElementById("say-answer").checked = bunchSettings.sayAnswer;
 
+    document.getElementById("hide-para-text").checked =
+        bunchSettings.hideParaText;
+
     if (pinyinLang(bunchSettings.promptLang)) {
         document
             .getElementById("pinyin-option-section")
@@ -628,10 +646,7 @@ function updateHTML() {
             document
                 .getElementById("pinyin-text")
                 .addEventListener("click", () => {
-                    addPinYinText(
-                        document.getElementById("prompt").innerText,
-                        true
-                    );
+                    addPinYinText(currentPrompt(), true);
                 });
 
             //event listeners for piniyn
@@ -645,10 +660,7 @@ function updateHTML() {
                             (currentReversed &&
                                 pinyinLang(bunchSettings.answerLang))
                         ) {
-                            addPinYinText(
-                                document.getElementById("prompt").innerText,
-                                false
-                            );
+                            addPinYinText(currentPrompt(), false);
                             document
                                 .getElementById("pinyin-text")
                                 .classList.remove("hide");
@@ -671,8 +683,14 @@ function updateHTML() {
                 });
         }
 
-        if (bunchSettings.showPinyin) {
-            updatePromptPinyin();
+        if (
+            bunchSettings.showPinyin &&
+            ((!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
+                (currentReversed && pinyinLang(bunchSettings.answerLang)))
+        ) {
+            document.getElementById("pinyin-text").classList.remove("hide");
+        } else {
+            document.getElementById("pinyin-text").classList.add("hide");
         }
     }
 }
@@ -683,7 +701,7 @@ function updatePromptPinyin() {
             (!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
             (currentReversed && pinyinLang(bunchSettings.answerLang))
         ) {
-            addPinYinText(document.getElementById("prompt").innerText, false);
+            addPinYinText(currentPrompt(), false);
             document.getElementById("pinyin-text").classList.remove("hide");
         } else {
             document.getElementById("pinyin-text").classList.add("hide");
@@ -701,13 +719,17 @@ function displayCard() {
             if (currentPair.revCalls > 0) {
                 currentReversed = true; //TODO should not be set here
                 document.getElementById("prompt").innerText =
-                    currentPair.answer;
+                    bunchSettings.showPinyin || bunchSettings.hideParaText
+                        ? currentPair.answer.replace(/\(.*?\)/g, "")
+                        : currentPair.answer;
                 document.getElementById("answer").innerText =
                     currentPair.prompt;
             } else {
                 currentReversed = false;
                 document.getElementById("prompt").innerText =
-                    currentPair.prompt;
+                    bunchSettings.showPinyin || bunchSettings.hideParaText
+                        ? currentPair.prompt.replace(/\(.*?\)/g, "")
+                        : currentPair.prompt;
                 document.getElementById("answer").innerText =
                     currentPair.answer;
             }
@@ -716,13 +738,17 @@ function displayCard() {
                 //this is ok because calls is set to zero for reversed
                 currentReversed = false;
                 document.getElementById("prompt").innerText =
-                    currentPair.prompt;
+                    bunchSettings.showPinyin || bunchSettings.hideParaText
+                        ? currentPair.prompt.replace(/\(.*?\)/g, "")
+                        : currentPair.prompt;
                 document.getElementById("answer").innerText =
                     currentPair.answer;
             } else {
                 currentReversed = true;
                 document.getElementById("prompt").innerText =
-                    currentPair.answer;
+                    bunchSettings.showPinyin || bunchSettings.hideParaText
+                        ? currentPair.answer.replace(/\(.*?\)/g, "")
+                        : currentPair.answer;
                 document.getElementById("answer").innerText =
                     currentPair.prompt;
             }
@@ -795,19 +821,22 @@ function studyCompleteHTML() {
 function addPinYinText(val, poly) {
     if (val.trim() != "") {
         if (val.includes("(") && val.includes(")")) {
-            const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
-            val = val.replace(rmp, "").trim();
+            // const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
+            // val = val.replace(rmp, "").trim();
+            val = val.match(/\(([^)]+)\)/)[1]; //gets text in parenthesis
+            document.getElementById("pinyin-text").innerText = val;
+        } else {
+            // * @param str Chinese character to be converted
+            // * @param splitter separated characters, separated by spaces by default
+            // * @param withtone return Whether the result contains tones, the default is
+            // * @param polyphone Whether polyphone supports polyphones, the default is no
+            document.getElementById("pinyin-text").innerText = poly
+                ? `${pinyinUtil.getPinyin(val, " ", true, poly)}`.replaceAll(
+                      ",",
+                      " / "
+                  )
+                : `${pinyinUtil.getPinyin(val, " ", true, false)}`;
         }
-        // * @param str Chinese character to be converted
-        // * @param splitter separated characters, separated by spaces by default
-        // * @param withtone return Whether the result contains tones, the default is
-        // * @param polyphone Whether polyphone supports polyphones, the default is no
-        document.getElementById("pinyin-text").innerText = poly
-            ? `${pinyinUtil.getPinyin(val, " ", true, poly)}`.replaceAll(
-                  ",",
-                  " / "
-              )
-            : `${pinyinUtil.getPinyin(val, " ", true, false)}`;
     }
 }
 
@@ -854,4 +883,8 @@ function resetPage() {
 function pinyinLang(lang) {
     //returns bool representing if lang is a pinyin lang
     return lang == "zh-CN" || lang == "zh-HK" || lang == "zh-TW";
+}
+
+function currentPrompt() {
+    return currentReversed ? currentPair.answer : currentPair.prompt;
 }
