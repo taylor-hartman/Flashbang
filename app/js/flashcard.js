@@ -159,6 +159,7 @@ document.getElementById("hide-para-text").addEventListener("change", () => {
     displayCard();
 });
 
+//TODO chnage to only on down
 window.addEventListener("keydown", keyListener);
 function keyListener(e) {
     e = e || window.e; //capture the e, and ensure we have an e
@@ -253,6 +254,21 @@ function setCurrentPair() {
         lastPrompt = pairsRef[index].prompt;
     }
     currentPair = pairsRef[index];
+
+    if (bunchSettings.pairOrder.bothrs) {
+        if (currentPair.revCalls > 0) {
+            //if it is reversed then standard, then we need to flip order
+            currentReversed = true;
+        } else {
+            currentReversed = false;
+        }
+    } else {
+        if (currentPair.calls > 0) {
+            currentReversed = false;
+        } else {
+            currentReversed = true;
+        }
+    }
 
     displayCard();
 }
@@ -714,44 +730,18 @@ function updatePromptPinyin() {
 function displayCard() {
     if (!studyComplete) {
         //this is called from bunch:getAll when studyis complete sometimes. this is to stop it from that
-        if (bunchSettings.pairOrder.bothrs) {
-            //if it is reversed then standard, then we need to flip order
-            if (currentPair.revCalls > 0) {
-                currentReversed = true; //TODO should not be set here
-                document.getElementById("prompt").innerText =
-                    bunchSettings.showPinyin || bunchSettings.hideParaText
-                        ? currentPair.answer.replace(/\(.*?\)/g, "")
-                        : currentPair.answer;
-                document.getElementById("answer").innerText =
-                    currentPair.prompt;
-            } else {
-                currentReversed = false;
-                document.getElementById("prompt").innerText =
-                    bunchSettings.showPinyin || bunchSettings.hideParaText
-                        ? currentPair.prompt.replace(/\(.*?\)/g, "")
-                        : currentPair.prompt;
-                document.getElementById("answer").innerText =
-                    currentPair.answer;
-            }
+        if (currentReversed) {
+            document.getElementById("prompt").innerText =
+                bunchSettings.showPinyin || bunchSettings.hideParaText
+                    ? currentPair.answer.replace(/\(.*?\)/g, "")
+                    : currentPair.answer;
+            document.getElementById("answer").innerText = currentPair.prompt;
         } else {
-            if (currentPair.calls > 0) {
-                //this is ok because calls is set to zero for reversed
-                currentReversed = false;
-                document.getElementById("prompt").innerText =
-                    bunchSettings.showPinyin || bunchSettings.hideParaText
-                        ? currentPair.prompt.replace(/\(.*?\)/g, "")
-                        : currentPair.prompt;
-                document.getElementById("answer").innerText =
-                    currentPair.answer;
-            } else {
-                currentReversed = true;
-                document.getElementById("prompt").innerText =
-                    bunchSettings.showPinyin || bunchSettings.hideParaText
-                        ? currentPair.answer.replace(/\(.*?\)/g, "")
-                        : currentPair.answer;
-                document.getElementById("answer").innerText =
-                    currentPair.prompt;
-            }
+            document.getElementById("prompt").innerText =
+                bunchSettings.showPinyin || bunchSettings.hideParaText
+                    ? currentPair.prompt.replace(/\(.*?\)/g, "")
+                    : currentPair.prompt;
+            document.getElementById("answer").innerText = currentPair.answer;
         }
         updatePromptPinyin();
         sayChecked(currentReversed ? "answer" : "prompt");

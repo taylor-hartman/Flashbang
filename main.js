@@ -179,7 +179,7 @@ ipcMain.on("newbunch:save", (e, bunch) => {
         bunchStorage.set(key, value);
     }
 
-    //TODO take out, only need for development
+    //NOTE only need for development
     //checks to see if defaults have been added and applies them if so
     for (const [key, value] of Object.entries(bunchStorage.defaults)) {
         if (
@@ -200,16 +200,16 @@ ipcMain.on("bunch:save", (e, bunch) => {
         bunchStorage.set(key, value);
     }
 
-    //TODO take out, only need for development
+    //NOTE only need for development
     //checks to see if defaults have been added and applies them if so
-    for (const [key, value] of Object.entries(bunchStorage.defaults)) {
-        if (
-            bunchStorage.get(key) == null ||
-            bunchStorage.get(key) == undefined
-        ) {
-            bunchStorage.set(key, value);
-        }
-    }
+    // for (const [key, value] of Object.entries(bunchStorage.defaults)) {
+    //     if (
+    //         bunchStorage.get(key) == null ||
+    //         bunchStorage.get(key) == undefined
+    //     ) {
+    //         bunchStorage.set(key, value);
+    //     }
+    // }
 });
 
 //when a newbunch is submitted
