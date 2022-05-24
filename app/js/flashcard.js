@@ -25,7 +25,6 @@ let inResetMenu = false;
 /*                               Event Handlers                               */
 /* -------------------------------------------------------------------------- */
 
-//TODO could likely be chnaged do document.addEventListener('DOMContentLoaded', ()) and be faster
 window.onload = () => {
     //requests pairs data from main
     ipcRenderer.send("globalSettings:getAll");

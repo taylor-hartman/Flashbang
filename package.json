@@ -8,22 +8,16 @@
         "dev": "nodemon --exec electron .",
         "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds --ignore=internal_icons --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
         "package-win32": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=icons/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
-        "package-win64": "electron-packager . --overwrite --platform=win32 --arch=x64 --icon=icons/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
+        "package-win64": "electron-packager . --overwrite --platform=win32 --arch=x64 --icon=icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
         "package-win64arm": "electron-packager . --overwrite --platform=win32 --arch=arm64 --icon=icons/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
-        "setup-win32": "electron-installer-windows --name flashbang-win-ia32 --src release-builds/flashbang-win32-ia32/ --dest release-builds/",
-        "setup-win64": "electron-installer-windows --name flashbang-win-ia64 --src release-builds/flashbang-win32-x64/ --dest release-builds/",
         "package-linux": "electron-packager . flashbang --overwrite --platform=linux --arch=x64 --icon=icons/1024x1024.png --prune=false --out=release-builds --ignore=internal_icons --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
         "create-debian-installer": "electron-installer-debian --src release-builds/flashbang-linux-x64/ --arch amd64 --config debian.json"
     },
-    "author": "Taylor Hartman",
+    "author": "taylor hartman",
     "license": "ISC",
     "devDependencies": {
         "electron": "^16.0.5",
         "electron-installer-windows": "^3.0.0",
-        "electron-packager": "^15.5.1",
-        "electron-winstaller": "^5.0.0"
-    },
-    "dependencies": {
-        "electron-squirrel-startup": "^1.0.0"
+        "electron-packager": "^15.5.1"
     }
 }
