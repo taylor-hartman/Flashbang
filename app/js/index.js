@@ -150,7 +150,7 @@ function generateHTML(num) {
             <div class="hex-row">
                 <div class="hex-container">
                     <div class="hex">
-                        <a href="newbunch.html" class="hex-center">
+                        <a href="newbunch.html?id=.new_bunch" class="hex-center">
                             <div class="hex-content no-bunches-hex-content">
                                 <h3>Create New Bunch</h3>
                                 <svg
@@ -185,7 +185,7 @@ function generateHTML(num) {
             main.innerHTML = `<div class="hex-row">${generateHexs(2)}</div>`;
             main.innerHTML += `<div class="hex-row">${generateHexs(2)}</div>`;
             var rows = main.getElementsByClassName("hex-row");
-            rows[0].style = "margin-left: -20%;";
+            rows[0].style = "margin-left: -125px;";
             break;
         case 5:
             main.innerHTML = `<div class="hex-row">${generateHexs(3)}</div>`;
@@ -195,7 +195,7 @@ function generateHTML(num) {
             main.innerHTML = `<div class="hex-row">${generateHexs(3)}</div>`;
             main.innerHTML += `<div class="hex-row">${generateHexs(3)}</div>`;
             var rows = main.getElementsByClassName("hex-row");
-            rows[0].style = "margin-left: -20%;";
+            rows[0].style = "margin-left: -125px;";
             break;
         default:
             main.innerHTML = `<div class="hex-row">${generateHexs(4)}</div>`;

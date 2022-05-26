@@ -142,7 +142,7 @@ function generatePairsHTML() {
     const htmlPairs = document.getElementsByClassName("pair");
     for (x = 0; x < htmlPairs.length; x++) {
         htmlPairs[x].addEventListener("change", (e) => {
-            resetPairCalls(e);
+            // resetPairCalls(e);
             console.log(pairOrder);
         });
     }
@@ -409,10 +409,13 @@ function parseImport() {
         const termSeparatorInput = document.getElementById("btwn-term");
         const pairSeparatorInput = document.getElementById("btwn-pair");
 
-        const termSeparator =
-            termSeparatorInput.value === "" ? "-" : termSeparatorInput.value;
-        const pairSeparator =
-            pairSeparatorInput.value === "" ? "\n" : pairSeparatorInput.value;
+        var termSeparator =
+            termSeparatorInput.value == "" ? "-" : termSeparatorInput.value;
+        var pairSeparator =
+            pairSeparatorInput.value == "" ? "\n" : pairSeparatorInput.value;
+
+        termSeparator = termSeparator == "\\n" ? "\n" : termSeparator;
+        pairSeparator = pairSeparator == "\\n" ? "\n" : pairSeparator; //translate from string \n to new line
 
         const importVals = document.getElementById("import-text").value.trim();
         const pairsStrings = importVals.split(pairSeparator);

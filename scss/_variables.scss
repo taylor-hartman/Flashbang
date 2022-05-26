@@ -37,12 +37,20 @@ $lemon-mint-background: #fffdde;
 $lemon-mint-placeholder: lighten($lemon-mint-text, 20%);
 $lemon-mint-btn-hover: lighten($lemon-mint-highlight, 20%);
 
-//Sea Mist
-$lab-text: #31313b;
-$lab-highlight: #31313b;
+//Lab
+// $lab-text: #31313b;
+// $lab-highlight: #31313b;
+// $lab-primary: #e4e7e6;
+// $lab-secondary: #d6ccb3;
+// $lab-background: #a583ea;
+// $lab-placeholder: lighten($lab-text, 10%);
+// $lab-btn-hover: lighten($lab-highlight, 20%);
+
+$lab-text: #a583ea;
+$lab-highlight: #a583ea;
 $lab-primary: #e4e7e6;
-$lab-secondary: #d6ccb3;
-$lab-background: #a583ea;
+$lab-secondary: #d5d4d4;
+$lab-background: #e4e7e6;
 $lab-placeholder: lighten($lab-text, 10%);
 $lab-btn-hover: lighten($lab-highlight, 20%);
 

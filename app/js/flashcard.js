@@ -161,22 +161,25 @@ document.getElementById("hide-para-text").addEventListener("change", () => {
 //TODO chnage to only on down
 window.addEventListener("keydown", keyListener);
 function keyListener(e) {
-    e = e || window.e; //capture the e, and ensure we have an e
-    var key = e.key; //find the key that was pressed
-    if (
-        key === "Escape" ||
-        (!inResetMenu && studyComplete && (key === " " || key === "Enter"))
-    ) {
-        window.location.href = "index.html";
-        return;
-    } else if (inResetMenu && key === " ") {
-        exitResetMenu();
-    } else {
-        answerManager(e);
-    }
+    if (!e.repeat) {
+        //makes it on key initially pressed down instead of while key down
+        e = e || window.e; //capture the e, and ensure we have an e
+        var key = e.key; //find the key that was pressed
+        if (
+            key === "Escape" ||
+            (!inResetMenu && studyComplete && (key === " " || key === "Enter"))
+        ) {
+            window.location.href = "index.html";
+            return;
+        } else if (inResetMenu && key === " ") {
+            exitResetMenu();
+        } else {
+            answerManager(e);
+        }
 
-    if (menuToggled) {
-        toggleMenu();
+        if (menuToggled) {
+            toggleMenu();
+        }
     }
 }
 

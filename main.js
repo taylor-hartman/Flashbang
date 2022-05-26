@@ -24,7 +24,7 @@ const backgroundLookUp = {
     light: "#e7e6e1",
     dark: "#222831",
     "lemon-mint": "#fffdde",
-    lab: "#a583ea",
+    lab: "#e4e7e6",
     beehive: "#ffc600",
     houseplant: "#a7ff83",
     cafe: "#f4dfba",
