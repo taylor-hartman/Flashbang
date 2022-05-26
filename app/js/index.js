@@ -6,9 +6,13 @@ ipcRenderer.send("updateMenu", "standard");
 
 window.onload = () => {
     ipcRenderer.send("bunchdata:get");
+    console.log("bunches sent");
 };
 
+console.log("js worlking");
+
 ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
+    console.log("bunches got");
     //TODO redundant conversion before and after get
     bunches = JSON.parse(JSON.stringify(bunchesData));
     makeIndexPage();

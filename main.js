@@ -8,8 +8,8 @@ const fs = require("fs");
 /*                         Electron/Window Management                         */
 /* -------------------------------------------------------------------------- */
 // Set env
-// process.env.NODE_ENV = "development";
-process.env.NODE_ENV = "production";
+process.env.NODE_ENV = "development";
+// process.env.NODE_ENV = "production";
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false;
 const isMac = process.platform === "darwin" ? true : false;
@@ -256,7 +256,7 @@ ipcMain.on("bunchdata:get", sendBunchData);
 
 //used to format index page
 //this has to be done here and not in index becuase index.js cannot access directory
-function sendBunchData() {
+function sendBunchData(e) {
     //TODO see if there is a way to stop this from reading all the contents of every json file
     const userDataPath = app.getPath("userData");
     const bunchesDir = userDataPath + "/bunches";
@@ -278,14 +278,14 @@ function sendBunchData() {
                     data.push({ id, title, lastUsed, numTerms });
                 }
             }
-            mainWindow.webContents.send("bunchdata:get", data);
+            e.reply("bunchdata:get", data);
         } catch {
             (error) => {
                 console.log(error);
             };
         }
     } else {
-        mainWindow.webContents.send("bunchdata:get", []); //return 0 if bunches directory dne
+        e.reply("bunchdata:get", []); //return 0 if bunches directory dne
     }
 }
 
