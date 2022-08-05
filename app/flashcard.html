@@ -59,6 +59,25 @@
 
         <div class="hide" id="options-menu">
             <div class="row-container">
+                <label for="ask-flashcard">Flashcard</label>
+                <label class="checkbox-container">
+                    <input
+                        type="radio"
+                        name="questionType"
+                        id="ask-flashcard"
+                    />
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <div class="row-container">
+                <label for="ask-typed">Typed</label>
+                <label class="checkbox-container">
+                    <input type="radio" name="questionType" id="ask-typed" />
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <div class="separator"></div>
+            <div class="row-container">
                 <label for="ask-prompt">Standard</label>
                 <label class="checkbox-container">
                     <input type="radio" name="pairOrder" id="standard" />
@@ -86,25 +105,7 @@
                     <span class="checkmark"></span>
                 </label>
             </div>
-            <div class="separator"></div>
-            <div class="row-container">
-                <label for="ask-flashcard">Flashcard</label>
-                <label class="checkbox-container">
-                    <input
-                        type="radio"
-                        name="questionType"
-                        id="ask-flashcard"
-                    />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-            <div class="row-container">
-                <label for="ask-typed">Typed</label>
-                <label class="checkbox-container">
-                    <input type="radio" name="questionType" id="ask-typed" />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
+
             <div class="separator"></div>
             <div class="row-container">
                 <label for="say-prompt">Say Prompt</label>
@@ -140,7 +141,7 @@
             </div>
         </div>
 
-        <div class="container main-container" id="flashcard-container">
+        <div class="container flashcard-main-container" id="main-container">
             <h2 id="prompt"></h2>
             <div class="hide" id="main-separator"></div>
             <h2 class="hide" id="answer"></h2>

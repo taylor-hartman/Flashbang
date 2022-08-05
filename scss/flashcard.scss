@@ -34,6 +34,9 @@ svg {
 
 input {
     background: none;
+    &:focus {
+        outline: none;
+    }
 }
 
 a {
@@ -52,9 +55,14 @@ a {
     justify-content: center;
 }
 
-.main-container {
+.flashcard-main-container {
     width: 100vw;
     height: 100vh;
+}
+
+.test-main-container {
+    width: 100vw;
+    padding: 0 10%;
 }
 
 #main-separator {
@@ -183,8 +191,7 @@ a {
 }
 //-----------end checkbox stuff-------------
 
-#flashcard-container {
-    display: flex;
+#main-container {
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -319,6 +326,132 @@ a {
         text-align: center;
         color: var(--highlight, $highlight);
     }
+}
+
+//--------TEST STUFF---------
+
+.test-typed {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 1rem;
+    text-align: left;
+
+    .test-typed-prompt {
+        max-width: 45%;
+        overflow-wrap: break-word;
+    }
+
+    .test-typed-answer {
+        width: 45%;
+        max-width: 45%;
+        min-width: 45%;
+        border: 2px solid var(--highlight, $highlight);
+        border-radius: 3px;
+        font-size: 1rem;
+        padding: 1.9px 2.5px;
+    }
+}
+
+.TF-head,
+.typed-head,
+.MC-head {
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--highlight, $highlight);
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.test-TF {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+
+    .test-TF-prompt {
+        width: 43%;
+        max-width: 43%;
+        overflow-wrap: break-word;
+    }
+
+    .test-TF-answer {
+        width: 43%;
+        max-width: 43%;
+        overflow-wrap: break-word;
+    }
+
+    .test-TF-button {
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 1.5rem;
+        line-height: 1.4rem;
+        font-weight: bold;
+        text-align: center;
+        justify-content: center;
+        border: 2px solid var(--highlight, $highlight);
+        border-radius: 3px;
+        background: none;
+    }
+}
+
+.test-MC {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 1.3rem;
+
+    .test-MC-prompt {
+        width: 100%;
+        text-align: center;
+    }
+
+    .test-MC-choice-container {
+        margin-top: 0.5rem;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+
+        .test-MC-choice {
+            padding: 3px 0.75rem;
+            width: 32%;
+            max-width: 32%;
+            border: 2px solid var(--highlight, $highlight);
+            border-radius: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: none;
+            font-size: 0.8rem;
+            position: relative;
+
+            .test-MC-choice-text {
+                text-align: center;
+            }
+        }
+    }
+}
+
+.incorrect-indicator {
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    position: absolute;
+    right: 5%;
+}
+
+.correct-indicator {
+    position: absolute;
+    right: 3px;
+    bottom: 0;
+    font-size: 1rem;
+    background: var(--background);
 }
 
 .hide {

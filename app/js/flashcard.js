@@ -212,7 +212,12 @@ ipcRenderer.on("bunch:getAll", (e, bunch) => {
 
     updateHTML();
 
-    createPairsRef();
+    if (
+        bunchSettings.questionType.typed ||
+        bunchSettings.questionType.flashcard
+    ) {
+        createPairsRef();
+    }
 });
 
 function setPairs() {
@@ -389,72 +394,18 @@ function showAnswer() {
         let userAnswer = document.getElementById("answer-input").value.trim();
         let answer = currentReversed ? currentPair.prompt : currentPair.answer;
 
-        const re = /\([^)]*\) */g; //removes parenthesis and text btw them
-
-        //if the answer is: "ans1 (1) / ans2 (2)", with all settings we should accept:
-        //"ans1 (1) / ans2 (2)", "ans1 / ans2", "ans1 (1)", "ans2 (2)", "ans1", "ans2"
-
-        let answers;
-        if (settings.useSlash) {
-            answers = answer.split("/");
-
-            for (x = 0; x < answers.length; x++) {
-                answers[x] = answers[x].trim();
-            }
-
-            if (answers.length > 1) {
-                answers.unshift(answer); //appends full answer to position 0
+        if (typedCorrect(userAnswer, answer)) {
+            updateCalls(true);
+            if (settings.delayCorrect == 0) {
+                resetPage();
+            } else {
+                styleAnswer(true);
+                correctTimeout = setTimeout(
+                    resetPage,
+                    settings.delayCorrect * 1000
+                );
             }
         } else {
-            answers = [];
-            answers.push(answer);
-        }
-
-        let toBeAdded = [];
-
-        if (settings.ignoreParenthesis) {
-            for (x = 0; x < answers.length; x++) {
-                const val = answers[x].replace(re, "").trim();
-                if (!answers.includes(val)) {
-                    toBeAdded.push(val);
-                }
-            }
-        }
-
-        answers = answers.concat(toBeAdded);
-        toBeAdded = [];
-
-        if (settings.ignoreCapital) {
-            userAnswer = userAnswer.toLowerCase();
-            for (x = 0; x < answers.length; x++) {
-                const val = answers[x].toLowerCase();
-                if (!answers.includes(val)) {
-                    toBeAdded.push(val);
-                }
-            }
-        }
-
-        answers = answers.concat(toBeAdded);
-        toBeAdded = [];
-
-        let set = false;
-        for (x = 0; x < answers.length; x++) {
-            if (userAnswer == answers[x]) {
-                updateCalls(true);
-                if (settings.delayCorrect == 0) {
-                    resetPage();
-                } else {
-                    styleAnswer(true);
-                    correctTimeout = setTimeout(
-                        resetPage,
-                        settings.delayCorrect * 1000
-                    );
-                }
-                set = true;
-                break;
-            }
-        }
-        if (!set) {
             noTimeout = false;
             incorrectTimeout = setTimeout(() => {
                 noTimeout = true;
@@ -464,6 +415,62 @@ function showAnswer() {
             sayChecked(currentReversed ? "prompt" : "answer");
         }
     }
+}
+
+function typedCorrect(userAnswer, answer) {
+    //if the answer is: "ans1 (1) / ans2 (2)", with all settings we should accept:
+    //"ans1 (1) / ans2 (2)", "ans1 / ans2", "ans1 (1)", "ans2 (2)", "ans1", "ans2"
+
+    let answers;
+    if (settings.useSlash) {
+        answers = answer.split("/");
+
+        for (x = 0; x < answers.length; x++) {
+            answers[x] = answers[x].trim();
+        }
+
+        if (answers.length > 1) {
+            answers.unshift(answer); //appends full answer to position 0
+        }
+    } else {
+        answers = [];
+        answers.push(answer);
+    }
+
+    let toBeAdded = [];
+
+    if (settings.ignoreParenthesis) {
+        const re = /\([^)]*\) */g; //removes parenthesis and text btw them
+        for (x = 0; x < answers.length; x++) {
+            const val = answers[x].replace(re, "").trim();
+            if (!answers.includes(val)) {
+                toBeAdded.push(val);
+            }
+        }
+    }
+
+    answers = answers.concat(toBeAdded);
+    toBeAdded = [];
+
+    if (settings.ignoreCapital) {
+        userAnswer = userAnswer.toLowerCase();
+        for (x = 0; x < answers.length; x++) {
+            const val = answers[x].toLowerCase();
+            if (!answers.includes(val)) {
+                toBeAdded.push(val);
+            }
+        }
+    }
+
+    answers = answers.concat(toBeAdded);
+    toBeAdded = [];
+
+    for (x = 0; x < answers.length; x++) {
+        if (userAnswer == answers[x]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function answerManager(e) {
@@ -599,11 +606,11 @@ function updateHTML() {
     if (studyComplete) {
         //study again menu is open bc bunch is complete
         inResetMenu = true;
-        var fcc = document.getElementById("flashcard-container");
+        var fcc = document.getElementById("main-container");
         fcc.innerHTML = `<h2 id="end-dialogue">Bunch Complete <br> Press Space to Reset Progress</h2>`;
     } else {
         if (bunchSettings.questionType.flashcard) {
-            document.getElementById("flashcard-container").innerHTML = `
+            document.getElementById("main-container").innerHTML = `
             <div id="prompt-container"> 
                 <div id="pinyin-container">
                     <p class="hide" id="pinyin-text"></p>
@@ -613,10 +620,20 @@ function updateHTML() {
             <div class="hide" id="main-separator"></div>
             <h2 class="hide" id="answer"></h2>`;
 
-            document.getElementById("flashcard-container").style.paddingBottom =
+            document.getElementById("main-container").style.paddingBottom =
                 "10vh";
+            document
+                .getElementById("edit-bunch-btn")
+                .classList.remove("undisplay");
+
+            document
+                .getElementById("main-container")
+                .classList.add("flashcard-main-container");
+            document
+                .getElementById("main-container")
+                .classList.remove("test-main-container");
         } else if (bunchSettings.questionType.typed) {
-            document.getElementById("flashcard-container").innerHTML = `
+            document.getElementById("main-container").innerHTML = `
             <div id="prompt-container"> 
                 <div id="pinyin-container">
                     <p class="hide" id="pinyin-text"></p>
@@ -631,12 +648,35 @@ function updateHTML() {
             <div class="hide" id="iwr-btn-container">
             <button id="iwr-btn">I was right</button></div>`;
 
-            document.getElementById("flashcard-container").style.paddingBottom =
+            document.getElementById("main-container").style.paddingBottom =
                 "5vh";
 
             document
                 .getElementById("iwr-btn")
                 .addEventListener("click", iWasRight);
+
+            document
+                .getElementById("edit-bunch-btn")
+                .classList.remove("undisplay");
+
+            document
+                .getElementById("main-container")
+                .classList.add("flashcard-main-container");
+            document
+                .getElementById("main-container")
+                .classList.remove("test-main-container");
+        } else if (bunchSettings.questionType.test) {
+            document
+                .getElementById("main-container")
+                .classList.remove("flashcard-main-container");
+            document
+                .getElementById("main-container")
+                .classList.add("test-main-container");
+
+            document
+                .getElementById("edit-bunch-btn")
+                .classList.add("undisplay");
+            generateTest();
         }
 
         document.getElementById("bottom-container").innerHTML = `
@@ -648,85 +688,330 @@ function updateHTML() {
                 settings.showInfo ? "" : 'class="undisplay"'
             } id="bottom-text">Press Enter to Answer</p>`;
 
-        //event listeners for text to speech on click
-        document.getElementById("prompt").addEventListener("click", () => {
-            sayClicked("prompt");
-        });
-
-        document.getElementById("answer").addEventListener("click", () => {
-            sayClicked("answer");
-        });
-
         if (
-            pinyinLang(bunchSettings.promptLang) ||
-            pinyinLang(bunchSettings.answerLang)
+            bunchSettings.questionType.flashcard ||
+            bunchSettings.questionType.typed
         ) {
-            document
-                .getElementById("pinyin-text")
-                .addEventListener("click", () => {
-                    addPinYinText(currentPrompt(), true);
-                });
+            //event listeners for text to speech on click
+            document.getElementById("prompt").addEventListener("click", () => {
+                sayClicked("prompt");
+            });
 
-            //event listeners for piniyn
-            document
-                .getElementById("prompt")
-                .addEventListener("mouseenter", () => {
-                    if (!bunchSettings.showPinyin) {
-                        if (
-                            (!currentReversed &&
-                                pinyinLang(bunchSettings.promptLang)) ||
-                            (currentReversed &&
-                                pinyinLang(bunchSettings.answerLang))
-                        ) {
-                            addPinYinText(currentPrompt(), false);
-                            document
-                                .getElementById("pinyin-text")
-                                .classList.remove("hide");
-                        } else {
+            document.getElementById("answer").addEventListener("click", () => {
+                sayClicked("answer");
+            });
+
+            if (
+                pinyinLang(bunchSettings.promptLang) ||
+                pinyinLang(bunchSettings.answerLang)
+            ) {
+                document
+                    .getElementById("pinyin-text")
+                    .addEventListener("click", () => {
+                        addPinYinText(currentPrompt(), true);
+                    });
+
+                //event listeners for piniyn
+                document
+                    .getElementById("prompt")
+                    .addEventListener("mouseenter", () => {
+                        if (!bunchSettings.showPinyin) {
+                            if (
+                                (!currentReversed &&
+                                    pinyinLang(bunchSettings.promptLang)) ||
+                                (currentReversed &&
+                                    pinyinLang(bunchSettings.answerLang))
+                            ) {
+                                addPinYinText(currentPrompt(), false);
+                                document
+                                    .getElementById("pinyin-text")
+                                    .classList.remove("hide");
+                            } else {
+                                document
+                                    .getElementById("pinyin-text")
+                                    .classList.add("hide");
+                            }
+                        }
+                    });
+
+                document
+                    .getElementById("prompt")
+                    .addEventListener("mouseleave", () => {
+                        if (!bunchSettings.showPinyin) {
                             document
                                 .getElementById("pinyin-text")
                                 .classList.add("hide");
                         }
-                    }
-                });
-
-            document
-                .getElementById("prompt")
-                .addEventListener("mouseleave", () => {
-                    if (!bunchSettings.showPinyin) {
-                        document
-                            .getElementById("pinyin-text")
-                            .classList.add("hide");
-                    }
-                });
+                    });
+            }
+            //TODO remove try catch
+            try {
+                if (
+                    bunchSettings.showPinyin &&
+                    ((!currentReversed &&
+                        pinyinLang(bunchSettings.promptLang)) ||
+                        (currentReversed &&
+                            pinyinLang(bunchSettings.answerLang)))
+                ) {
+                    document
+                        .getElementById("pinyin-text")
+                        .classList.remove("hide");
+                } else {
+                    document
+                        .getElementById("pinyin-text")
+                        .classList.add("hide");
+                }
+            } catch {}
         }
+    }
+}
 
-        if (
-            bunchSettings.showPinyin &&
-            ((!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
-                (currentReversed && pinyinLang(bunchSettings.answerLang)))
-        ) {
-            document.getElementById("pinyin-text").classList.remove("hide");
+function genTestMC(pair, index) {
+    //at least THREE pairs must exist to do mc
+    let randIndex1 = Math.floor(Math.random() * pairs.length);
+    while (randIndex1 == index) {
+        randIndex1 = Math.floor(Math.random() * pairs.length);
+    }
+    let randIndex2 = Math.floor(Math.random() * pairs.length);
+    while (randIndex2 == index || randIndex2 == randIndex1) {
+        randIndex2 = Math.floor(Math.random() * pairs.length);
+    }
+
+    let choice0, choice1, choice2;
+    let answerIndex = Math.floor(Math.random() * 3);
+    switch (answerIndex) {
+        case 0:
+            choice0 = pair.answer;
+            choice1 = pairs[randIndex1].answer;
+            choice2 = pairs[randIndex2].answer;
+            break;
+        case 1:
+            choice0 = pairs[randIndex1].answer;
+            choice1 = pair.answer;
+            choice2 = pairs[randIndex2].answer;
+            break;
+        case 2:
+            choice0 = pairs[randIndex1].answer;
+            choice1 = pairs[randIndex2].answer;
+            choice2 = pair.answer;
+            break;
+    }
+
+    const html = `<div class="test-MC" answer="${answerIndex}" selected=-1>
+    <div class="test-MC-prompt">${pair.prompt}</div>
+    <div class="test-MC-choice-container">
+        <button class="test-MC-choice" class="test-MC-choice" num=0><div class="test-MC-choice-text">${choice0}</div><div class="correct-indicator undisplay">&#10004;</div></button>
+        <button class="test-MC-choice" class="test-MC-choice" num=1><div class="test-MC-choice-text">${choice1}</div><div class="correct-indicator undisplay">&#10004;</div></button>
+        <button class="test-MC-choice" class="test-MC-choice" num=2><div class="test-MC-choice-text">${choice2}</div><div class="correct-indicator undisplay">&#10004;</div></button>
+
+        <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+    </div>
+</div>`;
+    return html;
+}
+
+function genTestTyped(pair) {
+    const html = `<div class="test-typed" answer="${pair.answer}">
+    <div class="test-typed-prompt">${pair.prompt}</div>
+    <input type="text" class="test-typed-answer" />
+
+    <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+</div>`;
+    return html;
+}
+
+function genTestTF(pair) {
+    const isTrue = Math.floor(Math.random() * 2) == 0; //determines if true or false
+    if (isTrue) {
+        const html = `
+        <div class="test-TF" answer="true" state="true">
+            <div class="test-TF-prompt">${pair.prompt}</div>
+            <button class="test-TF-button">=</button>
+            <div class="test-TF-answer">${pair.answer}</div>
+
+            <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+        </div>`;
+        return html;
+    } else {
+        const index = Math.floor(Math.random() * pairs.length); //determines other pair
+        const randPrompt = Math.floor(Math.random() * 2) == 0; //determines if prompt is dif or answer is dif
+        if (randPrompt) {
+            const html = `
+                <div class="test-TF" answer="false" state="true">
+                    <div class="test-TF-prompt">${pairs[index].prompt}</div>
+                    <button class="test-TF-button">=</button>
+                    <div class="test-TF-answer">${pair.answer}</div>
+
+                    <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+                </div>`;
+            return html;
         } else {
-            document.getElementById("pinyin-text").classList.add("hide");
+            const html = `
+                <div class="test-TF" answer="false" state="true">
+                    <div class="test-TF-prompt">${pair.prompt}</div>
+                    <button class="test-TF-button">=</button>
+                    <div class="test-TF-answer">${pairs[index].answer}</div>
+
+                    <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+                </div>`;
+            return html;
+        }
+    }
+}
+
+function generateTest() {
+    var indecies = [];
+    for (x = 0; x < pairs.length; x++) {
+        indecies[x] = x;
+    }
+
+    var testHTML = "";
+
+    if (pairs.length < 3) {
+        if (pairs.length == 1) {
+            testHTML += genTestMC(pairs[0]);
+        }
+    } else {
+        let numMC = Math.floor(pairs.length / 3);
+        let numTyped = Math.ceil((pairs.length - numMC) / 2);
+        let numTF = pairs.length - numMC - numTyped;
+        testHTML += `<div class="MC-head">Multiple Choice</div>`;
+        for (x = 0; x < numMC; x++) {
+            let indeciesIndex = Math.floor(Math.random() * indecies.length);
+            let index = indecies[indeciesIndex];
+            let testGenPair = pairs[index];
+            testHTML += genTestMC(testGenPair, index);
+            indecies.splice(indeciesIndex, 1);
+        }
+        testHTML += `<div class="typed-head">Typed</div>`;
+        for (x = 0; x < numTyped; x++) {
+            let indeciesIndex = Math.floor(Math.random() * indecies.length);
+            let index = indecies[indeciesIndex];
+            let testGenPair = pairs[index];
+            testHTML += genTestTyped(testGenPair);
+            indecies.splice(indeciesIndex, 1);
+        }
+        testHTML += `<div class="TF-head">True / False</div>`;
+        for (x = 0; x < numTF; x++) {
+            let indeciesIndex = Math.floor(Math.random() * indecies.length);
+            let index = indecies[indeciesIndex];
+            let testGenPair = pairs[index];
+            testHTML += genTestTF(testGenPair);
+            indecies.splice(indeciesIndex, 1);
+        }
+    }
+    document.getElementById("main-container").innerHTML = testHTML;
+
+    const TFButtons = document.getElementsByClassName("test-TF-button");
+    for (button of TFButtons) {
+        button.addEventListener("click", (e) => {
+            newState =
+                "true" != e.target.closest(".test-TF").getAttribute("state");
+            e.target.closest(".test-TF").setAttribute("state", newState);
+            if (newState) {
+                e.target.innerText = "=";
+            } else {
+                e.target.innerText = "≠";
+            }
+        });
+    }
+
+    const MCButtons = document.getElementsByClassName("test-MC-choice");
+    for (button of MCButtons) {
+        button.addEventListener("click", (e) => {
+            e.target
+                .closest(".test-MC")
+                .setAttribute(
+                    "selected",
+                    e.target.closest(".test-MC-choice").getAttribute("num")
+                );
+
+            const choices = e.target
+                .closest(".test-MC")
+                .getElementsByClassName("test-MC-choice");
+            for (choice of choices) {
+                choice.style.background = "none";
+            }
+            e.target.closest(".test-MC-choice").style.background =
+                "var(--btn-hover)";
+        });
+    }
+}
+
+function checkTest() {
+    const choices = document.getElementsByClassName("test-MC-choice");
+    for (choice of choices) {
+        //cloning removes event listeners
+        let new_choice = choice.cloneNode(true);
+        choice.parentNode.replaceChild(new_choice, choice);
+    }
+
+    const btns = document.getElementsByClassName("test-TF-button");
+    for (btn of btns) {
+        //cloning removes event listeners
+        let new_btn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(new_btn, btn);
+    }
+
+    let incorrectCount;
+
+    const MC = document.getElementsByClassName("test-MC");
+    for (question of MC) {
+        if (
+            question.getAttribute("answer") != question.getAttribute("selected")
+        ) {
+            question
+                .querySelector(".incorrect-indicator")
+                .classList.remove("undisplay");
+
+            question
+                .getElementsByClassName("correct-indicator")
+                [question.getAttribute("answer")].classList.remove("undisplay");
+            incorrectCount += 1;
+        }
+    }
+
+    const typed = document.getElementsByClassName("test-typed");
+    for (question of typed) {
+        const input = question.querySelector(".test-typed-answer");
+        if (!typedCorrect(input.value, question.getAttribute("answer"))) {
+            question
+                .querySelector(".incorrect-indicator")
+                .classList.remove("undisplay");
+
+            incorrectCount += 1;
+        }
+    }
+
+    const TF = document.getElementsByClassName("test-TF");
+    for (question of TF) {
+        if (question.getAttribute("answer") != question.getAttribute("state")) {
+            question
+                .querySelector(".incorrect-indicator")
+                .classList.remove("undisplay");
+
+            incorrectCount += 1;
         }
     }
 }
 
 function updatePromptPinyin() {
-    if (bunchSettings.showPinyin)
-        if (
-            (!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
-            (currentReversed && pinyinLang(bunchSettings.answerLang))
-        ) {
-            addPinYinText(currentPrompt(), false);
-            document.getElementById("pinyin-text").classList.remove("hide");
-        } else {
+    //TODO remove try catch
+    try {
+        if (bunchSettings.showPinyin)
+            if (
+                (!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
+                (currentReversed && pinyinLang(bunchSettings.answerLang))
+            ) {
+                addPinYinText(currentPrompt(), false);
+                document.getElementById("pinyin-text").classList.remove("hide");
+            } else {
+                document.getElementById("pinyin-text").classList.add("hide");
+            }
+        else {
             document.getElementById("pinyin-text").classList.add("hide");
         }
-    else {
-        document.getElementById("pinyin-text").classList.add("hide");
-    }
+    } catch {}
 }
 
 function displayCard() {
@@ -801,7 +1086,7 @@ function resetHTML() {
 }
 
 function studyCompleteHTML() {
-    var fcc = document.getElementById("flashcard-container");
+    var fcc = document.getElementById("main-container");
     const bottomText = document.getElementById("bottom-text");
     bottomText.innerText = "Press Space or Enter to Return Home";
     fcc.innerHTML = `<h2 id="end-dialogue">Bunch Study Complete!</h2>`;

@@ -1,22 +1,9 @@
 * {
   margin: 0;
   padding: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   font-family: monospace;
   color: var(--text, #393e41);
-}
-
-::-webkit-input-placeholder {
-  color: var(--placeholder, #697277);
-}
-
-:-ms-input-placeholder {
-  color: var(--placeholder, #697277);
-}
-
-::-ms-input-placeholder {
-  color: var(--placeholder, #697277);
 }
 
 ::placeholder {
@@ -48,12 +35,8 @@ a {
 }
 
 .new-bunch-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
   padding-top: 20vh;
   padding-bottom: 20vh;
   width: 100vw;
@@ -77,18 +60,13 @@ input {
 }
 
 #lang-select {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin: 0.5rem 0 0.8rem 0;
   width: 100%;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   padding-right: 1rem;
   padding-left: 1.3rem;
 }
-
 #lang-select select {
   background: none;
   border: 1px solid var(--highlight, #393e41);
@@ -97,57 +75,37 @@ input {
 }
 
 .pinyin-menu-content {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin: 0.5rem 0 0.8rem 0;
   width: 70vw;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   padding-right: 1rem;
   padding-left: 1.3rem;
 }
-
 .pinyin-menu-content p {
   display: inline;
 }
-
 .pinyin-menu-content .pinyin-half {
   background: none;
   width: 46.5%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  justify-content: space-around;
 }
 
 .pair {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin: 0.5rem 0 0.8rem 0;
 }
-
 .pair p {
   padding: 0.3rem;
 }
-
 .pair .input-holder {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  align-items: center;
+  justify-content: space-between;
   padding-right: 1rem;
 }
-
 .pair .input-holder input {
   border-bottom: 1px solid var(--highlight, #393e41);
   padding: 0.3rem;
@@ -156,81 +114,54 @@ input {
 }
 
 #submit-add-bar {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin: 0.5rem 0 0.8rem 0;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  align-items: center;
+  justify-content: space-between;
 }
-
 #submit-add-bar button {
   background: none;
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
   padding: 0.3rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   color: var(--highlight, #393e41);
 }
-
 #submit-add-bar button:hover {
   cursor: pointer;
   background: var(--btn-hover, #9da5a9);
 }
-
 #submit-add-bar .btn-holder {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
 }
-
 #submit-add-bar #clear-btn {
   margin-right: 0.5rem;
 }
-
 #submit-add-bar #export-btn {
   width: 2rem;
   height: 2rem;
   margin-right: 0.5rem;
 }
-
 #submit-add-bar #export-btn svg {
   width: 2rem;
   height: 2rem;
 }
-
 #submit-add-bar #edit-pairs {
   width: 2rem;
   height: 2rem;
   margin-right: 0.5rem;
 }
-
 #submit-add-bar #edit-pairs svg {
   width: 2rem;
   height: 2rem;
 }
-
 #submit-add-bar #plus {
   width: 2rem;
   height: 2rem;
 }
-
 #submit-add-bar #plus svg {
   width: 1rem;
   height: 1rem;
@@ -241,7 +172,6 @@ input {
   top: 5px;
   left: 5px;
 }
-
 #back-btn:hover {
   cursor: pointer;
 }
@@ -251,7 +181,6 @@ input {
   bottom: 5px;
   right: 5px;
 }
-
 #scroll-down-btn:hover {
   cursor: pointer;
 }
@@ -261,7 +190,6 @@ input {
   bottom: 5px;
   left: 5px;
 }
-
 #scroll-up-btn:hover {
   cursor: pointer;
 }
@@ -271,7 +199,6 @@ input {
   top: 5px;
   right: 5px;
 }
-
 #top-right-btn:hover {
   cursor: pointer;
 }
@@ -286,22 +213,12 @@ form {
   height: 75vh;
   top: 12.5vh;
   left: 12.5vw;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border-radius: 6px;
 }
-
 #import-form textarea {
   font-size: 1.1rem;
   border-radius: 6px;
@@ -310,16 +227,13 @@ form {
   resize: none;
   background: none;
 }
-
 #import-form textarea:focus {
   outline: none;
 }
-
 #import-form #import-text {
   width: 80%;
   height: 60%;
 }
-
 #import-form #import-submit-btn {
   width: 30%;
   margin-top: 3%;
@@ -329,7 +243,6 @@ form {
   padding: 0.1rem 0;
   outline: none;
 }
-
 #import-form #info-icon {
   width: 1.5rem;
   height: 1.5rem;
@@ -337,7 +250,6 @@ form {
   border-radius: 50%;
   margin-left: 0.2rem;
 }
-
 #import-form #import-info-menu {
   position: absolute;
   margin-left: 0.2rem;
@@ -346,51 +258,26 @@ form {
 }
 
 .input-and-icon-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .horizontal-container {
   width: 80%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 2%;
 }
 
 .input-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-
 .input-container input {
   width: 60px;
   text-align: center;
@@ -406,22 +293,12 @@ form {
   height: 75vh;
   top: 12.5vh;
   left: 12.5vw;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border-radius: 6px;
 }
-
 #export-menu textarea {
   font-size: 1.1rem;
   border-radius: 6px;
@@ -430,16 +307,13 @@ form {
   resize: none;
   background: none;
 }
-
 #export-menu textarea:focus {
   outline: none;
 }
-
 #export-menu #export-text {
   width: 80%;
   height: 60%;
 }
-
 #export-menu #info-icon-export {
   width: 1.5rem;
   height: 1.5rem;
@@ -447,7 +321,6 @@ form {
   border-radius: 50%;
   margin-left: 0.2rem;
 }
-
 #export-menu #export-info-menu {
   position: absolute;
   margin-left: 0.2rem;
@@ -458,11 +331,9 @@ form {
 .pair-delete-btn {
   height: 24px;
 }
-
 .pair-delete-btn svg {
   pointer-events: none;
 }
-
 .pair-delete-btn:hover {
   cursor: pointer;
 }
@@ -472,19 +343,10 @@ form {
   width: 80vw;
   left: 10vw;
   top: 10vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 #import-valid-message {
@@ -492,19 +354,10 @@ form {
   width: 80vw;
   left: 10vw;
   top: 8vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 #delete-menu {
@@ -513,34 +366,18 @@ form {
   height: 15vh;
   left: 10vw;
   bottom: 0px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
-
 #delete-menu #delete-btns-container {
   margin-top: 1.5vh;
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  align-items: center;
+  justify-content: space-around;
 }
-
 #delete-menu #delete-btns-container button {
   background: none;
   border: solid 2px var(--highlight, #393e41);
@@ -548,7 +385,6 @@ form {
   width: 10%;
   padding: 0.1rem;
 }
-
 #delete-menu #delete-btns-container button:hover {
   cursor: pointer;
   background: var(--btn-hover, #9da5a9);
@@ -617,5 +453,6 @@ form {
   border: solid var(--background, #e7e6e1);
   border-width: 0 0.2rem 0.2rem 0;
   -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }

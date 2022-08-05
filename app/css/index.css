@@ -1,8 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   font-family: monospace;
   color: var(--text, #393e41);
 }
@@ -13,18 +12,6 @@ html {
 
 body {
   background: var(--background);
-}
-
-::-webkit-input-placeholder {
-  color: var(--placeholder, #697277);
-}
-
-:-ms-input-placeholder {
-  color: var(--placeholder, #697277);
-}
-
-::-ms-input-placeholder {
-  color: var(--placeholder, #697277);
 }
 
 ::placeholder {
@@ -44,19 +31,10 @@ a {
 }
 
 .container {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .main-container {
@@ -71,55 +49,35 @@ a {
   margin-left: -4.06px;
   margin-right: -4.06px;
 }
-
 .hex-btn .hex-center {
   top: 2px;
   left: 2px;
   width: calc(100% - (2px * 2));
   height: calc(100% - (2px * 2));
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn svg {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .edit-icons-container {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
   position: absolute;
   bottom: calc(25% - 20px);
 }
-
 .edit-icons-container a {
   margin: 0 3.9px;
 }
-
 .edit-icons-container .delete-btn:hover {
   cursor: pointer;
 }
-
 .edit-icons-container .delete-btn svg {
   pointer-events: none;
 }
@@ -130,40 +88,23 @@ a {
   height: 17%;
   left: 10%;
   bottom: 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
-
 #delete-menu h3 {
   font-size: 13px;
   overflow: hidden;
   text-align: center;
 }
-
 #delete-menu #delete-btns-container {
   margin-top: 1.5vh;
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  align-items: center;
+  justify-content: space-around;
 }
-
 #delete-menu #delete-btns-container button {
   background: none;
   border: solid 2px var(--highlight, #393e41);
@@ -171,7 +112,6 @@ a {
   width: 10%;
   padding: 1.3px;
 }
-
 #delete-menu #delete-btns-container button:hover {
   cursor: pointer;
   background: var(--btn-hover, #9da5a9);
@@ -194,7 +134,6 @@ a {
   bottom: 5px;
   left: 10px;
 }
-
 #edit-bunch-btn:hover {
   cursor: pointer;
 }
@@ -204,7 +143,6 @@ a {
   top: 5px;
   right: 8px;
 }
-
 #search-bunch-btn:hover {
   cursor: pointer;
 }
@@ -216,13 +154,10 @@ a {
   text-align: left;
   padding: 1.3px;
   min-width: 50px;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
   width: fit-content;
   border: none;
   border-bottom: solid 1px var(--highlight, #393e41);
 }
-
 #search-input:focus {
   outline: none;
 }
@@ -232,15 +167,9 @@ a {
 }
 
 .hex-row {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   margin-bottom: -41.785px;
 }
 
@@ -249,26 +178,18 @@ a {
   height: 150px;
   margin-left: -12.7px;
   margin-right: -12.7px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .hex {
   display: block;
   position: relative;
   width: 100%;
-  height: 100%;
-  /* width * 0.866 */
+  height: 100%; /* width * 0.866 */
   background: var(--highlight, #393e41);
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   text-align: center;
   clip-path: polygon(6.7% 25%, 6.7% 75%, 50% 100%, 93.3% 75%, 93.3% 25%, 50% 0%);
   -webkit-clip-path: polygon(6.7% 25%, 6.7% 75%, 50% 100%, 93.3% 75%, 93.3% 25%, 50% 0%);
@@ -295,21 +216,11 @@ a {
   height: 50%;
   max-height: 50%;
   text-align: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
-
 .hex-content h3 {
   font-size: 1rem;
   line-height: 1.2rem;
@@ -318,7 +229,6 @@ a {
   overflow: hidden;
   overflow-wrap: break-word;
 }
-
 .hex-content p {
   font-size: 0.75rem;
   margin-top: 6.5px;
@@ -330,20 +240,13 @@ a {
 
 .scroll-btn {
   position: absolute;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   top: calc(50% - 24px);
 }
-
 .scroll-btn:hover {
   cursor: pointer;
 }
@@ -361,21 +264,11 @@ a {
 }
 
 .no-bunches-hex-content {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
-
 .no-bunches-hex-content h3 {
   font-size: 1rem;
   text-align: center;
