@@ -76,6 +76,13 @@
                     <span class="checkmark"></span>
                 </label>
             </div>
+            <div class="row-container">
+                <label for="ask-test">Test</label>
+                <label class="checkbox-container">
+                    <input type="radio" name="questionType" id="ask-test" />
+                    <span class="checkmark"></span>
+                </label>
+            </div>
             <div class="separator"></div>
             <div class="row-container">
                 <label for="ask-prompt">Standard</label>
@@ -146,9 +153,11 @@
             <div class="hide" id="main-separator"></div>
             <h2 class="hide" id="answer"></h2>
         </div>
-        <div id="bottom-container">
-            <p id="remaining-text"></p>
-            <p id="bottom-text"></p>
+        <div id="bottom-container-container" class="undisplay">
+            <div id="bottom-container">
+                <p id="remaining-text"></p>
+                <p id="bottom-text"></p>
+            </div>
         </div>
         <script src="js/pinyin_dict_withtone.js"></script>
         <script src="js/pinyinUtil.js"></script>

@@ -59,6 +59,18 @@ function toggleMenu() {
     menuToggled = !menuToggled;
 }
 
+document.body.addEventListener("click", (e) => {
+    if (
+        !document.getElementById("options-menu").contains(e.target) &&
+        !document.getElementById("options-btn").contains(e.target)
+    ) {
+        if (menuToggled) {
+            document.getElementById("options-menu").classList.add("hide");
+            menuToggled = !menuToggled;
+        }
+    }
+});
+
 document.getElementById("back-btn").addEventListener("click", () => {
     window.location.href = `index.html`;
 });
@@ -101,17 +113,25 @@ function onQuestionTypeChange() {
         value: {
             flashcard: document.getElementById("ask-flashcard").checked,
             typed: document.getElementById("ask-typed").checked,
+            test: document.getElementById("ask-test").checked,
         },
     });
     bunchSettings.questionType = {
         //TODO should be updated w get to main
         flashcard: document.getElementById("ask-flashcard").checked,
         typed: document.getElementById("ask-typed").checked,
+        test: document.getElementById("ask-test").checked,
     };
+
     updateMenu();
     updateHTML();
     updateRemainingText();
-    setCurrentPair();
+    if (
+        bunchSettings.questionType.flashcard ||
+        bunchSettings.questionType.typed
+    ) {
+        createPairsRef();
+    }
 }
 
 document.getElementById("say-prompt").addEventListener("change", () => {
@@ -235,10 +255,10 @@ function setComplete() {
 }
 
 function updateMenu() {
-    if (bunchSettings.questionType.flashcard) {
-        ipcRenderer.send("updateMenu", "standard");
-    } else {
+    if (bunchSettings.questionType.typed) {
         ipcRenderer.send("updateMenu", "study-typed");
+    } else {
+        ipcRenderer.send("updateMenu", "standard");
     }
 }
 //#endregion
@@ -574,17 +594,20 @@ function sayClicked(type) {
 
 function updateHTML() {
     /*updates all html that depends on bunch content/settings */
+
+    document.getElementById("ask-flashcard").checked =
+        bunchSettings.questionType.flashcard;
+    document.getElementById("ask-typed").checked =
+        bunchSettings.questionType.typed;
+    document.getElementById("ask-test").checked =
+        bunchSettings.questionType.test;
+
     document.getElementById("standard").checked =
         bunchSettings.pairOrder.standard;
     document.getElementById("reversed").checked =
         bunchSettings.pairOrder.reversed;
     document.getElementById("bothsr").checked = bunchSettings.pairOrder.bothsr;
     document.getElementById("bothrs").checked = bunchSettings.pairOrder.bothrs;
-
-    document.getElementById("ask-flashcard").checked =
-        bunchSettings.questionType.flashcard;
-    document.getElementById("ask-typed").checked =
-        bunchSettings.questionType.typed;
 
     document.getElementById("say-prompt").checked = bunchSettings.sayPrompt;
     document.getElementById("say-answer").checked = bunchSettings.sayAnswer;
@@ -622,16 +645,11 @@ function updateHTML() {
 
             document.getElementById("main-container").style.paddingBottom =
                 "10vh";
-            document
-                .getElementById("edit-bunch-btn")
-                .classList.remove("undisplay");
 
-            document
-                .getElementById("main-container")
-                .classList.add("flashcard-main-container");
-            document
-                .getElementById("main-container")
-                .classList.remove("test-main-container");
+            changeDisplayTypedAndFlashcard();
+            initBottomContainer();
+            ttsTypedAndFlashcardEventListeners();
+            pinyinTypedAndFlashcardHTML();
         } else if (bunchSettings.questionType.typed) {
             document.getElementById("main-container").innerHTML = `
             <div id="prompt-container"> 
@@ -655,16 +673,10 @@ function updateHTML() {
                 .getElementById("iwr-btn")
                 .addEventListener("click", iWasRight);
 
-            document
-                .getElementById("edit-bunch-btn")
-                .classList.remove("undisplay");
-
-            document
-                .getElementById("main-container")
-                .classList.add("flashcard-main-container");
-            document
-                .getElementById("main-container")
-                .classList.remove("test-main-container");
+            changeDisplayTypedAndFlashcard();
+            initBottomContainer();
+            ttsTypedAndFlashcardEventListeners();
+            pinyinTypedAndFlashcardHTML();
         } else if (bunchSettings.questionType.test) {
             document
                 .getElementById("main-container")
@@ -674,12 +686,18 @@ function updateHTML() {
                 .classList.add("test-main-container");
 
             document
+                .getElementById("bottom-container-container")
+                .classList.add("undisplay");
+            document
                 .getElementById("edit-bunch-btn")
                 .classList.add("undisplay");
             generateTest();
         }
+    }
+}
 
-        document.getElementById("bottom-container").innerHTML = `
+function initBottomContainer() {
+    document.getElementById("bottom-container").innerHTML = `
             <p ${
                 settings.showRemaining ? "" : 'class="undisplay"'
             }id="remaining-text"></p>
@@ -688,71 +706,57 @@ function updateHTML() {
                 settings.showInfo ? "" : 'class="undisplay"'
             } id="bottom-text">Press Enter to Answer</p>`;
 
-        if (
-            bunchSettings.questionType.flashcard ||
-            bunchSettings.questionType.typed
-        ) {
-            //event listeners for text to speech on click
-            document.getElementById("prompt").addEventListener("click", () => {
-                sayClicked("prompt");
-            });
+    if (
+        bunchSettings.questionType.flashcard ||
+        bunchSettings.questionType.typed
+    ) {
+    }
+}
 
-            document.getElementById("answer").addEventListener("click", () => {
-                sayClicked("answer");
-            });
+function ttsTypedAndFlashcardEventListeners() {
+    //event listeners for text to speech on click
+    document.getElementById("prompt").addEventListener("click", () => {
+        sayClicked("prompt");
+    });
 
-            if (
-                pinyinLang(bunchSettings.promptLang) ||
-                pinyinLang(bunchSettings.answerLang)
-            ) {
-                document
-                    .getElementById("pinyin-text")
-                    .addEventListener("click", () => {
-                        addPinYinText(currentPrompt(), true);
-                    });
+    document.getElementById("answer").addEventListener("click", () => {
+        sayClicked("answer");
+    });
+}
 
-                //event listeners for piniyn
-                document
-                    .getElementById("prompt")
-                    .addEventListener("mouseenter", () => {
-                        if (!bunchSettings.showPinyin) {
-                            if (
-                                (!currentReversed &&
-                                    pinyinLang(bunchSettings.promptLang)) ||
-                                (currentReversed &&
-                                    pinyinLang(bunchSettings.answerLang))
-                            ) {
-                                addPinYinText(currentPrompt(), false);
-                                document
-                                    .getElementById("pinyin-text")
-                                    .classList.remove("hide");
-                            } else {
-                                document
-                                    .getElementById("pinyin-text")
-                                    .classList.add("hide");
-                            }
-                        }
-                    });
+function changeDisplayTypedAndFlashcard() {
+    document.getElementById("edit-bunch-btn").classList.remove("undisplay");
 
-                document
-                    .getElementById("prompt")
-                    .addEventListener("mouseleave", () => {
-                        if (!bunchSettings.showPinyin) {
-                            document
-                                .getElementById("pinyin-text")
-                                .classList.add("hide");
-                        }
-                    });
-            }
-            //TODO remove try catch
-            try {
+    document
+        .getElementById("bottom-container-container")
+        .classList.remove("undisplay");
+
+    document
+        .getElementById("main-container")
+        .classList.add("flashcard-main-container");
+    document
+        .getElementById("main-container")
+        .classList.remove("test-main-container");
+}
+
+function pinyinTypedAndFlashcardHTML() {
+    if (
+        pinyinLang(bunchSettings.promptLang) ||
+        pinyinLang(bunchSettings.answerLang)
+    ) {
+        document.getElementById("pinyin-text").addEventListener("click", () => {
+            addPinYinText(currentPrompt(), true);
+        });
+
+        //event listeners for piniyn
+        document.getElementById("prompt").addEventListener("mouseenter", () => {
+            if (!bunchSettings.showPinyin) {
                 if (
-                    bunchSettings.showPinyin &&
-                    ((!currentReversed &&
+                    (!currentReversed &&
                         pinyinLang(bunchSettings.promptLang)) ||
-                        (currentReversed &&
-                            pinyinLang(bunchSettings.answerLang)))
+                    (currentReversed && pinyinLang(bunchSettings.answerLang))
                 ) {
+                    addPinYinText(currentPrompt(), false);
                     document
                         .getElementById("pinyin-text")
                         .classList.remove("hide");
@@ -761,8 +765,24 @@ function updateHTML() {
                         .getElementById("pinyin-text")
                         .classList.add("hide");
                 }
-            } catch {}
-        }
+            }
+        });
+
+        document.getElementById("prompt").addEventListener("mouseleave", () => {
+            if (!bunchSettings.showPinyin) {
+                document.getElementById("pinyin-text").classList.add("hide");
+            }
+        });
+    }
+
+    if (
+        bunchSettings.showPinyin &&
+        ((!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
+            (currentReversed && pinyinLang(bunchSettings.answerLang)))
+    ) {
+        document.getElementById("pinyin-text").classList.remove("hide");
+    } else {
+        document.getElementById("pinyin-text").classList.add("hide");
     }
 }
 
@@ -803,8 +823,9 @@ function genTestMC(pair, index) {
         <button class="test-MC-choice" class="test-MC-choice" num=0><div class="test-MC-choice-text">${choice0}</div><div class="correct-indicator undisplay">&#10004;</div></button>
         <button class="test-MC-choice" class="test-MC-choice" num=1><div class="test-MC-choice-text">${choice1}</div><div class="correct-indicator undisplay">&#10004;</div></button>
         <button class="test-MC-choice" class="test-MC-choice" num=2><div class="test-MC-choice-text">${choice2}</div><div class="correct-indicator undisplay">&#10004;</div></button>
-
-        <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+        <div class="incorrect-indicator-container">
+            <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+        </div>
     </div>
 </div>`;
     return html;
@@ -813,14 +834,20 @@ function genTestMC(pair, index) {
 function genTestTyped(pair) {
     const html = `<div class="test-typed" answer="${pair.answer}">
     <div class="test-typed-prompt">${pair.prompt}</div>
-    <input type="text" class="test-typed-answer" />
+    <div class="answer-container-test-typed">
+        <input type="text" class="test-typed-answer" />
+        <div class="test-typed-correct-answer undisplay">${pair.answer}</div>
+    </div>
 
-    <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+    <div class="incorrect-indicator-container typed-correct-indicator-conatiner">
+        <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+    </div>
 </div>`;
     return html;
 }
 
-function genTestTF(pair) {
+function genTestTF(pair, index) {
+    //NEED AT LEAST TWO PAIRS FOR TF Questions
     const isTrue = Math.floor(Math.random() * 2) == 0; //determines if true or false
     if (isTrue) {
         const html = `
@@ -829,20 +856,27 @@ function genTestTF(pair) {
             <button class="test-TF-button">=</button>
             <div class="test-TF-answer">${pair.answer}</div>
 
-            <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+            <div class="incorrect-indicator-container">
+                <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+            </div>
         </div>`;
         return html;
     } else {
-        const index = Math.floor(Math.random() * pairs.length); //determines other pair
+        let indexDif = Math.floor(Math.random() * pairs.length); //determines other pair
+        while (index == indexDif) {
+            indexDif = Math.floor(Math.random() * pairs.length);
+        }
         const randPrompt = Math.floor(Math.random() * 2) == 0; //determines if prompt is dif or answer is dif
         if (randPrompt) {
             const html = `
                 <div class="test-TF" answer="false" state="true">
-                    <div class="test-TF-prompt">${pairs[index].prompt}</div>
+                    <div class="test-TF-prompt">${pairs[indexDif].prompt}</div>
                     <button class="test-TF-button">=</button>
                     <div class="test-TF-answer">${pair.answer}</div>
 
-                    <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+                    <div class="incorrect-indicator-container">
+                        <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+                    </div>
                 </div>`;
             return html;
         } else {
@@ -850,9 +884,11 @@ function genTestTF(pair) {
                 <div class="test-TF" answer="false" state="true">
                     <div class="test-TF-prompt">${pair.prompt}</div>
                     <button class="test-TF-button">=</button>
-                    <div class="test-TF-answer">${pairs[index].answer}</div>
+                    <div class="test-TF-answer">${pairs[indexDif].answer}</div>
 
-                    <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+                    <div class="incorrect-indicator-container">
+                        <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+                    </div>
                 </div>`;
             return html;
         }
@@ -865,7 +901,12 @@ function generateTest() {
         indecies[x] = x;
     }
 
-    var testHTML = "";
+    var testHTML = `<div class="undisplay" id="test-score-container">
+                        <div id="test-score-flex">
+                            <div id="score-fraction"></div>
+                            <div id="score-percent"></div>
+                        </div>
+                    </div>`;
 
     if (pairs.length < 3) {
         if (pairs.length == 1) {
@@ -896,11 +937,20 @@ function generateTest() {
             let indeciesIndex = Math.floor(Math.random() * indecies.length);
             let index = indecies[indeciesIndex];
             let testGenPair = pairs[index];
-            testHTML += genTestTF(testGenPair);
+            testHTML += genTestTF(testGenPair, index);
             indecies.splice(indeciesIndex, 1);
         }
     }
+
+    testHTML += `<div class="test-separator"></div>
+                <button id="test-submit">Submit</button>`;
+
     document.getElementById("main-container").innerHTML = testHTML;
+
+    document.getElementById("test-submit").addEventListener("click", () => {
+        window.scrollTo(0, 0);
+        checkTest();
+    });
 
     const TFButtons = document.getElementsByClassName("test-TF-button");
     for (button of TFButtons) {
@@ -953,7 +1003,7 @@ function checkTest() {
         btn.parentNode.replaceChild(new_btn, btn);
     }
 
-    let incorrectCount;
+    let incorrectCount = 0;
 
     const MC = document.getElementsByClassName("test-MC");
     for (question of MC) {
@@ -979,6 +1029,12 @@ function checkTest() {
                 .querySelector(".incorrect-indicator")
                 .classList.remove("undisplay");
 
+            question.querySelector(".test-typed-answer ").style.textDecoration =
+                "line-through 2px";
+
+            question
+                .querySelector(".test-typed-correct-answer")
+                .classList.remove("undisplay");
             incorrectCount += 1;
         }
     }
@@ -993,6 +1049,17 @@ function checkTest() {
             incorrectCount += 1;
         }
     }
+
+    const totalQuestions = MC.length + typed.length + TF.length;
+    document.getElementById("score-fraction").innerText = `Score: ${
+        totalQuestions - incorrectCount
+    } / ${totalQuestions}`;
+    document.getElementById("score-percent").innerText = `${Math.ceil(
+        ((totalQuestions - incorrectCount) / totalQuestions) * 100
+    )}%`;
+    document
+        .getElementById("test-score-container")
+        .classList.remove("undisplay");
 }
 
 function updatePromptPinyin() {

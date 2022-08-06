@@ -304,16 +304,21 @@ a {
     }
 }
 
-#bottom-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
+#bottom-container-container {
     position: absolute;
     bottom: 10px;
     height: 50px;
     width: 50vw;
     left: 25vw;
+}
+
+#bottom-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
 
     #bottom-text {
         font-size: 13px;
@@ -338,20 +343,65 @@ a {
     flex-direction: row;
     margin-top: 1rem;
     text-align: left;
+    position: relative;
 
     .test-typed-prompt {
         max-width: 45%;
         overflow-wrap: break-word;
     }
 
-    .test-typed-answer {
+    .answer-container-test-typed {
         width: 45%;
         max-width: 45%;
         min-width: 45%;
-        border: 2px solid var(--highlight, $highlight);
-        border-radius: 3px;
-        font-size: 1rem;
-        padding: 1.9px 2.5px;
+        .test-typed-answer {
+            width: 100%;
+            border: 2px solid var(--highlight, $highlight);
+            border-radius: 3px;
+            font-size: 1rem;
+            padding: 1.9px 2.5px;
+            text-align: center;
+        }
+
+        .test-typed-correct-answer {
+            width: 100%;
+            border: 2px solid var(--highlight, $highlight);
+            border-top: none;
+            border-radius: 3px;
+            padding: 3.9px;
+            font-size: 1rem;
+            text-align: center;
+        }
+    }
+
+    .typed-correct-indicator-conatiner {
+        justify-content: start;
+    }
+}
+
+#test-score-container {
+    width: 100%;
+
+    #test-score-flex {
+        width: 100%;
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        padding: 0 1rem;
+
+        #score-fraction {
+            font-size: 2rem;
+        }
+
+        #score-percent {
+            font-size: 3rem;
+            border: 3px solid var(--highlight, $highlight);
+            // text-decoration: underline;
+            border-radius: 50%;
+            padding: 0.45rem;
+        }
     }
 }
 
@@ -371,6 +421,7 @@ a {
     align-items: center;
     width: 100%;
     margin-top: 1rem;
+    position: relative;
 
     .test-TF-prompt {
         width: 43%;
@@ -417,6 +468,7 @@ a {
         display: flex;
         justify-content: space-between;
         align-items: stretch;
+        position: relative;
 
         .test-MC-choice {
             padding: 3px 0.75rem;
@@ -438,12 +490,15 @@ a {
     }
 }
 
-.incorrect-indicator {
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
+.incorrect-indicator-container {
+    // width: 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     position: absolute;
-    right: 5%;
+    right: -1.75rem;
 }
 
 .correct-indicator {
@@ -452,6 +507,27 @@ a {
     bottom: 0;
     font-size: 1rem;
     background: var(--background);
+}
+
+.test-separator {
+    width: 100%;
+    border-bottom: 2px solid var(--highlight, $highlight);
+    margin-top: 1rem;
+}
+
+#test-submit {
+    width: 30%;
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    margin-top: 1rem;
+    background: none;
+    border: 2px solid var(--highlight, $highlight);
+    border-radius: 3px;
+    &:active {
+        background: var(--btn-hover, $btn-hover);
+    }
 }
 
 .hide {
