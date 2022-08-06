@@ -81,6 +81,11 @@ Array.prototype.forEach.call(orderRadios, (radio) => {
     radio.addEventListener("change", onOrderChange);
 });
 
+var orderRadiosTest = document.querySelectorAll('input[name="pairOrderTest"]');
+Array.prototype.forEach.call(orderRadiosTest, (radio) => {
+    radio.addEventListener("change", generateTest);
+});
+
 function onOrderChange() {
     ipcRenderer.send("bunch:set", id, {
         key: "pairOrder",
@@ -594,23 +599,7 @@ function sayClicked(type) {
 
 function updateHTML() {
     /*updates all html that depends on bunch content/settings */
-
-    document.getElementById("ask-flashcard").checked =
-        bunchSettings.questionType.flashcard;
-    document.getElementById("ask-typed").checked =
-        bunchSettings.questionType.typed;
-    document.getElementById("ask-test").checked =
-        bunchSettings.questionType.test;
-
-    document.getElementById("standard").checked =
-        bunchSettings.pairOrder.standard;
-    document.getElementById("reversed").checked =
-        bunchSettings.pairOrder.reversed;
-    document.getElementById("bothsr").checked = bunchSettings.pairOrder.bothsr;
-    document.getElementById("bothrs").checked = bunchSettings.pairOrder.bothrs;
-
-    document.getElementById("say-prompt").checked = bunchSettings.sayPrompt;
-    document.getElementById("say-answer").checked = bunchSettings.sayAnswer;
+    updateOptionsMenu();
 
     document.getElementById("hide-para-text").checked =
         bunchSettings.hideParaText;
@@ -691,9 +680,49 @@ function updateHTML() {
             document
                 .getElementById("edit-bunch-btn")
                 .classList.add("undisplay");
+
+            document.getElementById("say-options").classList.add("undisplay");
+            document
+                .getElementById("format-options")
+                .classList.add("undisplay");
+
+            document
+                .getElementById("pair-order-flash-typed")
+                .classList.add("undisplay");
+            document
+                .getElementById("pair-order-test")
+                .classList.remove("undisplay");
+
             generateTest();
         }
     }
+}
+
+function updateOptionsMenu() {
+    document.getElementById("ask-flashcard").checked =
+        bunchSettings.questionType.flashcard;
+    document.getElementById("ask-typed").checked =
+        bunchSettings.questionType.typed;
+    document.getElementById("ask-test").checked =
+        bunchSettings.questionType.test;
+
+    document.getElementById("standard").checked =
+        bunchSettings.pairOrder.standard;
+    document.getElementById("reversed").checked =
+        bunchSettings.pairOrder.reversed;
+    document.getElementById("bothsr").checked = bunchSettings.pairOrder.bothsr;
+    document.getElementById("bothrs").checked = bunchSettings.pairOrder.bothrs;
+
+    document.getElementById("standard-test").checked =
+        bunchSettings.pairOrder.standard;
+    document.getElementById("reversed-test").checked =
+        bunchSettings.pairOrder.reversed;
+    if (bunchSettings.pairOrder.bothsr || bunchSettings.pairOrder.bothrs) {
+        document.getElementById("both-test").checked = true;
+    }
+
+    document.getElementById("say-prompt").checked = bunchSettings.sayPrompt;
+    document.getElementById("say-answer").checked = bunchSettings.sayAnswer;
 }
 
 function initBottomContainer() {
@@ -737,6 +766,14 @@ function changeDisplayTypedAndFlashcard() {
     document
         .getElementById("main-container")
         .classList.remove("test-main-container");
+
+    document.getElementById("pair-order-test").classList.add("undisplay");
+    document
+        .getElementById("pair-order-flash-typed")
+        .classList.remove("undisplay");
+
+    document.getElementById("say-options").classList.remove("undisplay");
+    document.getElementById("format-options").classList.remove("undisplay");
 }
 
 function pinyinTypedAndFlashcardHTML() {
@@ -787,6 +824,27 @@ function pinyinTypedAndFlashcardHTML() {
 }
 
 function genTestMC(pair, index) {
+    let questionPrompt, questionAnswer, choiceType;
+    if (document.getElementById("standard-test").checked) {
+        questionPrompt = pair.prompt;
+        questionAnswer = pair.answer;
+        choiceType = "answer";
+    } else if (document.getElementById("reversed-test").checked) {
+        questionPrompt = pair.answer;
+        questionAnswer = pair.prompt;
+        choiceType = "prompt";
+    } else if (document.getElementById("both-test").checked) {
+        if (Math.floor(Math.random() * 2) == 0) {
+            questionPrompt = pair.prompt;
+            questionAnswer = pair.answer;
+            choiceType = "answer";
+        } else {
+            questionPrompt = pair.answer;
+            questionAnswer = pair.prompt;
+            choiceType = "prompt";
+        }
+    }
+
     //at least THREE pairs must exist to do mc
     let randIndex1 = Math.floor(Math.random() * pairs.length);
     while (randIndex1 == index) {
@@ -801,24 +859,24 @@ function genTestMC(pair, index) {
     let answerIndex = Math.floor(Math.random() * 3);
     switch (answerIndex) {
         case 0:
-            choice0 = pair.answer;
-            choice1 = pairs[randIndex1].answer;
-            choice2 = pairs[randIndex2].answer;
+            choice0 = questionAnswer;
+            choice1 = pairs[randIndex1][choiceType];
+            choice2 = pairs[randIndex2][choiceType];
             break;
         case 1:
-            choice0 = pairs[randIndex1].answer;
-            choice1 = pair.answer;
-            choice2 = pairs[randIndex2].answer;
+            choice0 = pairs[randIndex1][choiceType];
+            choice1 = questionAnswer;
+            choice2 = pairs[randIndex2][choiceType];
             break;
         case 2:
-            choice0 = pairs[randIndex1].answer;
-            choice1 = pairs[randIndex2].answer;
-            choice2 = pair.answer;
+            choice0 = pairs[randIndex1][choiceType];
+            choice1 = pairs[randIndex2][choiceType];
+            choice2 = questionAnswer;
             break;
     }
 
     const html = `<div class="test-MC" answer="${answerIndex}" selected=-1>
-    <div class="test-MC-prompt">${pair.prompt}</div>
+    <div class="test-MC-prompt">${questionPrompt}</div>
     <div class="test-MC-choice-container">
         <button class="test-MC-choice" class="test-MC-choice" num=0><div class="test-MC-choice-text">${choice0}</div><div class="correct-indicator undisplay">&#10004;</div></button>
         <button class="test-MC-choice" class="test-MC-choice" num=1><div class="test-MC-choice-text">${choice1}</div><div class="correct-indicator undisplay">&#10004;</div></button>
@@ -832,11 +890,28 @@ function genTestMC(pair, index) {
 }
 
 function genTestTyped(pair) {
-    const html = `<div class="test-typed" answer="${pair.answer}">
-    <div class="test-typed-prompt">${pair.prompt}</div>
+    let questionPrompt, questionAnswer;
+    if (document.getElementById("standard-test").checked) {
+        questionPrompt = pair.prompt;
+        questionAnswer = pair.answer;
+    } else if (document.getElementById("reversed-test").checked) {
+        questionPrompt = pair.answer;
+        questionAnswer = pair.prompt;
+    } else if (document.getElementById("both-test").checked) {
+        if (Math.floor(Math.random() * 2) == 0) {
+            questionPrompt = pair.prompt;
+            questionAnswer = pair.answer;
+        } else {
+            questionPrompt = pair.answer;
+            questionAnswer = pair.prompt;
+        }
+    }
+
+    const html = `<div class="test-typed" answer="${questionAnswer}">
+    <div class="test-typed-prompt">${questionPrompt}</div>
     <div class="answer-container-test-typed">
         <input type="text" class="test-typed-answer" />
-        <div class="test-typed-correct-answer undisplay">${pair.answer}</div>
+        <div class="test-typed-correct-answer undisplay">${questionAnswer}</div>
     </div>
 
     <div class="incorrect-indicator-container typed-correct-indicator-conatiner">
@@ -848,13 +923,32 @@ function genTestTyped(pair) {
 
 function genTestTF(pair, index) {
     //NEED AT LEAST TWO PAIRS FOR TF Questions
+    let questionPrompt, questionAnswer, reversed;
+    if (document.getElementById("standard-test").checked) {
+        questionPrompt = pair.prompt;
+        questionAnswer = pair.answer;
+    } else if (document.getElementById("reversed-test").checked) {
+        questionPrompt = pair.answer;
+        questionAnswer = pair.prompt;
+        reversed = true;
+    } else if (document.getElementById("both-test").checked) {
+        if (Math.floor(Math.random() * 2) == 0) {
+            questionPrompt = pair.prompt;
+            questionAnswer = pair.answer;
+        } else {
+            questionPrompt = pair.answer;
+            questionAnswer = pair.prompt;
+            reversed = true;
+        }
+    }
+
     const isTrue = Math.floor(Math.random() * 2) == 0; //determines if true or false
     if (isTrue) {
         const html = `
         <div class="test-TF" answer="true" state="true">
-            <div class="test-TF-prompt">${pair.prompt}</div>
+            <div class="test-TF-prompt">${questionPrompt}</div>
             <button class="test-TF-button">=</button>
-            <div class="test-TF-answer">${pair.answer}</div>
+            <div class="test-TF-answer">${questionAnswer}</div>
 
             <div class="incorrect-indicator-container">
                 <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
@@ -870,9 +964,13 @@ function genTestTF(pair, index) {
         if (randPrompt) {
             const html = `
                 <div class="test-TF" answer="false" state="true">
-                    <div class="test-TF-prompt">${pairs[indexDif].prompt}</div>
+                    <div class="test-TF-prompt">${
+                        reversed
+                            ? pairs[indexDif].answer
+                            : pairs[indexDif].prompt
+                    }</div>
                     <button class="test-TF-button">=</button>
-                    <div class="test-TF-answer">${pair.answer}</div>
+                    <div class="test-TF-answer">${questionAnswer}</div>
 
                     <div class="incorrect-indicator-container">
                         <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
@@ -882,9 +980,13 @@ function genTestTF(pair, index) {
         } else {
             const html = `
                 <div class="test-TF" answer="false" state="true">
-                    <div class="test-TF-prompt">${pair.prompt}</div>
+                    <div class="test-TF-prompt">${questionPrompt}</div>
                     <button class="test-TF-button">=</button>
-                    <div class="test-TF-answer">${pairs[indexDif].answer}</div>
+                    <div class="test-TF-answer">${
+                        reversed
+                            ? pairs[indexDif].prompt
+                            : pairs[indexDif].answer
+                    }</div>
 
                     <div class="incorrect-indicator-container">
                         <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>

@@ -83,67 +83,114 @@
                     <span class="checkmark"></span>
                 </label>
             </div>
-            <div class="separator"></div>
-            <div class="row-container">
-                <label for="ask-prompt">Standard</label>
-                <label class="checkbox-container">
-                    <input type="radio" name="pairOrder" id="standard" />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-            <div class="row-container">
-                <label for="ask-answer">Reversed</label>
-                <label class="checkbox-container">
-                    <input type="radio" name="pairOrder" id="reversed" />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-            <div class="row-container">
-                <label for="ask-answer">Both (S->R)</label>
-                <label class="checkbox-container">
-                    <input type="radio" name="pairOrder" id="bothsr" />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-            <div class="row-container">
-                <label for="ask-answer">Both (R->S)</label>
-                <label class="checkbox-container">
-                    <input type="radio" name="pairOrder" id="bothrs" />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
 
             <div class="separator"></div>
-            <div class="row-container">
-                <label for="say-prompt">Say Prompt</label>
-                <label class="checkbox-container">
-                    <input type="checkbox" id="say-prompt" />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-            <div class="row-container">
-                <label for="say-answer">Say Answer</label>
-                <label class="checkbox-container">
-                    <input type="checkbox" id="say-answer" />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-            <div class="separator"></div>
-            <div class="row-container">
-                <label for="hide-para-text">Hide prompt ()</label>
-                <label class="checkbox-container">
-                    <input type="checkbox" id="hide-para-text" />
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-            <div class="undisplay" id="pinyin-option-section">
-                <div class="separator"></div>
+
+            <div id="pair-order-flash-typed">
                 <div class="row-container">
-                    <label for="show-pinyin">Show pinyin</label>
+                    <label for="ask-prompt">Standard</label>
                     <label class="checkbox-container">
-                        <input type="checkbox" id="show-pinyin" />
+                        <input type="radio" name="pairOrder" id="standard" />
                         <span class="checkmark"></span>
                     </label>
+                </div>
+                <div class="row-container">
+                    <label for="ask-answer">Reversed</label>
+                    <label class="checkbox-container">
+                        <input type="radio" name="pairOrder" id="reversed" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div id="both-flash-typed">
+                    <div class="row-container">
+                        <label for="ask-answer">Both (S->R)</label>
+                        <label class="checkbox-container">
+                            <input type="radio" name="pairOrder" id="bothsr" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="row-container">
+                        <label for="ask-answer">Both (R->S)</label>
+                        <label class="checkbox-container">
+                            <input type="radio" name="pairOrder" id="bothrs" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pair-order-test" class="undisplay">
+                <div class="row-container">
+                    <label for="ask-prompt">Standard</label>
+                    <label class="checkbox-container">
+                        <input
+                            type="radio"
+                            name="pairOrderTest"
+                            id="standard-test"
+                        />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="row-container">
+                    <label for="ask-answer">Reversed</label>
+                    <label class="checkbox-container">
+                        <input
+                            type="radio"
+                            name="pairOrderTest"
+                            id="reversed-test"
+                        />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="row-container">
+                    <label for="ask-answer">Both</label>
+                    <label class="checkbox-container">
+                        <input
+                            type="radio"
+                            name="pairOrderTest"
+                            id="both-test"
+                        />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="say-options">
+                <div class="separator"></div>
+                <div class="row-container">
+                    <label for="say-prompt">Say Prompt</label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="say-prompt" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="row-container">
+                    <label for="say-answer">Say Answer</label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="say-answer" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="format-options">
+                <div class="separator"></div>
+                <div class="row-container">
+                    <label for="hide-para-text">Hide prompt ()</label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="hide-para-text" />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="undisplay" id="pinyin-option-section">
+                    <div class="separator"></div>
+                    <div class="row-container">
+                        <label for="show-pinyin">Show pinyin</label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="show-pinyin" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>

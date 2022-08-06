@@ -329,6 +329,8 @@ a {
   padding: 3.9px;
   font-size: 1rem;
   text-align: center;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 .test-typed .typed-correct-indicator-conatiner {
   justify-content: start;
@@ -418,9 +420,9 @@ a {
   position: relative;
 }
 .test-MC .test-MC-choice-container .test-MC-choice {
-  padding: 3px 0.75rem;
-  width: 32%;
-  max-width: 32%;
+  padding: 3px 0.25rem;
+  width: 32.5%;
+  max-width: 32.5%;
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
   display: flex;
@@ -431,7 +433,10 @@ a {
   position: relative;
 }
 .test-MC .test-MC-choice-container .test-MC-choice .test-MC-choice-text {
+  max-width: 100%;
   text-align: center;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .incorrect-indicator-container {
