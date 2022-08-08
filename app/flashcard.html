@@ -88,14 +88,14 @@
 
             <div id="pair-order-flash-typed">
                 <div class="row-container">
-                    <label for="ask-prompt">Standard</label>
+                    <label for="standard">Standard</label>
                     <label class="checkbox-container">
                         <input type="radio" name="pairOrder" id="standard" />
                         <span class="checkmark"></span>
                     </label>
                 </div>
                 <div class="row-container">
-                    <label for="ask-answer">Reversed</label>
+                    <label for="reversed">Reversed</label>
                     <label class="checkbox-container">
                         <input type="radio" name="pairOrder" id="reversed" />
                         <span class="checkmark"></span>
@@ -103,14 +103,14 @@
                 </div>
                 <div id="both-flash-typed">
                     <div class="row-container">
-                        <label for="ask-answer">Both (S->R)</label>
+                        <label for="bothsr">Both (S->R)</label>
                         <label class="checkbox-container">
                             <input type="radio" name="pairOrder" id="bothsr" />
                             <span class="checkmark"></span>
                         </label>
                     </div>
                     <div class="row-container">
-                        <label for="ask-answer">Both (R->S)</label>
+                        <label for="bothrs">Both (R->S)</label>
                         <label class="checkbox-container">
                             <input type="radio" name="pairOrder" id="bothrs" />
                             <span class="checkmark"></span>
@@ -121,7 +121,7 @@
 
             <div id="pair-order-test" class="undisplay">
                 <div class="row-container">
-                    <label for="ask-prompt">Standard</label>
+                    <label for="standard-test">Standard</label>
                     <label class="checkbox-container">
                         <input
                             type="radio"
@@ -132,7 +132,7 @@
                     </label>
                 </div>
                 <div class="row-container">
-                    <label for="ask-answer">Reversed</label>
+                    <label for="reversed-test">Reversed</label>
                     <label class="checkbox-container">
                         <input
                             type="radio"
@@ -143,7 +143,7 @@
                     </label>
                 </div>
                 <div class="row-container">
-                    <label for="ask-answer">Both</label>
+                    <label for="both-test">Both</label>
                     <label class="checkbox-container">
                         <input
                             type="radio"
@@ -191,6 +191,43 @@
                             <span class="checkmark"></span>
                         </label>
                     </div>
+                </div>
+            </div>
+
+            <div id="test-config-options" class="undisplay">
+                <div class="separator"></div>
+                <div class="row-container">
+                    <label for="MC-test-toggle">Multi Choice</label>
+                    <label class="checkbox-container">
+                        <input
+                            type="checkbox"
+                            id="MC-test-toggle"
+                            class="test-toggle"
+                        />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="row-container">
+                    <label for="typed-test-toggle">Typed</label>
+                    <label class="checkbox-container">
+                        <input
+                            type="checkbox"
+                            id="typed-test-toggle"
+                            class="test-toggle"
+                        />
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="row-container">
+                    <label for="TF-test-toggle">True/False</label>
+                    <label class="checkbox-container">
+                        <input
+                            type="checkbox"
+                            id="TF-test-toggle"
+                            class="test-toggle"
+                        />
+                        <span class="checkmark"></span>
+                    </label>
                 </div>
             </div>
         </div>

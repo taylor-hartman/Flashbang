@@ -183,6 +183,11 @@ document.getElementById("hide-para-text").addEventListener("change", () => {
     displayCard();
 });
 
+const testToggleBtns = document.getElementsByClassName("test-toggle");
+for (btn of testToggleBtns) {
+    btn.addEventListener("click", generateTest);
+}
+
 //TODO chnage to only on down
 window.addEventListener("keydown", keyListener);
 function keyListener(e) {
@@ -667,6 +672,9 @@ function updateHTML() {
             ttsTypedAndFlashcardEventListeners();
             pinyinTypedAndFlashcardHTML();
         } else if (bunchSettings.questionType.test) {
+            //checking boxes
+
+            //html chnages
             document
                 .getElementById("main-container")
                 .classList.remove("flashcard-main-container");
@@ -692,7 +700,9 @@ function updateHTML() {
             document
                 .getElementById("pair-order-test")
                 .classList.remove("undisplay");
-
+            document
+                .getElementById("test-config-options")
+                .classList.remove("undisplay");
             generateTest();
         }
     }
@@ -713,6 +723,10 @@ function updateOptionsMenu() {
     document.getElementById("bothsr").checked = bunchSettings.pairOrder.bothsr;
     document.getElementById("bothrs").checked = bunchSettings.pairOrder.bothrs;
 
+    document.getElementById("say-prompt").checked = bunchSettings.sayPrompt;
+    document.getElementById("say-answer").checked = bunchSettings.sayAnswer;
+
+    //test stuff
     document.getElementById("standard-test").checked =
         bunchSettings.pairOrder.standard;
     document.getElementById("reversed-test").checked =
@@ -721,8 +735,9 @@ function updateOptionsMenu() {
         document.getElementById("both-test").checked = true;
     }
 
-    document.getElementById("say-prompt").checked = bunchSettings.sayPrompt;
-    document.getElementById("say-answer").checked = bunchSettings.sayAnswer;
+    document.getElementById("MC-test-toggle").checked = true;
+    document.getElementById("typed-test-toggle").checked = true;
+    document.getElementById("TF-test-toggle").checked = true;
 }
 
 function initBottomContainer() {
@@ -774,6 +789,8 @@ function changeDisplayTypedAndFlashcard() {
 
     document.getElementById("say-options").classList.remove("undisplay");
     document.getElementById("format-options").classList.remove("undisplay");
+
+    document.getElementById("test-config-options").classList.add("undisplay");
 }
 
 function pinyinTypedAndFlashcardHTML() {
@@ -1010,15 +1027,50 @@ function generateTest() {
                         </div>
                     </div>`;
 
+    let numMC = 0,
+        numTyped = 0,
+        numTF = 0;
+    let numQuestionTypes = 0;
+
     if (pairs.length < 3) {
         if (pairs.length == 1) {
             testHTML += genTestMC(pairs[0]);
         }
     } else {
-        let numMC = Math.floor(pairs.length / 3);
-        let numTyped = Math.ceil((pairs.length - numMC) / 2);
-        let numTF = pairs.length - numMC - numTyped;
-        testHTML += `<div class="MC-head">Multiple Choice</div>`;
+        if (document.getElementById("MC-test-toggle").checked) {
+            numQuestionTypes += 1;
+            numMC = 1;
+        }
+        if (document.getElementById("typed-test-toggle").checked) {
+            numQuestionTypes += 1;
+            numTyped = 1;
+        }
+        if (document.getElementById("TF-test-toggle").checked) {
+            numQuestionTypes += 1;
+            numTF = 1;
+        }
+
+        numMC = Math.floor(pairs.length / numQuestionTypes) * numMC;
+        numTyped = Math.floor(pairs.length / numQuestionTypes) * numTyped;
+        numTF = Math.floor(pairs.length / numQuestionTypes) * numTF;
+
+        //max descepency btwn total and sum of num___'s is 2
+
+        for (x = 0; x < 2; x++) {
+            if (numMC + numTyped + numTF != pairs.length) {
+                //prioritizing typed bc, idk most educationally valauable
+                if (document.getElementById("typed-test-toggle").checked) {
+                    numTyped += 1;
+                } else if (document.getElementById("MC-test-toggle").checked) {
+                    numMC += 1;
+                } else if (document.getElementById("TF-test-toggle").checked) {
+                    numTF += 1;
+                }
+            }
+        }
+
+        testHTML +=
+            numMC > 0 ? `<div class="MC-head">Multiple Choice</div>` : "";
         for (x = 0; x < numMC; x++) {
             let indeciesIndex = Math.floor(Math.random() * indecies.length);
             let index = indecies[indeciesIndex];
@@ -1026,7 +1078,7 @@ function generateTest() {
             testHTML += genTestMC(testGenPair, index);
             indecies.splice(indeciesIndex, 1);
         }
-        testHTML += `<div class="typed-head">Typed</div>`;
+        testHTML += numTyped > 0 ? `<div class="typed-head">Typed</div>` : "";
         for (x = 0; x < numTyped; x++) {
             let indeciesIndex = Math.floor(Math.random() * indecies.length);
             let index = indecies[indeciesIndex];
@@ -1034,7 +1086,7 @@ function generateTest() {
             testHTML += genTestTyped(testGenPair);
             indecies.splice(indeciesIndex, 1);
         }
-        testHTML += `<div class="TF-head">True / False</div>`;
+        testHTML += numTF > 0 ? `<div class="TF-head">True / False</div>` : "";
         for (x = 0; x < numTF; x++) {
             let indeciesIndex = Math.floor(Math.random() * indecies.length);
             let index = indecies[indeciesIndex];
@@ -1044,15 +1096,20 @@ function generateTest() {
         }
     }
 
-    testHTML += `<div class="test-separator"></div>
-                <button id="test-submit">Submit</button>`;
+    testHTML +=
+        numQuestionTypes > 0
+            ? `<div class="test-separator"></div>
+                <button id="test-submit">Submit</button>`
+            : `<div id="test-select-question-type"><h2>Select at least one question type</h2></div>`;
 
     document.getElementById("main-container").innerHTML = testHTML;
 
-    document.getElementById("test-submit").addEventListener("click", () => {
-        window.scrollTo(0, 0);
-        checkTest();
-    });
+    if (numQuestionTypes > 0) {
+        document.getElementById("test-submit").addEventListener("click", () => {
+            window.scrollTo(0, 0);
+            checkTest();
+        });
+    }
 
     const TFButtons = document.getElementsByClassName("test-TF-button");
     for (button of TFButtons) {

@@ -535,6 +535,15 @@ a {
     }
 }
 
+#test-select-question-type {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10vh;
+}
+
 .hide {
     visibility: hidden;
 }
