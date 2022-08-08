@@ -463,8 +463,8 @@ a {
   margin-top: 1rem;
 }
 
-#test-submit {
-  width: 30%;
+.test-bottom-btn {
+  width: 35%;
   padding: 0.5rem 1rem;
   font-size: 1.5rem;
   line-height: 1.5rem;
@@ -474,17 +474,28 @@ a {
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
 }
-#test-submit:active {
+.test-bottom-btn:active {
   background: var(--btn-hover, #9da5a9);
 }
 
-#test-select-question-type {
+.test-error-msg {
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding-bottom: 10vh;
+}
+
+#num-test-questions {
+  font-size: 16px;
+  height: 18px;
+  width: 36px;
+  border-radius: 3px;
+  border: 2px solid var(--highlight, #393e41);
+  margin-right: 8px;
+  padding: 2px;
+  text-align: center;
 }
 
 .hide {

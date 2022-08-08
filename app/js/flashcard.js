@@ -65,8 +65,7 @@ document.body.addEventListener("click", (e) => {
         !document.getElementById("options-btn").contains(e.target)
     ) {
         if (menuToggled) {
-            document.getElementById("options-menu").classList.add("hide");
-            menuToggled = !menuToggled;
+            toggleMenu();
         }
     }
 });
@@ -205,10 +204,6 @@ function keyListener(e) {
             exitResetMenu();
         } else {
             answerManager(e);
-        }
-
-        if (menuToggled) {
-            toggleMenu();
         }
     }
 }
@@ -703,6 +698,29 @@ function updateHTML() {
             document
                 .getElementById("test-config-options")
                 .classList.remove("undisplay");
+
+            document.getElementById("num-test-questions").value =
+                pairs.length > 2 ? pairs.length : 3;
+
+            document
+                .getElementById("num-test-questions")
+                .addEventListener("change", () => {
+                    let val;
+                    val = parseInt(
+                        document.getElementById("num-test-questions").value
+                    );
+                    if (isNaN(val)) {
+                        val = pairs.length > 2 ? pairs.length : 3;
+                    } else if (val < 3) {
+                        val = 3;
+                    } else if (val > pairs.length) {
+                        val = pairs.length > 2 ? pairs.length : 3;
+                    }
+
+                    document.getElementById("num-test-questions").value = val;
+                    generateTest();
+                });
+
             generateTest();
         }
     }
@@ -1015,7 +1033,11 @@ function genTestTF(pair, index) {
 }
 
 function generateTest() {
-    var indecies = [];
+    let numQuestions = parseInt(
+        document.getElementById("num-test-questions").value
+    );
+
+    let indecies = [];
     for (x = 0; x < pairs.length; x++) {
         indecies[x] = x;
     }
@@ -1032,11 +1054,10 @@ function generateTest() {
         numTF = 0;
     let numQuestionTypes = 0;
 
-    if (pairs.length < 3) {
-        if (pairs.length == 1) {
-            testHTML += genTestMC(pairs[0]);
-        }
-    } else {
+    if (
+        document.getElementById("num-test-questions").value > 2 &&
+        pairs.length > 2
+    ) {
         if (document.getElementById("MC-test-toggle").checked) {
             numQuestionTypes += 1;
             numMC = 1;
@@ -1050,14 +1071,14 @@ function generateTest() {
             numTF = 1;
         }
 
-        numMC = Math.floor(pairs.length / numQuestionTypes) * numMC;
-        numTyped = Math.floor(pairs.length / numQuestionTypes) * numTyped;
-        numTF = Math.floor(pairs.length / numQuestionTypes) * numTF;
+        numMC = Math.floor(numQuestions / numQuestionTypes) * numMC;
+        numTyped = Math.floor(numQuestions / numQuestionTypes) * numTyped;
+        numTF = Math.floor(numQuestions / numQuestionTypes) * numTF;
 
         //max descepency btwn total and sum of num___'s is 2
 
         for (x = 0; x < 2; x++) {
-            if (numMC + numTyped + numTF != pairs.length) {
+            if (numMC + numTyped + numTF != numQuestions) {
                 //prioritizing typed bc, idk most educationally valauable
                 if (document.getElementById("typed-test-toggle").checked) {
                     numTyped += 1;
@@ -1094,13 +1115,16 @@ function generateTest() {
             testHTML += genTestTF(testGenPair, index);
             indecies.splice(indeciesIndex, 1);
         }
+        testHTML +=
+            numQuestionTypes > 0
+                ? `<div class="test-separator"></div>
+                <button id="test-submit" class="test-bottom-btn">Submit</button>`
+                : `<div class="test-error-msg"><h2>Select at least one question type</h2></div>`;
+    } else {
+        if (pairs.length < 3) {
+            testHTML += `<div class="test-error-msg"><h2>Bunch must contain at least 3 pairs for test</h2></div>`;
+        }
     }
-
-    testHTML +=
-        numQuestionTypes > 0
-            ? `<div class="test-separator"></div>
-                <button id="test-submit">Submit</button>`
-            : `<div id="test-select-question-type"><h2>Select at least one question type</h2></div>`;
 
     document.getElementById("main-container").innerHTML = testHTML;
 
@@ -1108,6 +1132,15 @@ function generateTest() {
         document.getElementById("test-submit").addEventListener("click", () => {
             window.scrollTo(0, 0);
             checkTest();
+            const subBtn = document.getElementById("test-submit");
+            const newBtn = document.createElement("button");
+            newBtn.innerText = "New Test";
+            newBtn.classList.add("test-bottom-btn");
+            newBtn.addEventListener("click", () => {
+                generateTest();
+                window.scrollTo(0, 0);
+            });
+            subBtn.parentNode.replaceChild(newBtn, subBtn);
         });
     }
 

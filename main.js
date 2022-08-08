@@ -124,16 +124,18 @@ ipcMain.on("updateMenu", (e, type) => {
         //     });
         //     break;
         case "newbunch":
-            menu.push({
-                label: "Navigation",
-                submenu: [
-                    { label: "Scroll To Top", accelerator: "CmdOrCtrl+Up" },
-                    {
-                        label: "Scroll To Bottom",
-                        accelerator: "CmdOrCtrl+Down",
-                    },
-                ],
-            });
+            if (isMac) {
+                menu.push({
+                    label: "Navigation",
+                    submenu: [
+                        { label: "Scroll To Top", accelerator: "CmdOrCtrl+Up" },
+                        {
+                            label: "Scroll To Bottom",
+                            accelerator: "CmdOrCtrl+Down",
+                        },
+                    ],
+                });
+            }
             break;
         case "standard":
             break;

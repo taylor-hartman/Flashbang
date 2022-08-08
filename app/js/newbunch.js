@@ -465,6 +465,7 @@ document.getElementById("export-btn").addEventListener("click", () => {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.add("hide");
+    document.getElementById("top-right-btn").classList.add("undisplay");
 
     exportMenuOpen = true;
 
@@ -480,10 +481,13 @@ function updateExport() {
     const termSeparatorInput = document.getElementById("btwn-term-export");
     const pairSeparatorInput = document.getElementById("btwn-pair-export");
 
-    const termSeparator =
+    let termSeparator =
         termSeparatorInput.value === "" ? "-" : termSeparatorInput.value;
-    const pairSeparator =
+    let pairSeparator =
         pairSeparatorInput.value === "" ? "\n" : pairSeparatorInput.value;
+
+    termSeparator = termSeparator == "\\n" ? "\n" : termSeparator;
+    pairSeparator = pairSeparator == "\\n" ? "\n" : pairSeparator; //translate from string \n to new line
 
     const textArea = document.getElementById("export-text");
     textArea.value = "";
@@ -510,6 +514,7 @@ function closeExportMenu() {
     document
         .getElementsByClassName("new-bunch-container")[0]
         .classList.remove("hide");
+    document.getElementById("top-right-btn").classList.remove("undisplay");
 
     exportMenuOpen = false;
 }
