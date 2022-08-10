@@ -6,16 +6,18 @@ ipcRenderer.send("updateMenu", "standard");
 
 window.onload = () => {
     ipcRenderer.send("bunchdata:get");
-    console.log("bunches sent");
 };
-
-console.log("js worlking");
 
 ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
     console.log("bunches got");
     //TODO redundant conversion before and after get
     bunches = JSON.parse(JSON.stringify(bunchesData));
     makeIndexPage();
+});
+
+ipcRenderer.on("index:showUpdateAlert", () => {
+    document.getElementById("update-alert").classList.remove("undisplay");
+    // console.log("rev");
 });
 
 //#region Edit/Delete
@@ -422,4 +424,14 @@ function scrollBack() {
         makeIndexPage();
     }
 }
+
+document.getElementById("update-notif-close").addEventListener("click", () => {
+    document.getElementById("update-alert").classList.add("undisplay");
+});
+
+document.getElementById("update-notif-update").addEventListener("click", () => {
+    require("electron").shell.openExternal("http://www.flashbang.lol");
+    document.getElementById("update-alert").classList.add("undisplay");
+});
+
 //#endregion

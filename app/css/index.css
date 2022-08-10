@@ -263,6 +263,10 @@ a {
   visibility: hidden;
 }
 
+.undisplay {
+  display: none;
+}
+
 .no-bunches-hex-content {
   display: flex;
   align-items: center;
@@ -272,4 +276,46 @@ a {
 .no-bunches-hex-content h3 {
   font-size: 1rem;
   text-align: center;
+}
+
+#update-alert-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-bottom: 10vh;
+}
+#update-alert-container #update-notif {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--background);
+  border: solid 2px var(--highlight, #393e41);
+  border-radius: 3px;
+  width: 32vw;
+  height: 23vh;
+  min-width: 150px;
+  min-height: 80px;
+  text-align: center;
+}
+#update-alert-container #update-notif .update-notif-btns {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+#update-alert-container #update-notif .update-notif-btns button {
+  padding: 1px 3px;
+  margin-bottom: 5px;
+  border: solid 1px var(--highlight, #393e41);
+  border-radius: 3px;
+}
+#update-alert-container #update-notif .update-notif-btns button:hover {
+  cursor: pointer;
+  background: var(--btn-hover, #9da5a9);
 }

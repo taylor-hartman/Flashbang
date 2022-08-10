@@ -2,6 +2,8 @@ const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const BunchStorage = require("./bunchStorage");
 const Settings = require("./settings");
 const fs = require("fs");
+const fetch = require("electron-fetch").default;
+const dialog = require("electron").dialog;
 
 //#region Electron/Window Management
 /* -------------------------------------------------------------------------- */
@@ -73,9 +75,23 @@ function createMainWindow() {
 
 app.on("ready", () => {
     createMainWindow();
-
     const mainMenu = Menu.buildFromTemplate(standardMenu);
     Menu.setApplicationMenu(mainMenu);
+
+    mainWindow.webContents.once("dom-ready", () => {
+        try {
+            const currentVersion = 1.0;
+            fetch("https://flashbang.lol/version-info.json")
+                .then((res) => res.text())
+                .then((body) => {
+                    const info = JSON.parse(body);
+                    const latestVersion = parseFloat(info["latest-version"]);
+                    if (latestVersion > currentVersion) {
+                        mainWindow.webContents.send("index:showUpdateAlert");
+                    }
+                });
+        } catch {}
+    });
 });
 
 const standardMenu = [
@@ -163,6 +179,7 @@ app.on("activate", () => {
 });
 
 app.allowRendererProcessReuse = true;
+
 //#endregion
 
 //#region Bunch Requests
