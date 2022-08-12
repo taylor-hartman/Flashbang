@@ -232,9 +232,15 @@ a {
         overflow: hidden;
     }
 
-    #answer-input {
+    #typed-container {
         width: 40vw;
+        min-width: 40vw;
         max-width: 70vw;
+        position: relative;
+    }
+
+    #answer-input {
+        width: 100%;
         margin-top: 5vh;
         border: 2px solid var(--highlight, $highlight);
         border-radius: 3px;
@@ -242,9 +248,20 @@ a {
         font-size: 1rem;
         text-align: center;
         font-weight: bold;
+        outline: 0;
         &:focus {
             outline: none;
         }
+    }
+
+    #answer-input-span {
+        position: absolute;
+        left: -9999px;
+        display: inline-block;
+        min-width: 40vw;
+        max-width: 70vw;
+        padding: 3.9px;
+        font-size: 1rem;
     }
 
     #status-block {
@@ -276,8 +293,9 @@ a {
 
     #iwr-btn {
         position: absolute;
-        // right: 30vw;
-        right: calc((100vw - (40vw + ((1rem - 18px) * 8))) / 2);
+        right: 0;
+        // bottom: 0;
+        // right: calc((100vw - (40vw + ((1rem - 18px) * 8))) / 2);
         background: none;
         color: var(--highlight, $highlight);
         border: none;
@@ -288,8 +306,12 @@ a {
         }
     }
 
+    #answer {
+        max-width: 100%;
+    }
+
     .typed-answer {
-        width: 40vw;
+        width: 100%;
         border: 2px solid var(--highlight, $highlight);
         border-top: none;
         border-radius: 3px;

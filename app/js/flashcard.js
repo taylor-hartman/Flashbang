@@ -647,13 +647,15 @@ function updateHTML() {
                 </div>
                 <h2 id="prompt">Lorem</h2>
             </div>
-            <div class="input-container">
+            <div id="typed-container">
                     <input type="text" id="answer-input"/>
+                    <span id="answer-input-span"></span>
                     <div class="hide" id="status-block">&#10004</div>
-            </div>
-            <h2 class="hide typed-answer" id="answer">Lorem</h2>
-            <div class="hide" id="iwr-btn-container">
-            <button id="iwr-btn">I was right</button></div>`;
+                    <h2 class="hide typed-answer" id="answer">Lorem</h2>
+                    <div class="hide" id="iwr-btn-container">
+                        <button id="iwr-btn">I was right</button>
+                    </div>
+            </div>`;
 
             document.getElementById("main-container").style.paddingBottom =
                 "5vh";
@@ -661,6 +663,10 @@ function updateHTML() {
             document
                 .getElementById("iwr-btn")
                 .addEventListener("click", iWasRight);
+
+            document
+                .getElementById("answer-input")
+                .addEventListener("input", updateInputLength);
 
             changeDisplayTypedAndFlashcard();
             initBottomContainer();
@@ -724,6 +730,15 @@ function updateHTML() {
             generateTest();
         }
     }
+}
+
+function updateInputLength() {
+    const span = document.getElementById("answer-input-span");
+    const inputContainer = document.getElementById("typed-container");
+    span.innerHTML = document
+        .getElementById("answer-input")
+        .value.replace(/\s/g, "&nbsp;");
+    inputContainer.style.width = span.offsetWidth + "px";
 }
 
 function updateOptionsMenu() {
@@ -1332,9 +1347,10 @@ function resetHTML() {
     } else if (bunchSettings.questionType.typed) {
         const input = document.getElementById("answer-input");
         input.readOnly = false;
-        input.style.border = `2px solid var(--highlight, #393e41)`;
+        // input.style.border = `2px solid var(--highlight, #393e41)`;
         input.focus();
         input.value = "";
+        updateInputLength(); //must be done after value = ""
         input.style.textDecoration = "none";
         document.getElementById("status-block").classList.add("hide");
         document.getElementById("answer").classList.add("hide");
