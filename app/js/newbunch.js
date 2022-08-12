@@ -10,7 +10,7 @@ let importMenuOpen = false,
 const url = document.location.href;
 const query = url.split("?")[1];
 parsedQuery = querystring.parse(query, "&", "=");
-id = parsedQuery.id;
+id = parsedQuery.id; //the id of the bunch (the num of the file name)
 accesedFrom = parsedQuery.from; //page where the edit button was hit
 
 const editing = id !== ".new_bunch"; //true if editing; false if new bunch
@@ -139,13 +139,13 @@ function generatePairsHTML() {
         document.getElementById("pair-container").appendChild(newPair);
     }
 
-    const htmlPairs = document.getElementsByClassName("pair");
-    for (x = 0; x < htmlPairs.length; x++) {
-        htmlPairs[x].addEventListener("change", (e) => {
-            // resetPairCalls(e);
-            console.log(pairOrder);
-        });
-    }
+    //removed feature for now
+    // const htmlPairs = document.getElementsByClassName("pair");
+    // for (x = 0; x < htmlPairs.length; x++) {
+    //     htmlPairs[x].addEventListener("change", (e) => {
+    //         // resetPairCalls(e);
+    //     });
+    // }
     showPinYinMenu(); //showpinyinmenu must be done after generatePairsHTML
 
     //adds event listeners after clear
@@ -736,6 +736,19 @@ ipcRenderer.send("globalSettings:get", "timesCorrect");
 ipcRenderer.on("globalSettings:gettimesCorrect", (e, val) => {
     timesCorrect = val;
 });
+
+function autoSave() {
+    const bunch = makeBunch();
+    if (id == ".new_bunch") {
+        ipcRenderer.send("newbunch:save", bunch);
+    } else {
+        ipcRenderer.send("bunch:save", bunch);
+    }
+    console.log("saved");
+    setTimeout(autoSave, 60000); //save every minute
+}
+setTimeout(autoSave, 60000); //initial call
+
 //#endregion
 
 //#region IPC

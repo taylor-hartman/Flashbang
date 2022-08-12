@@ -198,7 +198,7 @@ ipcMain.on("newbunch:save", (e, bunch) => {
         bunchStorage.set(key, value);
     }
 
-    //NOTE only need for development
+    //NOTE only need for development and updates
     //checks to see if defaults have been added and applies them if so
     for (const [key, value] of Object.entries(bunchStorage.defaults)) {
         if (
@@ -210,6 +210,7 @@ ipcMain.on("newbunch:save", (e, bunch) => {
     }
 });
 
+//saves an already existing bunch
 ipcMain.on("bunch:save", (e, bunch) => {
     const bunchStorage = new BunchStorage({
         fileName: bunch.id,
@@ -219,16 +220,16 @@ ipcMain.on("bunch:save", (e, bunch) => {
         bunchStorage.set(key, value);
     }
 
-    //NOTE only need for development
-    //checks to see if defaults have been added and applies them if so
-    // for (const [key, value] of Object.entries(bunchStorage.defaults)) {
-    //     if (
-    //         bunchStorage.get(key) == null ||
-    //         bunchStorage.get(key) == undefined
-    //     ) {
-    //         bunchStorage.set(key, value);
-    //     }
-    // }
+    //NOTE only need for development and updates
+    // checks to see if defaults have been added and applies them if so
+    for (const [key, value] of Object.entries(bunchStorage.defaults)) {
+        if (
+            bunchStorage.get(key) == null ||
+            bunchStorage.get(key) == undefined
+        ) {
+            bunchStorage.set(key, value);
+        }
+    }
 });
 
 //when a newbunch is submitted

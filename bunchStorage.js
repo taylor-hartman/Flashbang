@@ -35,6 +35,7 @@ class BunchStorage {
             questionType: {
                 flashcard: true,
                 typed: false,
+                test: false,
             },
             sayPrompt: false,
             sayAnswer: false,
