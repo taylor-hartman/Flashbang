@@ -552,7 +552,8 @@ a {
     background: none;
     border: 2px solid var(--highlight, $highlight);
     border-radius: 3px;
-    &:active {
+    &:hover {
+        cursor: pointer;
         background: var(--btn-hover, $btn-hover);
     }
 }

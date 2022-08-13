@@ -407,6 +407,7 @@ a {
                 margin-bottom: 5px;
                 border: solid 1px var(--highlight, $highlight);
                 border-radius: 3px;
+                background: none;
                 &:hover {
                     cursor: pointer;
                     background: var(--btn-hover, $btn-hover);

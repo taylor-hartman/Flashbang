@@ -492,7 +492,8 @@ a {
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
 }
-.test-bottom-btn:active {
+.test-bottom-btn:hover {
+  cursor: pointer;
   background: var(--btn-hover, #9da5a9);
 }
 

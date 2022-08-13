@@ -928,9 +928,9 @@ function genTestMC(pair, index) {
     const html = `<div class="test-MC" answer="${answerIndex}" selected=-1>
     <div class="test-MC-prompt">${questionPrompt}</div>
     <div class="test-MC-choice-container">
-        <button class="test-MC-choice" class="test-MC-choice" num=0><div class="test-MC-choice-text">${choice0}</div><div class="correct-indicator undisplay">&#10004;</div></button>
-        <button class="test-MC-choice" class="test-MC-choice" num=1><div class="test-MC-choice-text">${choice1}</div><div class="correct-indicator undisplay">&#10004;</div></button>
-        <button class="test-MC-choice" class="test-MC-choice" num=2><div class="test-MC-choice-text">${choice2}</div><div class="correct-indicator undisplay">&#10004;</div></button>
+        <button class="test-MC-choice" num=0><div class="test-MC-choice-text">${choice0}</div><div class="correct-indicator undisplay">&#10004;</div></button>
+        <button class="test-MC-choice" num=1><div class="test-MC-choice-text">${choice1}</div><div class="correct-indicator undisplay">&#10004;</div></button>
+        <button class="test-MC-choice" num=2><div class="test-MC-choice-text">${choice2}</div><div class="correct-indicator undisplay">&#10004;</div></button>
         <div class="incorrect-indicator-container">
             <svg class="incorrect-indicator undisplay" width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
         </div>
@@ -1094,11 +1094,13 @@ function generateTest() {
 
         for (x = 0; x < 2; x++) {
             if (numMC + numTyped + numTF != numQuestions) {
-                //prioritizing typed bc, idk most educationally valauable
-                if (document.getElementById("typed-test-toggle").checked) {
-                    numTyped += 1;
-                } else if (document.getElementById("MC-test-toggle").checked) {
+                //prioritizing MC bc it is first so why not //typed is a bit eh in test bc no iwr
+                if (document.getElementById("MC-test-toggle").checked) {
                     numMC += 1;
+                } else if (
+                    document.getElementById("typed-test-toggle").checked
+                ) {
+                    numTyped += 1;
                 } else if (document.getElementById("TF-test-toggle").checked) {
                     numTF += 1;
                 }
@@ -1171,6 +1173,16 @@ function generateTest() {
                 e.target.innerText = "≠";
             }
         });
+
+        button.addEventListener("mouseenter", (e) => {
+            e.target.style.background = "var(--btn-hover)";
+            e.target.style.cursor = "pointer";
+        });
+
+        button.addEventListener("mouseleave", (e) => {
+            e.target.style.background = "none";
+            e.target.style.cursor = "default";
+        });
     }
 
     const MCButtons = document.getElementsByClassName("test-MC-choice");
@@ -1191,6 +1203,21 @@ function generateTest() {
             }
             e.target.closest(".test-MC-choice").style.background =
                 "var(--btn-hover)";
+        });
+
+        button.addEventListener("mouseenter", (e) => {
+            e.target.style.background = "var(--btn-hover)";
+            e.target.style.cursor = "pointer";
+        });
+
+        button.addEventListener("mouseleave", (e) => {
+            if (
+                e.target.closest(".test-MC").getAttribute("selected") !=
+                e.target.closest(".test-MC-choice").getAttribute("num")
+            ) {
+                e.target.style.background = "none";
+            }
+            e.target.style.cursor = "default";
         });
     }
 }
@@ -1261,7 +1288,7 @@ function checkTest() {
     document.getElementById("score-fraction").innerText = `Score: ${
         totalQuestions - incorrectCount
     } / ${totalQuestions}`;
-    document.getElementById("score-percent").innerText = `${Math.ceil(
+    document.getElementById("score-percent").innerText = `${Math.round(
         ((totalQuestions - incorrectCount) / totalQuestions) * 100
     )}%`;
     document
@@ -1270,22 +1297,19 @@ function checkTest() {
 }
 
 function updatePromptPinyin() {
-    //TODO remove try catch
-    try {
-        if (bunchSettings.showPinyin)
-            if (
-                (!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
-                (currentReversed && pinyinLang(bunchSettings.answerLang))
-            ) {
-                addPinYinText(currentPrompt(), false);
-                document.getElementById("pinyin-text").classList.remove("hide");
-            } else {
-                document.getElementById("pinyin-text").classList.add("hide");
-            }
-        else {
+    if (bunchSettings.showPinyin)
+        if (
+            (!currentReversed && pinyinLang(bunchSettings.promptLang)) ||
+            (currentReversed && pinyinLang(bunchSettings.answerLang))
+        ) {
+            addPinYinText(currentPrompt(), false);
+            document.getElementById("pinyin-text").classList.remove("hide");
+        } else {
             document.getElementById("pinyin-text").classList.add("hide");
         }
-    } catch {}
+    else {
+        document.getElementById("pinyin-text").classList.add("hide");
+    }
 }
 
 function displayCard() {

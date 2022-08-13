@@ -10,8 +10,8 @@ const dialog = require("electron").dialog;
 /*                         Electron/Window Management                         */
 /* -------------------------------------------------------------------------- */
 // Set env
-process.env.NODE_ENV = "development";
-// process.env.NODE_ENV = "production";
+// process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "production";
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false;
 const isMac = process.platform === "darwin" ? true : false;
@@ -80,7 +80,7 @@ app.on("ready", () => {
 
     mainWindow.webContents.once("dom-ready", () => {
         try {
-            const currentVersion = 1.0;
+            const currentVersion = 1.1; //the version of this release
             fetch("https://flashbang.lol/version-info.json")
                 .then((res) => res.text())
                 .then((body) => {

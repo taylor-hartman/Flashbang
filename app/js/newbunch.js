@@ -728,7 +728,7 @@ function makePairs() {
 //saves when not leaving page e.g. going to import and export menus
 function saveInternal() {
     const bunch = makeBunch();
-    //saves pairs but not tile. i think this works, but may need fixing
+    //saves pairs but not title. i think this works, but may need fixing
     ipcRenderer.send("bunch:save", bunch);
 }
 
@@ -744,7 +744,6 @@ function autoSave() {
     } else {
         ipcRenderer.send("bunch:save", bunch);
     }
-    console.log("saved");
     setTimeout(autoSave, 60000); //save every minute
 }
 setTimeout(autoSave, 60000); //initial call
