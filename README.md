@@ -64,9 +64,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<a href="https://flashbang.lol/">
-    <img src="assets/flashbang-showcase.png" alt="Flashbang Screenshots" width="999" height="719">
-</a>
+![Flashbang Screenshot](assets/flashbang-showcase.png)
 
 Flashbang is a free flashcard app that helps you memorize in style. 
 
