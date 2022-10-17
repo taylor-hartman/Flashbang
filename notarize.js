@@ -10,9 +10,9 @@ exports.default = async function notarizing(context) {
     const appName = context.packager.appInfo.productFilename;
 
     return await notarize({
-        appBundleId: "BUNDLE ID HERE",
+        appBundleId: "INSERT_BUNDLE_ID",
         appPath: `${appOutDir}/${appName}.app`,
-        appleId: "EMAIL HERE",
-        appleIdPassword: "KEY HERE",
+        appleId: "INSERT_APPLE_ID",
+        appleIdPassword: "INSERT_TEMP_PASSWORD",
     });
 };

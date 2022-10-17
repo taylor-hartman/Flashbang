@@ -1,4 +1,5 @@
 <a name="readme-top"></a>
+
 <!--
 *** Created using the Best-README-Template. https://github.com/othneildrew/Best-README-Template
 -->
@@ -59,25 +60,27 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 ![Flashbang Screenshot](assets/flashbang-showcase.png)
 
-Flashbang is a free flashcard app that helps you memorize in style. 
+Flashbang is a free flashcard app that helps you memorize in style.
 
 Some Features Include:
-* Minimalistic Flashcard Reviewing
-* Typing and Test Modes for Flashcard sets
-* Easy Importing
-* Speech Synthesis for Cards
+
+-   Minimalistic Flashcard Reviewing
+-   Typing and Test Modes for Flashcard sets
+-   Easy Importing
+-   Speech Synthesis for Cards
 
 ## Installation
+
 Simply download Flashbang for your operating system from the <a href="https://flashbang.lol/">official site.</a>
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 To get a local copy up and running follow these simple example steps.
@@ -87,14 +90,16 @@ To get a local copy up and running follow these simple example steps.
 Install npm and download this repository to proceed. This is dependent on your operating system.
 
 Once npm is installed, run the following command in the directory of the project to download all of the dependencies.
-* npm
-  ```sh
-  npm install
-  ```
+
+-   npm
+    ```sh
+    npm install
+    ```
 
 ### Building
 
 #### Windows
+
 To build, run the following commands depending on your architecture
 
 win64:
@@ -107,27 +112,36 @@ win64arm:
 `npm run package-win64arm`
 
 #### macOS
+
 To build, run the following command:
 `npm run package-mac`
 
+To notarize and package as .dmg after build, input bundle ID, Apple ID, and app specific password into notarize.json. Then change appId and provisioningProfile values under build in package.json and run: `npm run dist`
+
 #### Linux
+
 To build, run the following command:
 `npm run package-linux`
 
+To package as .deb after build, run:
+`electron-installer-debian --src release-builds/flashbang-linux-x64/ --arch amd64 --config debian.json`
+
 <!-- USAGE EXAMPLES -->
+
 ## Usage
 
 ### Creating a Set of Flashcards
 
 Simply click the plus icon in the upper left to create a new set.
-    <img src="internal_icons/plus.svg" alt="Plus Icon" width="20" height="20">
+<img src="internal_icons/plus.svg" alt="Plus Icon" width="20" height="20">
 
 ### Editing an existing Set
 
 Simply click the pencil icon in the lower left to enable editing mode.
-    <img src="internal_icons/edit.svg" alt="Edit Icon" width="20" height="20">
+<img src="internal_icons/edit.svg" alt="Edit Icon" width="20" height="20">
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -142,12 +156,14 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the GPL-3.0 licence. See `LICENSE` for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/taylor-hartman/Flashbang.svg?style=for-the-badge
 [contributors-url]: https://github.com/taylor-hartman/Flashbang/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/taylor-hartman/Flashbang.svg?style=for-the-badge

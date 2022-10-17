@@ -6,17 +6,17 @@
     "scripts": {
         "start": "electron .",
         "dev": "nodemon --exec electron .",
-        "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds --ignore=internal_icons --ignore=.gitignore  --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
-        "package-win32": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=.gitignore --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
-        "package-win64": "electron-packager . --overwrite --platform=win32 --arch=x64 --icon=icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=.gitignore  --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
-        "package-win64arm": "electron-packager . --overwrite --platform=win32 --arch=arm64 --icon=icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=.gitignore --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
-        "package-linux": "electron-packager . flashbang --overwrite --platform=linux --arch=x64 --icon=icons/1024x1024.png --prune=true --out=release-builds --ignore=internal_icons --ignore=.gitignore --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json",
+        "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds --ignore=internal_icons --ignore=.gitignore  --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json --ignore=dist --ignore=README.md --ignore=assets",
+        "package-win32": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=.gitignore --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json --ignore=dist --ignore=README.md --ignore=assets",
+        "package-win64": "electron-packager . --overwrite --platform=win32 --arch=x64 --icon=icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=.gitignore  --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json --ignore=dist --ignore=README.md --ignore=assets",
+        "package-win64arm": "electron-packager . --overwrite --platform=win32 --arch=arm64 --icon=icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"flashbang\" --ignore=internal_icons --ignore=.gitignore --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json --ignore=dist --ignore=README.md --ignore=assets",
+        "package-linux": "electron-packager . flashbang --overwrite --platform=linux --arch=x64 --icon=icons/1024x1024.png --prune=true --out=release-builds --ignore=internal_icons --ignore=.gitignore --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json --ignore=dist --ignore=README.md --ignore=assets",
         "package-all": "npm run package-mac && npm run package-win32 && npm run package-win64 && npm run package-win64arm && npm run package-linux",
         "notarize-mac": "node notarize.js",
         "dist": "electron-builder"
     },
     "build": {
-        "appId": "com.williamhartman.flashbang",
+        "appId": "INSERT_APP_ID",
         "mac": {
             "category": "public.app-category.education",
             "icon": "icons/icons.icns",
@@ -24,7 +24,7 @@
             "gatekeeperAssess": false,
             "entitlements": "entitlements.plist",
             "entitlementsInherit": "entitlements.plist",
-            "provisioningProfile": "/Users/taylor/Desktop/flashbang.provisionprofile"
+            "provisioningProfile": "INSERT_PROVISIONING_PROFILE_PATH"
         },
         "afterSign": "notarize.js",
         "files": [
