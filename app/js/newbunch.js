@@ -49,13 +49,37 @@ document.getElementById("top-right-btn").addEventListener("click", () => {
 
 /* -------------------------------------------------------------------------- */
 
-//prevents enter from doing form actions
+//remaps certain keypresses
 document.addEventListener("keypress", function (e) {
+
+    //remap: enter
     if (e.key === "Enter") {
         if (document.activeElement.id != "import-text") {
+
+            //prevent enter from doing form actions
             e.preventDefault();
+
+            //get active bunch index
+            let activeBunch =
+                (document.querySelector("input.prompt:focus") || document.querySelector("input.answer"))
+                .parentNode
+                .parentNode
+                .querySelector("p.index").innerText - 1;
+
+            //get next bunch index
+            let nextBunch = activeBunch + 1;
+
+            //add new pair if needed
+            if (nextBunch >= document.querySelectorAll("div.pair").length) {
+                document.getElementById("plus").click();
+            }
+
+            //focus next pair
+            document.querySelectorAll("input.prompt")[nextBunch].focus();
+
         }
     }
+
 });
 
 document.getElementById("title-input").addEventListener("change", () => {
