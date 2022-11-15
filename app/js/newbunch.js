@@ -51,35 +51,37 @@ document.getElementById("top-right-btn").addEventListener("click", () => {
 
 //remaps certain keypresses
 document.addEventListener("keypress", function (e) {
-
     //remap: enter
     if (e.key === "Enter") {
         if (document.activeElement.id != "import-text") {
-
             //prevent enter from doing form actions
             e.preventDefault();
 
             //get active bunch index
-            let activeBunch =
-                (document.querySelector("input.prompt:focus") || document.querySelector("input.answer"))
-                .parentNode
-                .parentNode
-                .querySelector("p.index").innerText - 1;
+            let activePair;
+            if (document.activeElement.id == "title-input") {
+                activePair = -1; //allows enter key to transfer from title bar to pairs
+            } else {
+                activePair =
+                    (
+                        document.querySelector("input.prompt:focus") ||
+                        document.querySelector("input.answer:focus")
+                    ).parentNode.parentNode.querySelector("p.index").innerText -
+                    1;
+            }
 
             //get next bunch index
-            let nextBunch = activeBunch + 1;
+            let nextPair = activePair + 1;
 
             //add new pair if needed
-            if (nextBunch >= document.querySelectorAll("div.pair").length) {
+            if (nextPair >= document.querySelectorAll("div.pair").length) {
                 document.getElementById("plus").click();
             }
 
             //focus next pair
-            document.querySelectorAll("input.prompt")[nextBunch].focus();
-
+            document.querySelectorAll("input.prompt")[nextPair].focus();
         }
     }
-
 });
 
 document.getElementById("title-input").addEventListener("change", () => {

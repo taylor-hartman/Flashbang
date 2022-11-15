@@ -105,3 +105,6 @@ dist
 
 # VS Code files
 .vscode/
+
+#Release builds
+release-builds/
