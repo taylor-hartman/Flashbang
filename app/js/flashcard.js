@@ -781,7 +781,7 @@ function initBottomContainer() {
 
             <p ${
                 settings.showInfo ? "" : 'class="undisplay"'
-            } id="bottom-text">Press Enter to Answer</p>`;
+            } id="bottom-text">Press Enter or Space to Answer</p>`;
 
     if (
         bunchSettings.questionType.flashcard ||
