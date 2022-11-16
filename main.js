@@ -44,7 +44,7 @@ ipcMain.on("background:set", () => {
 
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: "flashbang",
+        title: `flashbang${isDev ? " (dev)" : ""}`,
         width: isDev ? 875 : 625,
         height: 425,
         icon: "./assets/icons/icon.png",
