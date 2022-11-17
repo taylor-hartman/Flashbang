@@ -10,6 +10,10 @@ function changeTheme(e) {
     const theme = e.target.id;
     ipcRenderer.send("globalSettings:set1", { key: "theme", value: theme });
     ipcRenderer.send("background:set");
+    e.target.querySelector(".color-box").classList.add("spin");
+    e.target.querySelector(".color-box").addEventListener("animationend", (f) => {
+        f.target.classList.remove("spin");
+    });
 }
 
 /* ----------------------------- Study Settings ----------------------------- */
