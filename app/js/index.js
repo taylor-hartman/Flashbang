@@ -6,6 +6,9 @@ ipcRenderer.send("updateMenu", "standard");
 
 window.onload = () => {
     ipcRenderer.send("bunchdata:get");
+    setTimeout(() => {
+        document.getElementById("search-input").classList.remove("preload");
+    }, 250);
 };
 
 ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
@@ -66,7 +69,9 @@ document.getElementById("search-bunch-btn").addEventListener("click", () => {
     if (searchInputShown) {
         //show it
         document.getElementById("search-input").classList.remove("hide");
-        document.getElementById("search-input").focus();
+        setTimeout(() => {
+            document.getElementById("search-input").focus();
+        }, 250);
     } else {
         //hide it
         document.getElementById("search-input").classList.add("hide");
