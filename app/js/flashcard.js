@@ -774,19 +774,24 @@ function updateOptionsMenu() {
 }
 
 function initBottomContainer() {
-    document.getElementById("bottom-container").innerHTML = `
+    if (bunchSettings.questionType.flashcard) {
+        document.getElementById("bottom-container").innerHTML = `
             <p ${
                 settings.showRemaining ? "" : 'class="undisplay"'
             }id="remaining-text"></p>
 
             <p ${
                 settings.showInfo ? "" : 'class="undisplay"'
-            } id="bottom-text">Press Enter or Space to Answer</p>`;
+            } id="bottom-text">Press Space to Reveal Answer</p>`;
+    } else if (bunchSettings.questionType.typed) {
+        document.getElementById("bottom-container").innerHTML = `
+            <p ${
+                settings.showRemaining ? "" : 'class="undisplay"'
+            }id="remaining-text"></p>
 
-    if (
-        bunchSettings.questionType.flashcard ||
-        bunchSettings.questionType.typed
-    ) {
+            <p ${
+                settings.showInfo ? "" : 'class="undisplay"'
+            } id="bottom-text">Press Enter to Answer</p>`;
     }
 }
 
