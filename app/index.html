@@ -9,9 +9,10 @@
             content="default-src 'self'"
         />
         <link rel="stylesheet" href="css/index.css" id="base-stylesheet" />
+        <link rel="stylesheet" href="css/fade.css" />
         <title></title>
     </head>
-    <body>
+    <body class="fade-in">
         <!-- <header class="titlebar"></header> -->
         <a href="newbunch.html?id=.new_bunch" class="btn" id="new-bunch-btn">
             <svg
@@ -43,7 +44,7 @@
             </svg>
         </a>
 
-        <input class="hide" type="text" id="search-input" />
+        <input class="hide preload" type="text" id="search-input" />
 
         <a class="btn" id="search-bunch-btn">
             <svg
@@ -128,5 +129,6 @@
         </div>
         <script src="js/index.js"></script>
         <script src="js/themeManager.js"></script>
+        <script src="js/fade.js"></script>
     </body>
 </html>

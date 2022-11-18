@@ -10,8 +10,7 @@ const dialog = require("electron").dialog;
 /*                         Electron/Window Management                         */
 /* -------------------------------------------------------------------------- */
 // Set env
-// process.env.NODE_ENV = "development";
-process.env.NODE_ENV = "production";
+process.env.NODE_ENV = app.commandLine.hasSwitch("dev") ? "development" : "production";
 
 const isDev = process.env.NODE_ENV !== "production" ? true : false;
 const isMac = process.platform === "darwin" ? true : false;
@@ -45,7 +44,7 @@ ipcMain.on("background:set", () => {
 
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: "flashbang",
+        title: `flashbang${isDev ? " (dev)" : ""}`,
         width: isDev ? 875 : 625,
         height: 425,
         icon: "./assets/icons/icon.png",
