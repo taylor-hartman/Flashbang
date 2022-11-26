@@ -161,24 +161,39 @@ a {
 #search-input:focus {
   outline: none;
 }
+
 #search-input.hide {
   animation: 0.25s SearchContract ease-in;
 }
+
 #search-input:not(.hide) {
   animation: 0.25s SearchExpand ease-out;
 }
+
 #search-input.hide.preload {
   animation-duration: 0s !important;
 }
+
 @keyframes SearchExpand {
-  from { transform: scaleX(0); visibility: hidden; }
-  to { transform: scaleX(1); visibility: visible; }
+  from {
+    transform: scaleX(0);
+    visibility: hidden;
+  }
+  to {
+    transform: scaleX(1);
+    visibility: visible;
+  }
 }
 @keyframes SearchContract {
-  from { transform: scaleX(1); visibility: visible; }
-  to { transform: scaleX(0); visibility: hidden; }
+  from {
+    transform: scaleX(1);
+    visibility: visible;
+  }
+  to {
+    transform: scaleX(0);
+    visibility: hidden;
+  }
 }
-
 #no-matches {
   text-align: center;
 }

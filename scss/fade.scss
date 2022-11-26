@@ -1,0 +1,34 @@
+.fade-in {
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+
+.fade-out {
+    -webkit-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+    opacity: 0;
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 0.825;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: 0.125;
+    }
+    100% {
+        opacity: 1;
+    }
+}

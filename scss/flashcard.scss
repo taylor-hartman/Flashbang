@@ -191,6 +191,30 @@ a {
 }
 //-----------end checkbox stuff-------------
 
+#main-container #answer:not(.hide) {
+    animation: 0.25s unhideAnswer ease-out;
+}
+@keyframes unhideAnswer {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#main-separator:not(.hide) {
+    animation: 0.5s unhideSeparator ease-out;
+}
+@keyframes unhideSeparator {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
 #main-container {
     flex-direction: column;
     align-items: center;

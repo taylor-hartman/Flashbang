@@ -91,13 +91,6 @@ a {
   overflow: hidden;
   pointer-events: none;
 }
-.main-container .section .theme-holder .palette .color-box.spin {
-  animation: 0.5s SpinColorBox ease-in-out;
-}
-@keyframes SpinColorBox {
-  from { transform: rotate(-45deg); }
-  to { transform: rotate(315deg); }
-}
 .main-container .section .theme-holder .palette .color {
   position: absolute;
   width: calc(8vw - 1.5px);
@@ -192,6 +185,18 @@ a {
   display: none;
 }
 
+.main-container .section .theme-holder .palette .color-box.spin {
+  animation: 0.5s SpinColorBox ease-in-out;
+}
+
+@keyframes SpinColorBox {
+  from {
+    transform: rotate(-45deg);
+  }
+  to {
+    transform: rotate(315deg);
+  }
+}
 #light .one {
   background: #e7e6e1;
 }

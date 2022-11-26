@@ -212,6 +212,18 @@ a {
     display: none;
 }
 
+.main-container .section .theme-holder .palette .color-box.spin {
+    animation: 0.5s SpinColorBox ease-in-out;
+}
+@keyframes SpinColorBox {
+    from {
+        transform: rotate(-45deg);
+    }
+    to {
+        transform: rotate(315deg);
+    }
+}
+
 #light {
     .one {
         background: $background;
