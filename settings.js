@@ -23,6 +23,7 @@ class Settings {
             delayCorrect: 1,
             delayIncorrect: 0,
             studyFontSize: 18,
+            animateStudy: true,
             ignoreParenthesis: true,
             useSlash: true,
             ignoreCapital: true,

@@ -171,7 +171,7 @@ a {
   transform: rotate(45deg);
 }
 
-#main-container #answer:not(.hide) {
+#main-container #answer:not(.hide).animate {
   animation: 0.25s unhideAnswer ease-out;
 }
 
@@ -183,7 +183,7 @@ a {
     opacity: 1;
   }
 }
-#main-separator:not(.hide) {
+#main-separator:not(.hide).animate {
   animation: 0.5s unhideSeparator ease-out;
 }
 

@@ -191,7 +191,7 @@ a {
 }
 //-----------end checkbox stuff-------------
 
-#main-container #answer:not(.hide) {
+#main-container #answer:not(.hide).animate {
     animation: 0.25s unhideAnswer ease-out;
 }
 @keyframes unhideAnswer {
@@ -203,7 +203,7 @@ a {
     }
 }
 
-#main-separator:not(.hide) {
+#main-separator:not(.hide).animate {
     animation: 0.5s unhideSeparator ease-out;
 }
 @keyframes unhideSeparator {

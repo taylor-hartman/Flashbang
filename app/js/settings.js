@@ -11,9 +11,11 @@ function changeTheme(e) {
     ipcRenderer.send("globalSettings:set1", { key: "theme", value: theme });
     ipcRenderer.send("background:set");
     e.target.querySelector(".color-box").classList.add("spin");
-    e.target.querySelector(".color-box").addEventListener("animationend", (f) => {
-        f.target.classList.remove("spin");
-    });
+    e.target
+        .querySelector(".color-box")
+        .addEventListener("animationend", (f) => {
+            f.target.classList.remove("spin");
+        });
 }
 
 /* ----------------------------- Study Settings ----------------------------- */
@@ -99,6 +101,20 @@ document.getElementById("study-font-size").addEventListener("change", () => {
     });
 });
 
+document.getElementById("animate-study").addEventListener("change", () => {
+    ipcRenderer.send("globalSettings:set", {
+        key: "animateStudy",
+        value: document.getElementById("animate-study").checked,
+    });
+});
+
+document.getElementById("animate-pages").addEventListener("change", () => {
+    ipcRenderer.send("globalSettings:set", {
+        key: "animatePages",
+        value: document.getElementById("animate-pages").checked,
+    });
+});
+
 document.getElementById("ignore-parenthesis").addEventListener("change", () => {
     ipcRenderer.send("globalSettings:set", {
         key: "ignoreParenthesis",
@@ -161,6 +177,7 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
     document.getElementById("delay-correct").value = settings.delayCorrect;
     document.getElementById("delay-incorrect").value = settings.delayIncorrect;
     document.getElementById("study-font-size").value = settings.studyFontSize;
+    document.getElementById("animate-study").checked = settings.animateStudy;
     //type
     document.getElementById("ignore-parenthesis").checked =
         settings.ignoreParenthesis;
@@ -169,4 +186,5 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
 
     //----Homepage----
     document.getElementById("sort-home-by").value = settings.sortHomeBy;
+    document.getElementById("animate-pages").checked = settings.animatePages;
 });

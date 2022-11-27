@@ -629,8 +629,12 @@ function updateHTML() {
                 </div>
                 <h2 class="" id="prompt"></h2>
             </div>
-            <div class="hide" id="main-separator"></div>
-            <h2 class="hide" id="answer"></h2>`;
+            <div class="hide ${
+                settings.animateStudy ? "animate" : ""
+            }" id="main-separator"></div>
+            <h2 class="hide ${
+                settings.animateStudy ? "animate" : ""
+            }" id="answer"></h2>`;
 
             document.getElementById("main-container").style.paddingBottom =
                 "10vh";

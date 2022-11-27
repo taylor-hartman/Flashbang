@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="css/fade.css" />
         <title></title>
     </head>
-    <body class="fade-in">
+    <body>
         <a href="index.html" id="back-btn">
             <svg
                 width="24px"
@@ -108,29 +108,6 @@
                 <div class="setting-holder">
                     <h3>General</h3>
                     <div class="setting">
-                        <label for="show-info">Show Instructions</label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="show-info" />
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                    <div class="setting">
-                        <label for="show-remaining"
-                            >Show Pairs Remaining Count</label
-                        >
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="show-remaining" />
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                    <div class="setting">
-                        <label for="show-iwr">Show "I was right" Button</label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="show-iwr" />
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                    <div class="setting">
                         <label for="times-correct"
                             >Answer Correctly ___ Times for Each Term</label
                         >
@@ -145,13 +122,6 @@
                             <input type="checkbox" id="penalize-incorrect" />
                             <span class="checkmark"></span>
                         </label>
-                    </div>
-
-                    <div class="setting">
-                        <label for="study-font-size"
-                            >Font Size (12pt-35pt)</label
-                        >
-                        <input type="text" id="study-font-size" />
                     </div>
                     <!-- typed answer settings -->
                     <h3>Typed</h3>
@@ -205,6 +175,45 @@
                         >
                         <input type="text" id="delay-incorrect" />
                     </div>
+                    <h3>Appearance</h3>
+                    <div class="setting">
+                        <label for="show-info">Show Instructions</label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="show-info" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="setting">
+                        <label for="show-remaining"
+                            >Show Pairs Remaining Count</label
+                        >
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="show-remaining" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="setting">
+                        <label for="show-iwr">Show "I was right" Button</label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="show-iwr" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="setting">
+                        <label for="study-font-size"
+                            >Font Size (12pt-35pt)</label
+                        >
+                        <input type="text" id="study-font-size" />
+                    </div>
+                    <div class="setting">
+                        <label for="animate-study"
+                            >Animate Flashcard Answer Reveal</label
+                        >
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="animate-study" />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
                     <div class="undisplay" id="sound-section">
                         <div id="sound-internal">
                             <h3>Sound</h3>
@@ -229,6 +238,15 @@
                                 <option value="name">Name</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="setting">
+                        <label for="animate-pages"
+                            >Animate Page Transitions</label
+                        >
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="animate-pages" />
+                            <span class="checkmark"></span>
+                        </label>
                     </div>
                 </div>
             </div>
