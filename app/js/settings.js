@@ -108,12 +108,12 @@ document.getElementById("animate-study").addEventListener("change", () => {
     });
 });
 
-document.getElementById("animate-pages").addEventListener("change", () => {
-    ipcRenderer.send("globalSettings:set", {
-        key: "animatePages",
-        value: document.getElementById("animate-pages").checked,
-    });
-});
+// document.getElementById("animate-pages").addEventListener("change", () => {
+//     ipcRenderer.send("globalSettings:set", {
+//         key: "animatePages",
+//         value: document.getElementById("animate-pages").checked,
+//     });
+// });
 
 document.getElementById("ignore-parenthesis").addEventListener("change", () => {
     ipcRenderer.send("globalSettings:set", {
@@ -186,5 +186,5 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
 
     //----Homepage----
     document.getElementById("sort-home-by").value = settings.sortHomeBy;
-    document.getElementById("animate-pages").checked = settings.animatePages;
+    // document.getElementById("animate-pages").checked = settings.animatePages;
 });
