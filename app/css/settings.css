@@ -150,6 +150,7 @@ a {
   background: none;
   border: 1px solid var(--highlight, #393e41);
   border-radius: 3px;
+  width: 8rem;
 }
 .main-container .separator {
   width: 100%;

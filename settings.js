@@ -28,6 +28,7 @@ class Settings {
             useSlash: true,
             ignoreCapital: true,
             sortHomeBy: "lastUsed",
+            homeStyle: "hexagon",
         };
 
         this.data = parseDataFile(this.path, this.defaults);

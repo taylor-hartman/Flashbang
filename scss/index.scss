@@ -50,9 +50,55 @@ a {
 }
 
 .main-container {
-    margin-top: calc(#{$hex-row-margin} / 2);
+    padding-bottom: calc(2 * #{$hex-row-margin} / -2);
     width: 100vw;
     height: 100vh;
+}
+
+.main-list {
+    margin-top: calc(2 * #{$hex-row-margin} / -2);
+    overflow: scroll;
+    width: 75%;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .li-bunch {
+        border: solid 2px var(--highlight, $highlight);
+        border-radius: 3px;
+        margin: 3px 0;
+        padding: 1px 5px;
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        align-items: center;
+
+        .list-link {
+            width: 88%;
+        }
+
+        .li-edit-icons-container {
+            display: flex;
+            flex-direction: row;
+            position: absolute;
+            right: 5px;
+        }
+    }
+}
+
+.list-create-new-bunch {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: solid 2px var(--highlight, $highlight);
+    border-radius: 3px;
+    padding: 5px 5px;
+    &:hover {
+        cursor: pointer;
+        background: var(--btn-hover, $btn-hover);
+    }
 }
 
 .hex-btn {
@@ -96,14 +142,14 @@ a {
     a {
         margin: 0 3.9px;
     }
+}
 
-    .delete-btn {
-        &:hover {
-            cursor: pointer;
-        }
-        svg {
-            pointer-events: none;
-        }
+.delete-btn {
+    &:hover {
+        cursor: pointer;
+    }
+    svg {
+        pointer-events: none;
     }
 }
 

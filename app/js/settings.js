@@ -158,6 +158,13 @@ document.getElementById("sort-home-by").addEventListener("change", () => {
     });
 });
 
+document.getElementById("home-style").addEventListener("change", () => {
+    ipcRenderer.send("globalSettings:set", {
+        key: "homeStyle",
+        value: document.getElementById("home-style").value,
+    });
+});
+
 document.getElementById("reset-btn").addEventListener("click", () => {
     ipcRenderer.send("globalSettings:resetDefaults");
 });
@@ -186,5 +193,7 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
 
     //----Homepage----
     document.getElementById("sort-home-by").value = settings.sortHomeBy;
+    document.getElementById("home-style").value = settings.homeStyle;
+
     // document.getElementById("animate-pages").checked = settings.animatePages;
 });
