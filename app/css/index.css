@@ -45,7 +45,8 @@ a {
 
 .main-list {
   margin-top: calc(2 * -41.785px / -2);
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   width: 75%;
 }
 .main-list::-webkit-scrollbar {
@@ -60,6 +61,13 @@ a {
   flex-direction: row;
   position: relative;
   align-items: center;
+}
+.main-list .li-bunch h3 {
+  -ms-word-break: break-all;
+  word-break: break-all;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
 }
 .main-list .li-bunch .list-link {
   width: 88%;
@@ -158,6 +166,13 @@ a {
 #delete-menu #delete-btns-container button:hover {
   cursor: pointer;
   background: var(--btn-hover, #9da5a9);
+}
+
+#li-delete-menu {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: green;
 }
 
 #settings-btn {
