@@ -34,10 +34,11 @@ document.getElementById("edit-bunch-btn").addEventListener("click", () => {
     updateEditIcons();
 });
 
-let bunchID; //the id of the bunch to be deleted
 function deleteBunch(e) {
     const fileTitle = e.target.getAttribute("bunch-title");
-    bunchID = e.target.getAttribute("bunch-id"); //TODO this is bad structure
+    document
+        .getElementById("yes-delete")
+        .setAttribute("bunch-id", e.target.getAttribute("bunch-id"));
     const deleteMenuText = document
         .getElementById("delete-menu")
         .querySelector("h3");
@@ -49,6 +50,7 @@ function deleteBunch(e) {
 }
 
 document.getElementById("yes-delete").addEventListener("click", () => {
+    bunchID = document.getElementById("yes-delete").getAttribute("bunch-id");
     ipcRenderer.send("bunch:delete", bunchID);
     ipcRenderer.send("bunchdata:get");
     document.getElementById("delete-menu").classList.add("hide");
@@ -407,9 +409,11 @@ function generateList(bunchList) {
         bunchList.forEach((bunch) => {
             listContent += `
             <li class="li-bunch" bunch-id="${bunch.id}"> 
-                <a class="list-link" href="flashcard.html?id=${bunch.id}">
-                    <h3>${bunch.title}</h3> 
-                    <div>${bunch.numTerms} Terms</div>  
+                <div class="standard-li-display">
+                    <a class="list-link" href="flashcard.html?id=${bunch.id}">
+                        <h3>${bunch.title}</h3> 
+                        <div>${bunch.numTerms} Terms</div>  
+                    </a>
                     <div class="li-edit-icons-container">
                         <a class="btn delete-btn"  bunch-title="${bunch.title}">
                             <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 7h-1v-1c0-1.104-.896-2-2-2h-7c-1.104 0-2 .896-2 2v1h-1c-.552 0-1 .448-1 1s.448 1 1 1v8c0 2.206 1.794 4 4 4h5c2.206 0 4-1.794 4-4v-8c.552 0 1-.448 1-1s-.448-1-1-1zm-10-1h7v1h-7v-1zm8 11c0 1.104-.896 2-2 2h-5c-1.104 0-2-.896-2-2v-8h9v8zM8.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM10.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM12.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM14.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5z"/></svg>
@@ -418,7 +422,7 @@ function generateList(bunchList) {
                             <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M21.561 5.318l-2.879-2.879c-.293-.293-.677-.439-1.061-.439-.385 0-.768.146-1.061.439l-3.56 3.561h-9c-.552 0-1 .447-1 1v13c0 .553.448 1 1 1h13c.552 0 1-.447 1-1v-9l3.561-3.561c.293-.293.439-.677.439-1.061s-.146-.767-.439-1.06zm-10.061 9.354l-2.172-2.172 6.293-6.293 2.172 2.172-6.293 6.293zm-2.561-1.339l1.756 1.728-1.695-.061-.061-1.667zm7.061 5.667h-11v-11h6l-3.18 3.18c-.293.293-.478.812-.629 1.289-.16.5-.191 1.056-.191 1.47v3.061h3.061c.414 0 1.108-.1 1.571-.29.464-.19.896-.347 1.188-.64l3.18-3.07v6zm2.5-11.328l-2.172-2.172 1.293-1.293 2.171 2.172-1.292 1.293z"/></svg>
                         </a>
                     </div>
-                </a>
+                </div>
                 <div class="li-delete-menu undisplay">
                     <h3>Are you sure you want to delete this bunch?</h3>
                     <div class="li-delete-btns-container">
@@ -441,27 +445,34 @@ function generateList(bunchList) {
 function deleteBunchList(e) {
     const parentLI = e.target.closest(".li-bunch");
     parentLI.querySelector(".li-delete-menu").classList.remove("undisplay");
-    parentLI.querySelector(".list-link").classList.add("undisplay");
-    e.target
-        .closest(".li-bunch")
+    parentLI.querySelector(".standard-li-display").classList.add("undisplay");
+    parentLI
         .querySelector(".li-yes-delete")
         .addEventListener("click", yesDeleteList);
-    e.target
-        .closest(".li-bunch")
+    parentLI
         .querySelector(".li-no-delete")
         .addEventListener("click", noDeleteList);
 }
 
 function yesDeleteList(e) {
-    const bunchID1 = e.target.closest(".li-bunch").getAttribute("bunch-id");
-    ipcRenderer.send("bunch:delete", bunchID1);
-    ipcRenderer.send("bunchdata:get");
+    const bunchID = e.target.closest(".li-bunch").getAttribute("bunch-id");
+    ipcRenderer.send("bunch:delete", bunchID);
+    ipcRenderer.send("bunchdata:get"); //TODO page should not be "reloaded" for 1 bunch delete
+    //dont have to deal with display/undisplay bc page is reloaded
 }
 
 function noDeleteList(e) {
     const parentLI = e.target.closest(".li-bunch");
     parentLI.querySelector(".li-delete-menu").classList.add("undisplay");
-    parentLI.querySelector(".list-link").classList.remove("undisplay");
+    parentLI
+        .querySelector(".standard-li-display")
+        .classList.remove("undisplay");
+    parentLI
+        .querySelector(".li-no-delete")
+        .removeEventListener("click", noDeleteList);
+    parentLI
+        .querySelector(".li-yes-delete")
+        .addEventListener("click", yesDeleteList);
 }
 
 function styleHomepage() {

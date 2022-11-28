@@ -61,6 +61,16 @@ a {
   flex-direction: row;
   position: relative;
   align-items: center;
+  justify-content: center;
+}
+.main-list .li-bunch .standard-li-display {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  align-items: center;
 }
 .main-list .li-bunch h3 {
   -ms-word-break: break-all;
@@ -168,11 +178,22 @@ a {
   background: var(--btn-hover, #9da5a9);
 }
 
-#li-delete-menu {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: green;
+.li-delete-menu {
+  text-align: center;
+}
+.li-delete-menu h3 {
+  font-size: 17px;
+}
+.li-delete-menu button {
+  background: none;
+  border: solid 2px var(--highlight, #393e41);
+  border-radius: 3px;
+  width: 10%;
+  padding: 1px 1.3px;
+}
+.li-delete-menu button:hover {
+  cursor: pointer;
+  background: var(--btn-hover, #9da5a9);
 }
 
 #settings-btn {
@@ -354,7 +375,7 @@ a {
 }
 
 .undisplay {
-  display: none;
+  display: none !important;
 }
 
 .no-bunches-hex-content {

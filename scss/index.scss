@@ -74,6 +74,17 @@ a {
         flex-direction: row;
         position: relative;
         align-items: center;
+        justify-content: center;
+
+        .standard-li-display {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            position: relative;
+            align-items: center;
+        }
 
         h3 {
             -ms-word-break: break-all;
@@ -200,11 +211,23 @@ a {
     }
 }
 
-#li-delete-menu {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: green;
+.li-delete-menu {
+    text-align: center;
+    h3 {
+        font-size: 17px;
+    }
+
+    button {
+        &:hover {
+            cursor: pointer;
+            background: var(--btn-hover, $btn-hover);
+        }
+        background: none;
+        border: solid 2px var(--highlight, $highlight);
+        border-radius: 3px;
+        width: 10%;
+        padding: 1px 1.3px;
+    }
 }
 
 //These values are all dif on the horizontal bc the svgs r centered weird
@@ -446,7 +469,7 @@ a {
 }
 
 .undisplay {
-    display: none;
+    display: none !important;
 }
 
 //Stuff for when there are no bunches
