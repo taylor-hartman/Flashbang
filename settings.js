@@ -31,7 +31,7 @@ class Settings {
             homeStyle: "hexagon",
         };
 
-        this.data = parseDataFile(this.path, this.defaults);
+        this.data = this.parseDataFile();
 
         //create file if dne
         if (!fs.existsSync(this.path)) {
@@ -60,13 +60,31 @@ class Settings {
         this.data = JSON.parse(JSON.stringify(this.defaults));
         fs.writeFileSync(this.path, JSON.stringify(this.data));
     }
-}
 
-function parseDataFile(filePath, defaults) {
-    try {
-        return JSON.parse(fs.readFileSync(filePath));
-    } catch (err) {
-        return defaults;
+    parseDataFile() {
+        try {
+            const fileData = JSON.parse(fs.readFileSync(this.path));
+            const data = this.fillNull(fileData);
+            return data;
+        } catch (err) {
+            return this.defaults;
+        }
+    }
+
+    fillNull(data) {
+        let set = false;
+        for (const [key, value] of Object.entries(this.defaults)) {
+            if (data[key] == null) {
+                //make sure no values are set to null
+                data[key] = value; //if null set to default
+                set = true;
+            }
+        }
+        if (set) {
+            //if a value was set save it to file
+            this.setAll(data);
+        }
+        return data;
     }
 }
 
