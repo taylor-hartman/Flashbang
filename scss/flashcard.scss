@@ -238,6 +238,14 @@ a {
         flex-direction: column;
     }
 
+    #prompt {
+        -ms-word-break: break-word;
+        word-break: break-word;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        hyphens: auto;
+    }
+
     #pinyin-container {
         width: 83%;
         height: 0;
@@ -332,6 +340,11 @@ a {
 
     #answer {
         max-width: 100%;
+        -ms-word-break: break-word;
+        word-break: break-word;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        hyphens: auto;
     }
 
     .typed-answer {
