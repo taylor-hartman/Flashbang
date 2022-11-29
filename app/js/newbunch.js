@@ -15,32 +15,6 @@ accesedFrom = parsedQuery.from; //page where the edit button was hit
 
 const editing = id !== ".new_bunch"; //true if editing; false if new bunch
 
-//#region IPC
-/* -------------------------------------------------------------------------- */
-/*                                  IPC                                       */
-/* -------------------------------------------------------------------------- */
-
-ipcRenderer.send("bunch:getAll", id);
-
-ipcRenderer.on("bunch:getAll", (e, bunch) => {
-    pairs = JSON.parse(JSON.stringify(bunch.pairs));
-    pairOrder = JSON.parse(JSON.stringify(bunch.pairOrder));
-    questionType = JSON.parse(JSON.stringify(bunch.questionType));
-    document.getElementById("title-input").value = bunch.title;
-    if (pairs.length < 3) {
-        const lenHolder = pairs.length;
-        for (x = 0; x < 3 - lenHolder; x++) {
-            pairs.push({ prompt: "", answer: "" });
-        }
-    }
-
-    document.getElementById("prompt-lang").value = bunch.promptLang;
-    document.getElementById("answer-lang").value = bunch.answerLang;
-
-    generatePairsHTML();
-});
-//#endregion
-
 //#region Event Handlers
 /* -------------------------------------------------------------------------- */
 /*                               Event Handlers                               */
@@ -799,5 +773,32 @@ function autoSave() {
     setTimeout(autoSave, 60000); //save every minute
 }
 setTimeout(autoSave, 60000); //initial call
+//#endregion
 
+//#region IPC
+/* -------------------------------------------------------------------------- */
+/*                                  IPC                                       */
+/* -------------------------------------------------------------------------- */
+
+//this needs to be down here otherwise calls are not generated correctly
+//i think this is because the ipc request comes in and calls genpairs html, before eveything is ready?
+ipcRenderer.send("bunch:getAll", id);
+
+ipcRenderer.on("bunch:getAll", (e, bunch) => {
+    pairs = JSON.parse(JSON.stringify(bunch.pairs));
+    pairOrder = JSON.parse(JSON.stringify(bunch.pairOrder));
+    questionType = JSON.parse(JSON.stringify(bunch.questionType));
+    document.getElementById("title-input").value = bunch.title;
+    if (pairs.length < 3) {
+        const lenHolder = pairs.length;
+        for (x = 0; x < 3 - lenHolder; x++) {
+            pairs.push({ prompt: "", answer: "" });
+        }
+    }
+
+    document.getElementById("prompt-lang").value = bunch.promptLang;
+    document.getElementById("answer-lang").value = bunch.answerLang;
+
+    generatePairsHTML();
+});
 //#endregion
