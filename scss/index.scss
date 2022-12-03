@@ -79,14 +79,17 @@ a {
             width: 100%;
             height: 100%;
             position: relative;
-            display: flex;
-            flex-direction: row;
             position: relative;
-            align-items: center;
             padding: 1px 5px;
+            display: inline-block;
+
             &:hover {
                 cursor: pointer;
                 background: var(--btn-hover, $btn-hover);
+            }
+
+            .li-content {
+                width: 88%;
             }
         }
 
@@ -96,10 +99,6 @@ a {
             -webkit-hyphens: auto;
             -moz-hyphens: auto;
             hyphens: auto;
-        }
-
-        .list-link {
-            width: 88%;
         }
 
         .li-edit-icons-container {

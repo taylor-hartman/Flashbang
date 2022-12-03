@@ -66,15 +66,16 @@ a {
   width: 100%;
   height: 100%;
   position: relative;
-  display: flex;
-  flex-direction: row;
   position: relative;
-  align-items: center;
   padding: 1px 5px;
+  display: inline-block;
 }
 .main-list .li-bunch .standard-li-display:hover {
   cursor: pointer;
   background: var(--btn-hover, #9da5a9);
+}
+.main-list .li-bunch .standard-li-display .li-content {
+  width: 88%;
 }
 .main-list .li-bunch h3 {
   -ms-word-break: break-word;
@@ -82,9 +83,6 @@ a {
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
   hyphens: auto;
-}
-.main-list .li-bunch .list-link {
-  width: 88%;
 }
 .main-list .li-bunch .li-edit-icons-container {
   display: flex;
