@@ -56,7 +56,6 @@ a {
   border: solid 2px var(--highlight, #393e41);
   border-radius: 3px;
   margin: 3px 0;
-  padding: 1px 5px;
   display: flex;
   flex-direction: row;
   position: relative;
@@ -71,6 +70,11 @@ a {
   flex-direction: row;
   position: relative;
   align-items: center;
+  padding: 1px 5px;
+}
+.main-list .li-bunch .standard-li-display:hover {
+  cursor: pointer;
+  background: var(--btn-hover, #9da5a9);
 }
 .main-list .li-bunch h3 {
   -ms-word-break: break-word;
@@ -180,6 +184,15 @@ a {
 
 .li-delete-menu {
   text-align: center;
+  padding: 1px 5px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .li-delete-menu h3 {
   font-size: 17px;
@@ -188,7 +201,7 @@ a {
   background: none;
   border: solid 2px var(--highlight, #393e41);
   border-radius: 3px;
-  width: 10%;
+  width: 50px;
   padding: 1px 1.3px;
 }
 .li-delete-menu button:hover {

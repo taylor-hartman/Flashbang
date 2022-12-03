@@ -74,7 +74,7 @@ class Settings {
     fillNull(data) {
         let set = false;
         for (const [key, value] of Object.entries(this.defaults)) {
-            if (data[key] == null) {
+            if (data[key] == null || data[key] == undefined) {
                 //make sure no values are set to null
                 data[key] = value; //if null set to default
                 set = true;
