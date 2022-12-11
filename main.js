@@ -14,9 +14,9 @@ process.env.NODE_ENV = app.commandLine.hasSwitch("dev")
     ? "development"
     : "production";
 
-const hardCodedDevFlag = true;
-const isDev =
-    process.env.NODE_ENV !== "production" || hardCodedDevFlag ? true : false;
+//npm start runs without dev flag
+//npm run dev runs with dev flag
+const isDev = process.env.NODE_ENV !== "production" ? true : false;
 const isMac = process.platform === "darwin" ? true : false;
 
 let mainWindow;
