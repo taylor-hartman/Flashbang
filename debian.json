@@ -2,5 +2,10 @@
     "dest": "release-builds/",
     "icon": "icons/1024x1024.png",
     "categories": ["Education"],
-    "lintianOverrides": ["changelog-file-missing-in-native-package"]
+    "lintianOverrides": ["changelog-file-missing-in-native-package"],
+    "options.version": "1.2.0",
+    "options.description": "free and open source flashcard app",
+    "options.homepage": "https://flashbang.lol",
+    "options.icon": "icons/1024x1024.png",
+    "options.productDescription": "flashbang provides users a clean and convenient way to study flashcard, typed, true/false, and multiple choice questions."
 }
