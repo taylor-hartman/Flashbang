@@ -544,3 +544,47 @@ a {
         }
     }
 }
+
+// #update-summary {
+//     width: 100vw;
+//     height: 100vh;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     z-index: 10;
+//     #update-menu {
+//         width: 90vw;
+//         height: 65vh;
+//         background: var(--background);
+//         border: solid 2px var(--highlight, $highlight);
+//         border-radius: 3px;
+//         padding: 5px;
+//         display: flex;
+//         align-items: center;
+//         justify-content: space-around;
+//         flex-direction: column;
+//         ul {
+//             li {
+//                 display: list-item;
+//                 list-style-type: circle;
+//                 list-style-position: inside;
+//             }
+//         }
+//         button {
+//             width: 60px;
+//             height: 35px;
+//             font-size: 20px;
+//             background: none;
+//             border: solid 2px var(--highlight, $highlight);
+//             border-radius: 3px;
+//             padding: 5px 5px;
+//             &:hover {
+//                 cursor: pointer;
+//                 background: var(--btn-hover, $btn-hover);
+//             }
+//         }
+//     }
+// }

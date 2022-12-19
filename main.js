@@ -83,7 +83,7 @@ app.on("ready", () => {
 
     mainWindow.webContents.once("dom-ready", () => {
         try {
-            const currentVersion = 1.1; //the version of this release
+            const currentVersion = 1.2; //the version of this release
             fetch("https://flashbang.lol/version-info.json")
                 .then((res) => res.text())
                 .then((body) => {
