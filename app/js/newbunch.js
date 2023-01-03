@@ -432,20 +432,38 @@ document.getElementById("info-icon").addEventListener("mouseleave", () => {
 var importTimeout;
 function parseImport() {
     try {
-        const termSeparatorInput = document.getElementById("btwn-term");
-        const pairSeparatorInput = document.getElementById("btwn-pair");
+        var termSeparatorInput = document.getElementById("btwn-term");
+        var pairSeparatorInput = document.getElementById("btwn-pair");
 
         var termSeparator =
             termSeparatorInput.value == "" ? "-" : termSeparatorInput.value;
         var pairSeparator =
-            pairSeparatorInput.value == "" ? "\n" : pairSeparatorInput.value;
+            pairSeparatorInput.value == "" ? ";" : pairSeparatorInput.value;
 
         termSeparator = termSeparator == "\\n" ? "\n" : termSeparator;
         pairSeparator = pairSeparator == "\\n" ? "\n" : pairSeparator; //translate from string \n to new line
 
+        console.log(pairSeparator);
+        console.log(termSeparator);
+
         const importVals = document.getElementById("import-text").value.trim();
-        const pairsStrings = importVals.split(pairSeparator);
-        const importPairs = [];
+
+        let pairsStrings = importVals.split(pairSeparator);
+        let importPairs = [];
+
+        //removes new lines from inside each pair if /n is not separator
+        if (termSeparator != "\n") {
+            for (x = 0; x < pairsStrings.length; x++) {
+                pairsStrings[x] = pairsStrings[x].replace(/\n|\r/g, " ");
+            }
+        }
+
+        if (pairsStrings[pairsStrings.length - 1] == "") {
+            //if last elem is blank (occurs when sepeartor is the last char of input)
+            console.log("last rm");
+            pairsStrings.splice(-1, 1); //remove last elem
+        }
+
         for (x = 0; x < pairsStrings.length; x++) {
             const pairArray = pairsStrings[x].split(termSeparator);
             const pair = {};
