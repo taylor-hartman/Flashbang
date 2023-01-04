@@ -165,6 +165,13 @@ document.getElementById("home-style").addEventListener("change", () => {
     });
 });
 
+document.getElementById("update-notif").addEventListener("change", () => {
+    ipcRenderer.send("globalSettings:set", {
+        key: "updateNotif",
+        value: document.getElementById("update-notif").checked,
+    });
+});
+
 document.getElementById("reset-btn").addEventListener("click", () => {
     ipcRenderer.send("globalSettings:resetDefaults");
 });
@@ -194,6 +201,6 @@ ipcRenderer.on("globalSettings:getAll", (e, settings) => {
     //----Homepage----
     document.getElementById("sort-home-by").value = settings.sortHomeBy;
     document.getElementById("home-style").value = settings.homeStyle;
-
+    document.getElementById("update-notif").checked = settings.updateNotif;
     // document.getElementById("animate-pages").checked = settings.animatePages;
 });

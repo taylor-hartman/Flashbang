@@ -29,6 +29,7 @@ class Settings {
             ignoreCapital: true,
             sortHomeBy: "lastUsed",
             homeStyle: "hexagon",
+            updateNotif: true,
         };
 
         this.data = this.parseDataFile();

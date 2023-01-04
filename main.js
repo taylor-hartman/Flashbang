@@ -82,18 +82,26 @@ app.on("ready", () => {
     Menu.setApplicationMenu(mainMenu);
 
     mainWindow.webContents.once("dom-ready", () => {
-        try {
-            const currentVersion = 1.2; //the version of this release
-            fetch("https://flashbang.lol/version-info.json")
-                .then((res) => res.text())
-                .then((body) => {
-                    const info = JSON.parse(body);
-                    const latestVersion = parseFloat(info["latest-version"]);
-                    if (latestVersion > currentVersion) {
-                        mainWindow.webContents.send("index:showUpdateAlert");
-                    }
-                });
-        } catch {}
+        //check for update
+        if (globalSettings.get("updateNotif")) {
+            //if notifications are turned off no external request is made
+            try {
+                const currentVersion = 1.1; //the version of this release
+                fetch("https://flashbang.lol/version-info.json")
+                    .then((res) => res.text())
+                    .then((body) => {
+                        const info = JSON.parse(body);
+                        const latestVersion = parseFloat(
+                            info["latest-version"]
+                        );
+                        if (latestVersion > currentVersion) {
+                            mainWindow.webContents.send(
+                                "index:showUpdateAlert"
+                            );
+                        }
+                    });
+            } catch {}
+        }
     });
 });
 
