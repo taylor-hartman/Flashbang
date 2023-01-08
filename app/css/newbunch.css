@@ -310,6 +310,9 @@ form {
 #export-menu textarea:focus {
   outline: none;
 }
+#export-menu #export-label {
+  margin-bottom: 0.75rem;
+}
 #export-menu #export-text {
   width: 80%;
   height: 60%;

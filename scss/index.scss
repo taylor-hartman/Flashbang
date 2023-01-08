@@ -89,7 +89,7 @@ a {
             }
 
             .li-content {
-                width: 88%;
+                width: 85%;
             }
         }
 
@@ -105,6 +105,8 @@ a {
             display: flex;
             flex-direction: row;
             position: absolute;
+            align-items: center;
+            justify-content: space-between;
             right: 5px;
         }
     }
@@ -159,11 +161,12 @@ a {
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
     position: absolute;
-    bottom: calc(25% - 20px);
+    bottom: calc(25% - 18px);
 
     a {
-        margin: 0 3.9px;
+        // margin: 0 3.9px;
     }
 }
 
@@ -544,6 +547,78 @@ a {
         }
     }
 }
+
+//----------Checkbox Stuff----------
+/* The container */
+.checkbox-container {
+    display: block;
+    position: relative;
+    width: 19px;
+    height: 19px;
+    cursor: pointer;
+    margin-right: 2px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 19px;
+    width: 19px;
+    // background-color: var(--highlight, $highlight);
+    border: solid 2px var(--highlight, $highlight);
+    border-radius: 3px;
+}
+
+// On mouse-over
+// .checkbox-container:hover input ~ .checkmark {
+//     background-color: var(--btn-hover, $btn-hover);
+// }
+
+// //When the checkbox is checked
+// .checkbox-container input:checked ~ .checkmark {
+//     background-color: var(--highlight, $highlight);
+// }
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+    left: 0.22rem;
+    top: 0.06rem;
+    width: 0.24rem;
+    height: 0.48rem;
+    border: solid var(--highlight, $highlight);
+    border-width: 0 0.2rem 0.2rem 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+//-----------end checkbox stuff-------------
 
 // #update-summary {
 //     width: 100vw;
