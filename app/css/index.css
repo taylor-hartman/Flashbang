@@ -75,7 +75,7 @@ a {
   background: var(--btn-hover, #9da5a9);
 }
 .main-list .li-bunch .standard-li-display .li-content {
-  width: 85%;
+  width: 83%;
 }
 .main-list .li-bunch h3 {
   -ms-word-break: break-word;
@@ -142,6 +142,27 @@ a {
 }
 .delete-btn svg {
   pointer-events: none;
+}
+
+#mega-bunch-menu {
+  position: absolute;
+  width: 80%;
+  left: 10%;
+  text-align: center;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#mega-bunch-menu a {
+  border: 2px solid var(--highlight, #393e41);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+#mega-bunch-menu a:hover {
+  cursor: pointer;
+  background: var(--btn-hover, #9da5a9);
 }
 
 #delete-menu {
@@ -443,21 +464,28 @@ a {
 }
 
 /* The container */
-.checkbox-container {
+.mega-bunch-checkbox-container {
   display: block;
   position: relative;
   width: 19px;
   height: 19px;
   cursor: pointer;
-  margin-right: 2px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
+.li-check-box-container {
+  margin-right: 6px;
+}
+
+.hex-check-box-container {
+  margin-right: 3px;
+}
+
 /* Hide the browser's default checkbox */
-.checkbox-container input {
+.mega-bunch-checkbox-container input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -484,12 +512,12 @@ a {
 }
 
 /* Show the checkmark when checked */
-.checkbox-container input:checked ~ .checkmark:after {
+.mega-bunch-checkbox-container input:checked ~ .checkmark:after {
   display: block;
 }
 
 /* Style the checkmark/indicator */
-.checkbox-container .checkmark:after {
+.mega-bunch-checkbox-container .checkmark:after {
   left: 0.22rem;
   top: 0.06rem;
   width: 0.24rem;

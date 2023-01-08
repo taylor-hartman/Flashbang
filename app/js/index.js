@@ -45,8 +45,13 @@ function deleteBunch(e) {
     deleteMenuText.innerText = `Do you really want to delete "${fileTitle}"?`;
 
     document.getElementById("delete-menu").classList.remove("hide");
-    // document.getElementById("no-delete").classList.remove("hide");
-    // document.getElementById("yes-delete").classList.remove("hide");
+    document.getElementById("mega-bunch-menu").classList.add("hide");
+    const megaBunchChecks = document.getElementsByClassName(
+        "mega-bunch-checkbox"
+    );
+    for (x = 0; x < megaBunchChecks.length; x++) {
+        megaBunchChecks[x].checked = false;
+    }
 }
 
 document.getElementById("yes-delete").addEventListener("click", () => {
@@ -246,8 +251,8 @@ function generateHexs(num) {
                 <a class="btn delete-btn">
                     <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 7h-1v-1c0-1.104-.896-2-2-2h-7c-1.104 0-2 .896-2 2v1h-1c-.552 0-1 .448-1 1s.448 1 1 1v8c0 2.206 1.794 4 4 4h5c2.206 0 4-1.794 4-4v-8c.552 0 1-.448 1-1s-.448-1-1-1zm-10-1h7v1h-7v-1zm8 11c0 1.104-.896 2-2 2h-5c-1.104 0-2-.896-2-2v-8h9v8zM8.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM10.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM12.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM14.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5z"/></svg>
                 </a>
-                <label class="checkbox-container">
-                        <input type="checkbox" id="penalize-incorrect" />
+                <label class="mega-bunch-checkbox-container hex-check-box-container">
+                        <input type="checkbox" class="mega-bunch-checkbox"/>
                         <span class="checkmark"></span>
                 </label>
                 <a class="btn edit-btn">
@@ -363,7 +368,7 @@ function populateHexs(input) {
 function insertElement(row, index, bunch) {
     const rows = document.getElementsByClassName("hex-row");
     //Row 0 for top, 1 for bottom
-    //index from 0 to 3 for top, from 0 to 3 for bottom
+    //index from 0 to 3 for top, from 0 to 2 for bottom
     //inserts titles
     rows[row]
         .getElementsByClassName("hex-content")
@@ -381,6 +386,10 @@ function insertElement(row, index, bunch) {
         .getElementsByClassName("edit-icons-container")
         [index].querySelector(".edit-btn")
         .setAttribute("href", `newbunch.html?id=${bunch.id}`);
+    rows[row]
+        .getElementsByClassName("edit-icons-container")
+        [index].querySelector(".mega-bunch-checkbox")
+        .setAttribute("bunch-id", `${bunch.id}`);
     //add delete strings
     rows[row]
         .getElementsByClassName("edit-icons-container")
@@ -422,15 +431,15 @@ function generateList(bunchList) {
                     </div>
                 </a>
                 <div class="li-edit-icons-container">
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="penalize-incorrect" />
+                    <label class="mega-bunch-checkbox-container li-check-box-container">
+                        <input type="checkbox" class="mega-bunch-checkbox" bunch-id="${bunch.id}"/>
                         <span class="checkmark"></span>
                     </label>
-                    <a class="btn delete-btn"  bunch-title="${bunch.title}">
-                        <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 7h-1v-1c0-1.104-.896-2-2-2h-7c-1.104 0-2 .896-2 2v1h-1c-.552 0-1 .448-1 1s.448 1 1 1v8c0 2.206 1.794 4 4 4h5c2.206 0 4-1.794 4-4v-8c.552 0 1-.448 1-1s-.448-1-1-1zm-10-1h7v1h-7v-1zm8 11c0 1.104-.896 2-2 2h-5c-1.104 0-2-.896-2-2v-8h9v8zM8.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM10.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM12.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM14.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5z"/></svg>
-                    </a>
                     <a class="btn edit-btn" href="newbunch.html?id=${bunch.id}">
                         <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M21.561 5.318l-2.879-2.879c-.293-.293-.677-.439-1.061-.439-.385 0-.768.146-1.061.439l-3.56 3.561h-9c-.552 0-1 .447-1 1v13c0 .553.448 1 1 1h13c.552 0 1-.447 1-1v-9l3.561-3.561c.293-.293.439-.677.439-1.061s-.146-.767-.439-1.06zm-10.061 9.354l-2.172-2.172 6.293-6.293 2.172 2.172-6.293 6.293zm-2.561-1.339l1.756 1.728-1.695-.061-.061-1.667zm7.061 5.667h-11v-11h6l-3.18 3.18c-.293.293-.478.812-.629 1.289-.16.5-.191 1.056-.191 1.47v3.061h3.061c.414 0 1.108-.1 1.571-.29.464-.19.896-.347 1.188-.64l3.18-3.07v6zm2.5-11.328l-2.172-2.172 1.293-1.293 2.171 2.172-1.292 1.293z"/></svg>
+                    </a>
+                    <a class="btn delete-btn" bunch-title="${bunch.title}">
+                        <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 7h-1v-1c0-1.104-.896-2-2-2h-7c-1.104 0-2 .896-2 2v1h-1c-.552 0-1 .448-1 1s.448 1 1 1v8c0 2.206 1.794 4 4 4h5c2.206 0 4-1.794 4-4v-8c.552 0 1-.448 1-1s-.448-1-1-1zm-10-1h7v1h-7v-1zm8 11c0 1.104-.896 2-2 2h-5c-1.104 0-2-.896-2-2v-8h9v8zM8.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM10.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM12.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM14.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5z"/></svg>
                     </a>
                 </div>
                 <div class="li-delete-menu undisplay">
@@ -449,6 +458,13 @@ function generateList(bunchList) {
         for (x = 0; x < deleteBtns.length; x++) {
             deleteBtns[x].addEventListener("click", deleteBunchList);
         }
+
+        const megaBunchChecks = document.getElementsByClassName(
+            "mega-bunch-checkbox"
+        );
+        for (x = 0; x < megaBunchChecks.length; x++) {
+            megaBunchChecks[x].addEventListener("change", megaBunchProcess);
+        }
     }
 }
 
@@ -461,6 +477,14 @@ function deleteBunchList(e) {
     parentLI
         .querySelector(".li-no-delete")
         .addEventListener("click", noDeleteList);
+
+    document.getElementById("mega-bunch-menu").classList.add("hide");
+    const megaBunchChecks = document.getElementsByClassName(
+        "mega-bunch-checkbox"
+    );
+    for (x = 0; x < megaBunchChecks.length; x++) {
+        megaBunchChecks[x].checked = false;
+    }
 }
 
 function yesDeleteList(e) {
@@ -492,6 +516,31 @@ function styleHomepage() {
 
 //#endregion
 
+//#region Mega Bunch
+/* -------------------------------------------------------------------------- */
+/*                               Mega Bunch                                   */
+/* -------------------------------------------------------------------------- */
+function megaBunchProcess() {
+    const megaBunchChecks = document.getElementsByClassName(
+        "mega-bunch-checkbox"
+    );
+    const bunchIDs = [];
+    for (x = 0; x < megaBunchChecks.length; x++) {
+        if (megaBunchChecks[x].checked) {
+            bunchIDs.push(megaBunchChecks[x].getAttribute("bunch-id"));
+        }
+    }
+
+    if (bunchIDs.length > 1) {
+        document.getElementById("mega-bunch-menu").classList.remove("hide");
+        document.getElementById("delete-menu").classList.add("hide");
+    } else {
+        document.getElementById("mega-bunch-menu").classList.add("hide");
+    }
+}
+
+//#endregion
+
 //#region Button Management
 /* -------------------------------------------------------------------------- */
 /*                              Button Management                             */
@@ -508,6 +557,10 @@ function updateEditIcons() {
             iconContainers[x]
                 .getElementsByClassName("delete-btn")[0]
                 .addEventListener("click", deleteBunch);
+
+            iconContainers[x]
+                .getElementsByClassName("mega-bunch-checkbox")[0]
+                .addEventListener("change", megaBunchProcess);
         }
     } else {
         for (x = 0; x < iconContainers.length; x++) {
