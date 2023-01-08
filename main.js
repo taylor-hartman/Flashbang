@@ -86,7 +86,7 @@ app.on("ready", () => {
         if (globalSettings.get("updateNotif")) {
             //if notifications are turned off no external request is made
             try {
-                const currentVersion = 1.1; //the version of this release
+                const currentVersion = 1.2; //the version of this release
                 fetch("https://flashbang.lol/version-info.json")
                     .then((res) => res.text())
                     .then((body) => {

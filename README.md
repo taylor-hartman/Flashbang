@@ -29,10 +29,10 @@
     <img src="icons/icon.ico" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Flashbang</h3>
+  <h3 align="center">flashbang</h3>
 
   <p align="center">
-    <strong>Review your flashcards in style.</strong>
+    <strong>a free and open source flashcard app</strong>
     <br />
     <br />
     Available for Windows, macOS, and Linux
@@ -66,18 +66,18 @@
 
 ![Flashbang Screenshot](assets/flashbang-showcase.png)
 
-Flashbang is a free flashcard app that helps you memorize in style.
-
 Some Features Include:
 
 -   Minimalistic Flashcard Reviewing
 -   Typing and Test Modes for Flashcard sets
 -   Easy Importing
--   Speech Synthesis for Cards
+-   Speech Synthesis
+
+More features and screenshots can be found <a href="https://flashbang.lol/features.html">here</a>.
 
 ## Installation
 
-Simply download Flashbang for your operating system from the <a href="https://flashbang.lol/">official site.</a>
+Simply download Flashbang for your operating system from the <a href="https://flashbang.lol/">official site</a>.
 
 <!-- GETTING STARTED -->
 
@@ -130,15 +130,19 @@ To package as .deb after build, run:
 
 ## Usage
 
-### Creating a Set of Flashcards
+### Creating a bunch of Flashcards
 
-Simply click the plus icon in the upper left to create a new set.
+Simply click the plus icon in the upper left to create a new bunch.
 <img src="internal_icons/plus.svg" alt="Plus Icon" width="20" height="20">
 
-### Editing an existing Set
+### Editing an existing bunch
 
 Simply click the pencil icon in the lower left to enable editing mode.
 <img src="internal_icons/edit.svg" alt="Edit Icon" width="20" height="20">
+
+### Importing
+
+Navigate to the new bunch menu using the <img src="internal_icons/plus.svg" alt="Plus Icon" width="20" height="20"> icon. Then click the <img src="internal_icons/import.svg" alt="Import Icon" width="20" height="20"> icon in the top right corner. Once in the import menu, paste the data you want to import, provide the appropriate separators, and click "Import".
 
 <!-- CONTRIBUTING -->
 
