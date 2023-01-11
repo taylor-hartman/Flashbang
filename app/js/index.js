@@ -45,7 +45,8 @@ function deleteBunch(e) {
     deleteMenuText.innerText = `Do you really want to delete "${fileTitle}"?`;
 
     document.getElementById("delete-menu").classList.remove("hide");
-    document.getElementById("mega-bunch-menu").classList.add("hide");
+    document.getElementById("study-together-btn").classList.add("undisplay");
+    document.getElementById("add-to-folder-btn").classList.add("undisplay");
     const megaBunchChecks = document.getElementsByClassName(
         "mega-bunch-checkbox"
     );
@@ -478,7 +479,8 @@ function deleteBunchList(e) {
         .querySelector(".li-no-delete")
         .addEventListener("click", noDeleteList);
 
-    document.getElementById("mega-bunch-menu").classList.add("hide");
+    document.getElementById("study-together-btn").classList.add("undisplay");
+    document.getElementById("add-to-folder-btn").classList.add("undisplay");
     const megaBunchChecks = document.getElementsByClassName(
         "mega-bunch-checkbox"
     );
@@ -532,10 +534,16 @@ function megaBunchProcess() {
     }
 
     if (bunchIDs.length > 1) {
-        document.getElementById("mega-bunch-menu").classList.remove("hide");
+        document.getElementById("study-together-btn").classList.remove("undisplay");
+        document.getElementById("add-to-folder-btn").classList.remove("undisplay");
+        document.getElementById("delete-menu").classList.add("hide");
+    } else if (bunchIDs.length > 0){
+        document.getElementById("study-together-btn").classList.add("undisplay");
+        document.getElementById("add-to-folder-btn").classList.remove("undisplay");
         document.getElementById("delete-menu").classList.add("hide");
     } else {
-        document.getElementById("mega-bunch-menu").classList.add("hide");
+        document.getElementById("study-together-btn").classList.add("undisplay");
+        document.getElementById("add-to-folder-btn").classList.add("undisplay");
     }
 }
 

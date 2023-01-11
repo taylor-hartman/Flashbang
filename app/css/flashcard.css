@@ -10,6 +10,14 @@ body {
   background: var(--background);
 }
 
+::-moz-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+:-ms-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
 ::placeholder {
   color: var(--placeholder, #697277);
 }
@@ -90,6 +98,8 @@ a {
   top: 30px;
   right: 8px;
   width: 175px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
   height: fit-content;
   border-radius: 3px;
   border: 2px solid var(--highlight, #393e41);
@@ -166,13 +176,21 @@ a {
   height: 6.24px;
   border: solid var(--background, #e7e6e1);
   border-width: 0 2.6px 2.6px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 
 #main-container #answer:not(.hide).animate {
-  animation: 0.25s unhideAnswer ease-out;
+  -webkit-animation: 0.25s unhideAnswer ease-out;
+          animation: 0.25s unhideAnswer ease-out;
+}
+
+@-webkit-keyframes unhideAnswer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes unhideAnswer {
@@ -184,7 +202,17 @@ a {
   }
 }
 #main-separator:not(.hide).animate {
-  animation: 0.5s unhideSeparator ease-out;
+  -webkit-animation: 0.5s unhideSeparator ease-out;
+          animation: 0.5s unhideSeparator ease-out;
+}
+
+@-webkit-keyframes unhideSeparator {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 @keyframes unhideSeparator {
@@ -219,8 +247,8 @@ a {
   -ms-word-break: break-word;
   word-break: break-word;
   -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  hyphens: auto;
+  -ms-hyphens: auto;
+      hyphens: auto;
 }
 #main-container #pinyin-container {
   width: 83%;
@@ -304,8 +332,8 @@ a {
   -ms-word-break: break-word;
   word-break: break-word;
   -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  hyphens: auto;
+  -ms-hyphens: auto;
+      hyphens: auto;
 }
 #main-container .typed-answer {
   width: 100%;
@@ -384,7 +412,9 @@ a {
   font-size: 1rem;
   text-align: center;
   overflow-wrap: break-word;
-  hyphens: auto;
+  -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+          hyphens: auto;
 }
 .test-typed .typed-correct-indicator-conatiner {
   justify-content: start;
@@ -490,7 +520,9 @@ a {
   max-width: 100%;
   text-align: center;
   overflow-wrap: break-word;
-  hyphens: auto;
+  -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+          hyphens: auto;
 }
 
 .incorrect-indicator-container {

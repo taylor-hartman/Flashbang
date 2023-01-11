@@ -189,12 +189,13 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: row;
 
     a {
         border: 2px solid var(--highlight, $highlight);
         padding: 2px 4px;
         border-radius: 3px;
+        margin: 5px;
         &:hover {
             cursor: pointer;
             background: var(--btn-hover, $btn-hover);

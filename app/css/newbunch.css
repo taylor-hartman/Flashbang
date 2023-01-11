@@ -6,6 +6,14 @@
   color: var(--text, #393e41);
 }
 
+::-moz-placeholder {
+  color: var(--placeholder, #697277);
+}
+
+:-ms-input-placeholder {
+  color: var(--placeholder, #697277);
+}
+
 ::placeholder {
   color: var(--placeholder, #697277);
 }
@@ -455,7 +463,5 @@ form {
   height: 0.48rem;
   border: solid var(--background, #e7e6e1);
   border-width: 0 0.2rem 0.2rem 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
