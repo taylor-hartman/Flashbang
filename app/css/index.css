@@ -175,6 +175,48 @@ a {
   background: var(--btn-hover, #9da5a9);
 }
 
+#folder-menu {
+  margin-top: calc(2 * -41.785px / -2);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 75%;
+}
+#folder-menu::-webkit-scrollbar {
+  display: none;
+}
+#folder-menu .folder-menu-li {
+  border: solid 2px var(--highlight, #393e41);
+  border-radius: 3px;
+  margin: 3px 0;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+#folder-menu .folder-menu-li .standard-li-display {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  position: relative;
+  padding: 1px 5px;
+  display: inline-block;
+}
+#folder-menu .folder-menu-li .standard-li-display:hover {
+  cursor: pointer;
+  background: var(--btn-hover, #9da5a9);
+}
+#folder-menu .folder-menu-li .standard-li-display .li-content {
+  width: 100%;
+}
+#folder-menu .folder-menu-li h3 {
+  -ms-word-break: break-word;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+      hyphens: auto;
+}
+
 #delete-menu {
   position: absolute;
   width: 80%;

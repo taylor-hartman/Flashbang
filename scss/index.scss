@@ -1,19 +1,19 @@
 @import "variables";
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: monospace;
-    color: var(--text, $text);
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: monospace;
+	color: var(--text, $text);
 }
 
 html {
-    font-size: 16.9px;
+	font-size: 16.9px;
 }
 
 body {
-    background: var(--background);
+	background: var(--background);
 }
 
 // .titlebar {
@@ -26,129 +26,129 @@ body {
 // }
 
 ::placeholder {
-    color: var(--placeholder, $placeholder);
+	color: var(--placeholder, $placeholder);
 }
 
 svg {
-    fill: var(--highlight, $highlight);
+	fill: var(--highlight, $highlight);
 }
 
 input {
-    background: none;
+	background: none;
 }
 
 a {
-    text-decoration: none;
-    // cursor: default;
+	text-decoration: none;
+	// cursor: default;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .main-container {
-    padding-bottom: calc(2 * #{$hex-row-margin} / -2);
-    width: 100vw;
-    height: 100vh;
+	padding-bottom: calc(2 * #{$hex-row-margin} / -2);
+	width: 100vw;
+	height: 100vh;
 }
 
 .main-list {
-    margin-top: calc(2 * #{$hex-row-margin} / -2);
-    overflow-y: scroll;
-    overflow-x: hidden;
-    width: 75%;
+	margin-top: calc(2 * #{$hex-row-margin} / -2);
+	overflow-y: scroll;
+	overflow-x: hidden;
+	width: 75%;
 
-    &::-webkit-scrollbar {
-        display: none;
-    }
+	&::-webkit-scrollbar {
+		display: none;
+	}
 
-    .li-bunch {
-        border: solid 2px var(--highlight, $highlight);
-        border-radius: 3px;
-        margin: 3px 0;
-        display: flex;
-        flex-direction: row;
-        position: relative;
-        align-items: center;
-        justify-content: center;
+	.li-bunch {
+		border: solid 2px var(--highlight, $highlight);
+		border-radius: 3px;
+		margin: 3px 0;
+		display: flex;
+		flex-direction: row;
+		position: relative;
+		align-items: center;
+		justify-content: center;
 
-        .standard-li-display {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            position: relative;
-            padding: 1px 5px;
-            display: inline-block;
+		.standard-li-display {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			position: relative;
+			padding: 1px 5px;
+			display: inline-block;
 
-            &:hover {
-                cursor: pointer;
-                background: var(--btn-hover, $btn-hover);
-            }
+			&:hover {
+				cursor: pointer;
+				background: var(--btn-hover, $btn-hover);
+			}
 
-            .li-content {
-                width: 83%;
-            }
-        }
+			.li-content {
+				width: 83%;
+			}
+		}
 
-        h3 {
-            -ms-word-break: break-word;
-            word-break: break-word;
-            -webkit-hyphens: auto;
-            -moz-hyphens: auto;
-            hyphens: auto;
-        }
+		h3 {
+			-ms-word-break: break-word;
+			word-break: break-word;
+			-webkit-hyphens: auto;
+			-moz-hyphens: auto;
+			hyphens: auto;
+		}
 
-        .li-edit-icons-container {
-            display: flex;
-            flex-direction: row;
-            position: absolute;
-            align-items: center;
-            justify-content: space-between;
-            right: 5px;
-        }
-    }
+		.li-edit-icons-container {
+			display: flex;
+			flex-direction: row;
+			position: absolute;
+			align-items: center;
+			justify-content: space-between;
+			right: 5px;
+		}
+	}
 }
 
 .list-create-new-bunch {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: solid 2px var(--highlight, $highlight);
-    border-radius: 3px;
-    padding: 5px 5px;
-    &:hover {
-        cursor: pointer;
-        background: var(--btn-hover, $btn-hover);
-    }
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border: solid 2px var(--highlight, $highlight);
+	border-radius: 3px;
+	padding: 5px 5px;
+	&:hover {
+		cursor: pointer;
+		background: var(--btn-hover, $btn-hover);
+	}
 }
 
 .hex-btn {
-    width: $hex-btn-width;
-    height: $hex-btn-width;
-    margin-left: $hex-btn-container-margin; //fixes container being bigger than hexagon
-    margin-right: $hex-btn-container-margin; //fixes container being bigger than hexagon
+	width: $hex-btn-width;
+	height: $hex-btn-width;
+	margin-left: $hex-btn-container-margin; //fixes container being bigger than hexagon
+	margin-right: $hex-btn-container-margin; //fixes container being bigger than hexagon
 
-    .hex-center {
-        top: $border-btn-thickness;
-        left: $border-btn-thickness;
-        width: calc(100% - (#{$border-btn-thickness} * 2));
-        height: calc(100% - (#{$border-btn-thickness} * 2));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+	.hex-center {
+		top: $border-btn-thickness;
+		left: $border-btn-thickness;
+		width: calc(100% - (#{$border-btn-thickness} * 2));
+		height: calc(100% - (#{$border-btn-thickness} * 2));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 }
 
 .btn {
-    svg {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+	svg {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 }
 
 //for baby hex inside big hex can delete
@@ -158,313 +158,361 @@ a {
 // }
 
 .edit-icons-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: calc(25% - 18px);
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	bottom: calc(25% - 18px);
 
-    // a {
-    //     // margin: 0 3.9px;
-    // }
+	// a {
+	//     // margin: 0 3.9px;
+	// }
 }
 
 .delete-btn {
-    &:hover {
-        cursor: pointer;
-    }
-    svg {
-        pointer-events: none;
-    }
+	&:hover {
+		cursor: pointer;
+	}
+	svg {
+		pointer-events: none;
+	}
 }
 
 #mega-bunch-menu {
-    position: absolute;
-    width: 80%;
-    // height: 1%;
-    left: 10%; //centers hortizontally
-    text-align: center;
-    bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
+	position: absolute;
+	width: 80%;
+	// height: 1%;
+	left: 10%; //centers hortizontally
+	text-align: center;
+	bottom: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: row;
 
-    a {
-        border: 2px solid var(--highlight, $highlight);
-        padding: 2px 4px;
-        border-radius: 3px;
-        margin: 5px;
-        &:hover {
-            cursor: pointer;
-            background: var(--btn-hover, $btn-hover);
-        }
-    }
+	a {
+		border: 2px solid var(--highlight, $highlight);
+		padding: 2px 4px;
+		border-radius: 3px;
+		margin: 5px;
+		&:hover {
+			cursor: pointer;
+			background: var(--btn-hover, $btn-hover);
+		}
+	}
+}
+
+#folder-menu {
+	margin-top: calc(2 * #{$hex-row-margin} / -2);
+	overflow-y: scroll;
+	overflow-x: hidden;
+	width: 75%;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+
+	.folder-menu-li {
+		border: solid 2px var(--highlight, $highlight);
+		border-radius: 3px;
+		margin: 3px 0;
+		display: flex;
+		flex-direction: row;
+		position: relative;
+		align-items: center;
+		justify-content: center;
+
+		.standard-li-display {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			position: relative;
+			padding: 1px 5px;
+			display: inline-block;
+
+			&:hover {
+				cursor: pointer;
+				background: var(--btn-hover, $btn-hover);
+			}
+
+			.li-content {
+				width: 100%;
+			}
+		}
+
+		h3 {
+			-ms-word-break: break-word;
+			word-break: break-word;
+			-webkit-hyphens: auto;
+			-moz-hyphens: auto;
+			hyphens: auto;
+		}
+	}
 }
 
 #delete-menu {
-    position: absolute;
-    width: 80%;
-    height: 17%;
-    left: 10%; //centers hortizontally
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+	position: absolute;
+	width: 80%;
+	height: 17%;
+	left: 10%; //centers hortizontally
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 
-    h3 {
-        font-size: 13px;
-        overflow: hidden;
-        text-align: center;
-    }
+	h3 {
+		font-size: 13px;
+		overflow: hidden;
+		text-align: center;
+	}
 
-    #delete-btns-container {
-        margin-top: 1.5vh;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
+	#delete-btns-container {
+		margin-top: 1.5vh;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
 
-        button {
-            &:hover {
-                cursor: pointer;
-                background: var(--btn-hover, $btn-hover);
-            }
-            background: none;
-            border: solid 2px var(--highlight, $highlight);
-            border-radius: 3px;
-            width: 10%;
-            padding: 1.3px;
-        }
-    }
+		button {
+			&:hover {
+				cursor: pointer;
+				background: var(--btn-hover, $btn-hover);
+			}
+			background: none;
+			border: solid 2px var(--highlight, $highlight);
+			border-radius: 3px;
+			width: 10%;
+			padding: 1.3px;
+		}
+	}
 }
 
 .li-delete-menu {
-    text-align: center;
-    padding: 1px 5px;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: var(--background);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+	text-align: center;
+	padding: 1px 5px;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: var(--background);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 
-    h3 {
-        font-size: 17px;
-    }
+	h3 {
+		font-size: 17px;
+	}
 
-    button {
-        &:hover {
-            cursor: pointer;
-            background: var(--btn-hover, $btn-hover);
-        }
-        background: none;
-        border: solid 2px var(--highlight, $highlight);
-        border-radius: 3px;
-        width: 50px;
-        padding: 1px 1.3px;
-    }
+	button {
+		&:hover {
+			cursor: pointer;
+			background: var(--btn-hover, $btn-hover);
+		}
+		background: none;
+		border: solid 2px var(--highlight, $highlight);
+		border-radius: 3px;
+		width: 50px;
+		padding: 1px 1.3px;
+	}
 }
 
 //These values are all dif on the horizontal bc the svgs r centered weird
 #settings-btn {
-    position: absolute;
-    bottom: 5px;
-    right: 8px;
+	position: absolute;
+	bottom: 5px;
+	right: 8px;
 }
 
 #new-bunch-btn {
-    position: absolute;
-    top: 5px;
-    left: 7px;
+	position: absolute;
+	top: 5px;
+	left: 7px;
 }
 
 #edit-bunch-btn {
-    position: absolute;
-    bottom: 5px;
-    left: 10px;
-    &:hover {
-        cursor: pointer;
-    }
+	position: absolute;
+	bottom: 5px;
+	left: 10px;
+	&:hover {
+		cursor: pointer;
+	}
 }
 
 #search-bunch-btn {
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    &:hover {
-        cursor: pointer;
-    }
+	position: absolute;
+	top: 5px;
+	right: 8px;
+	&:hover {
+		cursor: pointer;
+	}
 }
 
 #search-input {
-    position: absolute;
-    top: 8px;
-    right: 34px;
-    text-align: left;
-    padding: 1.3px;
-    min-width: 50px;
-    // border-radius: 20px;
-    width: fit-content;
-    border: none;
-    border-bottom: solid 1px var(--highlight, $highlight);
-    &:focus {
-        outline: none;
-    }
+	position: absolute;
+	top: 8px;
+	right: 34px;
+	text-align: left;
+	padding: 1.3px;
+	min-width: 50px;
+	// border-radius: 20px;
+	width: fit-content;
+	border: none;
+	border-bottom: solid 1px var(--highlight, $highlight);
+	&:focus {
+		outline: none;
+	}
 }
 
 #search-input.hide {
-    animation: 0.25s SearchContract ease-in;
+	animation: 0.25s SearchContract ease-in;
 }
 #search-input:not(.hide) {
-    animation: 0.25s SearchExpand ease-out;
+	animation: 0.25s SearchExpand ease-out;
 }
 #search-input.hide.preload {
-    animation-duration: 0s !important;
+	animation-duration: 0s !important;
 }
 @keyframes SearchExpand {
-    from {
-        transform: scaleX(0);
-        visibility: hidden;
-    }
-    to {
-        transform: scaleX(1);
-        visibility: visible;
-    }
+	from {
+		transform: scaleX(0);
+		visibility: hidden;
+	}
+	to {
+		transform: scaleX(1);
+		visibility: visible;
+	}
 }
 @keyframes SearchContract {
-    from {
-        transform: scaleX(1);
-        visibility: visible;
-    }
-    to {
-        transform: scaleX(0);
-        visibility: hidden;
-    }
+	from {
+		transform: scaleX(1);
+		visibility: visible;
+	}
+	to {
+		transform: scaleX(0);
+		visibility: hidden;
+	}
 }
 
 #no-matches {
-    text-align: center;
+	text-align: center;
 }
 
 .hex-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: $hex-row-margin;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: $hex-row-margin;
 }
 
 .hex-container {
-    width: $hex-width;
-    height: $hex-width;
-    margin-left: $hex-container-margin; //fixes container being bigger than hexagon
-    margin-right: $hex-container-margin; //fixes container being bigger than hexagon
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	width: $hex-width;
+	height: $hex-width;
+	margin-left: $hex-container-margin; //fixes container being bigger than hexagon
+	margin-right: $hex-container-margin; //fixes container being bigger than hexagon
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .hex {
-    display: block;
-    position: relative;
-    width: 100%;
-    height: 100%; /* width * 0.866 */
-    background: var(--highlight, $highlight);
-    box-sizing: border-box;
-    text-align: center;
-    clip-path: polygon(
-        6.7% 25%,
-        6.7% 75%,
-        50% 100%,
-        93.3% 75%,
-        93.3% 25%,
-        50% 0%
-    );
-    -webkit-clip-path: polygon(
-        6.7% 25%,
-        6.7% 75%,
-        50% 100%,
-        93.3% 75%,
-        93.3% 25%,
-        50% 0%
-    );
-    -moz-clip-path: polygon(
-        6.7% 25%,
-        6.7% 75%,
-        50% 100%,
-        93.3% 75%,
-        93.3% 25%,
-        50% 0%
-    );
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 100%; /* width * 0.866 */
+	background: var(--highlight, $highlight);
+	box-sizing: border-box;
+	text-align: center;
+	clip-path: polygon(
+		6.7% 25%,
+		6.7% 75%,
+		50% 100%,
+		93.3% 75%,
+		93.3% 25%,
+		50% 0%
+	);
+	-webkit-clip-path: polygon(
+		6.7% 25%,
+		6.7% 75%,
+		50% 100%,
+		93.3% 75%,
+		93.3% 25%,
+		50% 0%
+	);
+	-moz-clip-path: polygon(
+		6.7% 25%,
+		6.7% 75%,
+		50% 100%,
+		93.3% 75%,
+		93.3% 25%,
+		50% 0%
+	);
 }
 
 //used for hover event
 .hex-center {
-    position: absolute;
-    background-color: var(--primary, $primary);
-    top: $border-thickness;
-    left: $border-thickness;
-    width: calc(100% - (#{$border-thickness} * 2));
-    height: calc(100% - (#{$border-thickness} * 2));
-    clip-path: polygon(
-        6.7% 25%,
-        6.7% 75%,
-        50% 100%,
-        93.3% 75%,
-        93.3% 25%,
-        50% 0%
-    );
-    -webkit-clip-path: polygon(
-        6.7% 25%,
-        6.7% 75%,
-        50% 100%,
-        93.3% 75%,
-        93.3% 25%,
-        50% 0%
-    );
-    -moz-clip-path: polygon(
-        6.7% 25%,
-        6.7% 75%,
-        50% 100%,
-        93.3% 75%,
-        93.3% 25%,
-        50% 0%
-    );
+	position: absolute;
+	background-color: var(--primary, $primary);
+	top: $border-thickness;
+	left: $border-thickness;
+	width: calc(100% - (#{$border-thickness} * 2));
+	height: calc(100% - (#{$border-thickness} * 2));
+	clip-path: polygon(
+		6.7% 25%,
+		6.7% 75%,
+		50% 100%,
+		93.3% 75%,
+		93.3% 25%,
+		50% 0%
+	);
+	-webkit-clip-path: polygon(
+		6.7% 25%,
+		6.7% 75%,
+		50% 100%,
+		93.3% 75%,
+		93.3% 25%,
+		50% 0%
+	);
+	-moz-clip-path: polygon(
+		6.7% 25%,
+		6.7% 75%,
+		50% 100%,
+		93.3% 75%,
+		93.3% 25%,
+		50% 0%
+	);
 }
 
 .hex-content {
-    position: absolute;
-    margin-top: 25%;
-    margin-left: 6.7%;
-    width: 86.6%;
-    height: 50%;
-    max-height: 50%;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+	position: absolute;
+	margin-top: 25%;
+	margin-left: 6.7%;
+	width: 86.6%;
+	height: 50%;
+	max-height: 50%;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 
-    h3 {
-        font-size: 1rem;
-        line-height: 1.2rem;
-        max-height: 2.4rem;
-        width: 100%;
-        overflow: hidden;
-        overflow-wrap: break-word;
-    }
-    p {
-        font-size: 0.75rem;
-        margin-top: 6.5px;
-    }
+	h3 {
+		font-size: 1rem;
+		line-height: 1.2rem;
+		max-height: 2.4rem;
+		width: 100%;
+		overflow: hidden;
+		overflow-wrap: break-word;
+	}
+	p {
+		font-size: 0.75rem;
+		margin-top: 6.5px;
+	}
 }
 
 .hex-center:hover {
-    background: var(--secondary, $secondary);
+	background: var(--secondary, $secondary);
 }
 
 //--------stuff for toast--------
@@ -477,19 +525,19 @@ a {
 // }
 
 .scroll-btn {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    // width: 24px;
-    // height: 24px;
-    top: calc(50% - 24px);
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: none;
+	border: none;
+	// width: 24px;
+	// height: 24px;
+	top: calc(50% - 24px);
 
-    &:hover {
-        cursor: pointer;
-    }
+	&:hover {
+		cursor: pointer;
+	}
 }
 
 // .scroll-btn:hover {
@@ -497,147 +545,147 @@ a {
 // }
 
 #scroll-forward {
-    right: 13px;
+	right: 13px;
 }
 
 #scroll-back {
-    left: 13px;
+	left: 13px;
 }
 
 .hide {
-    visibility: hidden;
+	visibility: hidden;
 }
 
 .undisplay {
-    display: none !important;
+	display: none !important;
 }
 
 //Stuff for when there are no bunches
 
 .no-bunches-hex-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 
-    h3 {
-        font-size: 1rem;
-        text-align: center;
-    }
+	h3 {
+		font-size: 1rem;
+		text-align: center;
+	}
 }
 
 #update-alert-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin-bottom: 10vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-bottom: 10vh;
 
-    #update-notif {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-        background-color: var(--background);
-        border: solid 2px var(--highlight, $highlight);
-        border-radius: 3px;
-        width: 32vw;
-        height: 23vh;
-        min-width: 150px;
-        min-height: 80px;
-        text-align: center;
+	#update-notif {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+		background-color: var(--background);
+		border: solid 2px var(--highlight, $highlight);
+		border-radius: 3px;
+		width: 32vw;
+		height: 23vh;
+		min-width: 150px;
+		min-height: 80px;
+		text-align: center;
 
-        .update-notif-btns {
-            display: flex;
-            width: 100%;
-            justify-content: space-around;
-            align-items: center;
+		.update-notif-btns {
+			display: flex;
+			width: 100%;
+			justify-content: space-around;
+			align-items: center;
 
-            button {
-                padding: 1px 3px;
-                margin-bottom: 5px;
-                border: solid 1px var(--highlight, $highlight);
-                border-radius: 3px;
-                background: none;
-                &:hover {
-                    cursor: pointer;
-                    background: var(--btn-hover, $btn-hover);
-                }
-            }
-        }
-    }
+			button {
+				padding: 1px 3px;
+				margin-bottom: 5px;
+				border: solid 1px var(--highlight, $highlight);
+				border-radius: 3px;
+				background: none;
+				&:hover {
+					cursor: pointer;
+					background: var(--btn-hover, $btn-hover);
+				}
+			}
+		}
+	}
 }
 
 //----------Checkbox Stuff----------
 /* The container */
 .mega-bunch-checkbox-container {
-    display: block;
-    position: relative;
-    width: 19px;
-    height: 19px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+	display: block;
+	position: relative;
+	width: 19px;
+	height: 19px;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .li-check-box-container {
-    margin-right: 6px;
+	margin-right: 6px;
 }
 
 .hex-check-box-container {
-    margin-right: 3px;
+	margin-right: 3px;
 }
 
 /* Hide the browser's default checkbox */
 .mega-bunch-checkbox-container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
 }
 
 /* Create a custom checkbox */
 .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 19px;
-    width: 19px;
-    // background-color: var(--highlight, $highlight);
-    border: solid 2px var(--highlight, $highlight);
-    border-radius: 3px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 19px;
+	width: 19px;
+	// background-color: var(--highlight, $highlight);
+	border: solid 2px var(--highlight, $highlight);
+	border-radius: 3px;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
+	content: "";
+	position: absolute;
+	display: none;
 }
 
 /* Show the checkmark when checked */
 .mega-bunch-checkbox-container input:checked ~ .checkmark:after {
-    display: block;
+	display: block;
 }
 
 /* Style the checkmark/indicator */
 .mega-bunch-checkbox-container .checkmark:after {
-    left: 0.22rem;
-    top: 0.06rem;
-    width: 0.24rem;
-    height: 0.48rem;
-    border: solid var(--highlight, $highlight);
-    border-width: 0 0.2rem 0.2rem 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+	left: 0.22rem;
+	top: 0.06rem;
+	width: 0.24rem;
+	height: 0.48rem;
+	border: solid var(--highlight, $highlight);
+	border-width: 0 0.2rem 0.2rem 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 //-----------end checkbox stuff-------------
 
