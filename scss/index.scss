@@ -191,7 +191,7 @@ a {
 	justify-content: center;
 	flex-direction: row;
 
-	a {
+	.btn {
 		border: 2px solid var(--highlight, $highlight);
 		padding: 2px 4px;
 		border-radius: 3px;
@@ -223,10 +223,9 @@ a {
 		align-items: center;
 		justify-content: center;
 
-		.standard-li-display {
+		.folder-display {
 			width: 100%;
 			height: 100%;
-			position: relative;
 			position: relative;
 			padding: 1px 5px;
 			display: inline-block;

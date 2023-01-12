@@ -164,13 +164,13 @@ a {
   justify-content: center;
   flex-direction: row;
 }
-#mega-bunch-menu a {
+#mega-bunch-menu .btn {
   border: 2px solid var(--highlight, #393e41);
   padding: 2px 4px;
   border-radius: 3px;
   margin: 5px;
 }
-#mega-bunch-menu a:hover {
+#mega-bunch-menu .btn:hover {
   cursor: pointer;
   background: var(--btn-hover, #9da5a9);
 }
@@ -194,19 +194,18 @@ a {
   align-items: center;
   justify-content: center;
 }
-#folder-menu .folder-menu-li .standard-li-display {
+#folder-menu .folder-menu-li .folder-display {
   width: 100%;
   height: 100%;
-  position: relative;
   position: relative;
   padding: 1px 5px;
   display: inline-block;
 }
-#folder-menu .folder-menu-li .standard-li-display:hover {
+#folder-menu .folder-menu-li .folder-display:hover {
   cursor: pointer;
   background: var(--btn-hover, #9da5a9);
 }
-#folder-menu .folder-menu-li .standard-li-display .li-content {
+#folder-menu .folder-menu-li .folder-display .li-content {
   width: 100%;
 }
 #folder-menu .folder-menu-li h3 {

@@ -51,11 +51,9 @@ function deleteBunch(e) {
 	document.getElementById("delete-menu").classList.remove("hide");
 	document.getElementById("study-together-btn").classList.add("undisplay");
 	document.getElementById("add-to-folder-btn").classList.add("undisplay");
-	const megaBunchChecks = document.getElementsByClassName(
-		"mega-bunch-checkbox"
-	);
-	for (x = 0; x < megaBunchChecks.length; x++) {
-		megaBunchChecks[x].checked = false;
+	const checks = document.getElementsByClassName("mega-bunch-checkbox");
+	for (x = 0; x < checks.length; x++) {
+		checks[x].checked = false;
 	}
 }
 
@@ -460,33 +458,56 @@ function generateList(bunchList) {
 			deleteBtns[x].addEventListener("click", deleteBunchList);
 		}
 
-		const megaBunchChecks = document.getElementsByClassName(
-			"mega-bunch-checkbox"
-		);
-		for (x = 0; x < megaBunchChecks.length; x++) {
-			megaBunchChecks[x].addEventListener("change", megaBunchProcess);
+		const checks = document.getElementsByClassName("mega-bunch-checkbox");
+		for (x = 0; x < checks.length; x++) {
+			checks[x].addEventListener("change", megaBunchProcess);
 		}
 	}
 }
 
 function generateFolderMenu() {
+	currentBunchIDs = [];
+	checks = document.getElementsByClassName("mega-bunch-checkbox");
+	for (x = 0; x < checks.length; x++) {
+		if (checks[x].checked) {
+			currentBunchIDs.push(parseInt(checks[x].getAttribute("bunch-id")));
+		}
+	}
+	console.log(currentBunchIDs);
 	content = "";
 	for (var folderID in folders) {
 		//format taken from list homepage
 		content += `<li class="folder-menu-li"> 
-            <a class="standard-li-display">
+            <div class="folder-display" folder-id="${folderID}" title="${
+			folders[folderID.toString()]["title"]
+		}">
                 <div class="li-content">
                     <h3>${folders[folderID.toString()]["title"]}</h3> 
                     <div>${
 											folders[folderID.toString()]["bunchIDs"].length
 										} Bunches</div>  
                 </div>
-            </a>
+            </div>
         </li>`;
 	}
 	const main = document.querySelector(".main-container");
 	main.innerHTML = `<div id="folder-menu">${content}<div>`;
+
+	const folderLIs = document
+		.getElementById("folder-menu")
+		.getElementsByClassName("folder-display");
+	for (x = 0; x < folderLIs.length; x++) {
+		folderLIs[x].addEventListener("click", (e) => {
+			const folderID = parseInt(e.currentTarget.getAttribute("folder-id"));
+			ipcRenderer.send("folder:addbunches", folderID, currentBunchIDs);
+			ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
+		});
+	}
 }
+
+document
+	.getElementById("add-to-folder-btn")
+	.addEventListener("click", generateFolderMenu);
 
 function deleteBunchList(e) {
 	const parentLI = e.target.closest(".li-bunch");
@@ -504,11 +525,9 @@ function deleteBunchList(e) {
 function unselectBunches() {
 	document.getElementById("study-together-btn").classList.add("undisplay");
 	document.getElementById("add-to-folder-btn").classList.add("undisplay");
-	const megaBunchChecks = document.getElementsByClassName(
-		"mega-bunch-checkbox"
-	);
-	for (x = 0; x < megaBunchChecks.length; x++) {
-		megaBunchChecks[x].checked = false;
+	const checks = document.getElementsByClassName("mega-bunch-checkbox");
+	for (x = 0; x < checks.length; x++) {
+		checks[x].checked = false;
 	}
 }
 
@@ -545,22 +564,21 @@ function styleHomepage() {
 /* -------------------------------------------------------------------------- */
 /*                               Mega Bunch                                   */
 /* -------------------------------------------------------------------------- */
+var currentBunchIDs = [];
 function megaBunchProcess() {
-	const megaBunchChecks = document.getElementsByClassName(
-		"mega-bunch-checkbox"
-	);
-	const bunchIDs = [];
-	for (x = 0; x < megaBunchChecks.length; x++) {
-		if (megaBunchChecks[x].checked) {
-			bunchIDs.push(megaBunchChecks[x].getAttribute("bunch-id"));
+	const checks = document.getElementsByClassName("mega-bunch-checkbox");
+	var numChecks = 0;
+	for (x = 0; x < checks.length; x++) {
+		if (checks[x].checked) {
+			numChecks += 1;
 		}
 	}
 
-	if (bunchIDs.length > 1) {
+	if (numChecks > 1) {
 		document.getElementById("study-together-btn").classList.remove("undisplay");
 		document.getElementById("add-to-folder-btn").classList.remove("undisplay");
 		document.getElementById("delete-menu").classList.add("hide");
-	} else if (bunchIDs.length > 0) {
+	} else if (numChecks > 0) {
 		document.getElementById("study-together-btn").classList.add("undisplay");
 		document.getElementById("add-to-folder-btn").classList.remove("undisplay");
 		document.getElementById("delete-menu").classList.add("hide");

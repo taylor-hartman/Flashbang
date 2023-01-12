@@ -1,139 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta
-            http-equiv="Content-Security-Policy"
-            content="default-src 'self'"
-        />
-        <link rel="stylesheet" href="css/index.css" id="base-stylesheet" />
-        <!-- <link rel="stylesheet" href="css/fade.css" /> -->
-        <title></title>
-    </head>
-    <body>
-        <!-- <header class="titlebar"></header> -->
-        <a href="newbunch.html?id=.new_bunch" class="btn" id="new-bunch-btn">
-            <svg
-                width="24px"
-                height="24px"
-                viewBox="0 0 24 24"
-                version="1.2"
-                baseProfile="tiny"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
-                />
-            </svg>
-        </a>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'" />
+		<link rel="stylesheet" href="css/index.css" id="base-stylesheet" />
+		<!-- <link rel="stylesheet" href="css/fade.css" /> -->
+		<title></title>
+	</head>
+	<body>
+		<!-- <header class="titlebar"></header> -->
+		<a href="newbunch.html?id=.new_bunch" class="btn" id="new-bunch-btn">
+			<svg
+				width="24px"
+				height="24px"
+				viewBox="0 0 24 24"
+				version="1.2"
+				baseProfile="tiny"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
+				/>
+			</svg>
+		</a>
 
-        <a class="btn hide" id="edit-bunch-btn">
-            <svg
-                width="24px"
-                height="24px"
-                viewBox="0 0 24 24"
-                version="1.2"
-                baseProfile="tiny"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M21.561 5.318l-2.879-2.879c-.293-.293-.677-.439-1.061-.439-.385 0-.768.146-1.061.439l-3.56 3.561h-9c-.552 0-1 .447-1 1v13c0 .553.448 1 1 1h13c.552 0 1-.447 1-1v-9l3.561-3.561c.293-.293.439-.677.439-1.061s-.146-.767-.439-1.06zm-10.061 9.354l-2.172-2.172 6.293-6.293 2.172 2.172-6.293 6.293zm-2.561-1.339l1.756 1.728-1.695-.061-.061-1.667zm7.061 5.667h-11v-11h6l-3.18 3.18c-.293.293-.478.812-.629 1.289-.16.5-.191 1.056-.191 1.47v3.061h3.061c.414 0 1.108-.1 1.571-.29.464-.19.896-.347 1.188-.64l3.18-3.07v6zm2.5-11.328l-2.172-2.172 1.293-1.293 2.171 2.172-1.292 1.293z"
-                />
-            </svg>
-        </a>
+		<a class="btn hide" id="edit-bunch-btn">
+			<svg
+				width="24px"
+				height="24px"
+				viewBox="0 0 24 24"
+				version="1.2"
+				baseProfile="tiny"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M21.561 5.318l-2.879-2.879c-.293-.293-.677-.439-1.061-.439-.385 0-.768.146-1.061.439l-3.56 3.561h-9c-.552 0-1 .447-1 1v13c0 .553.448 1 1 1h13c.552 0 1-.447 1-1v-9l3.561-3.561c.293-.293.439-.677.439-1.061s-.146-.767-.439-1.06zm-10.061 9.354l-2.172-2.172 6.293-6.293 2.172 2.172-6.293 6.293zm-2.561-1.339l1.756 1.728-1.695-.061-.061-1.667zm7.061 5.667h-11v-11h6l-3.18 3.18c-.293.293-.478.812-.629 1.289-.16.5-.191 1.056-.191 1.47v3.061h3.061c.414 0 1.108-.1 1.571-.29.464-.19.896-.347 1.188-.64l3.18-3.07v6zm2.5-11.328l-2.172-2.172 1.293-1.293 2.171 2.172-1.292 1.293z"
+				/>
+			</svg>
+		</a>
 
-        <input class="hide preload" type="text" id="search-input" />
+		<input class="hide preload" type="text" id="search-input" />
 
-        <a class="btn" id="search-bunch-btn">
-            <svg
-                width="24px"
-                height="24px"
-                viewBox="0 0 24 24"
-                version="1.2"
-                baseProfile="tiny"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M13 4c-3.859 0-7 3.141-7 7 0 .763.127 1.495.354 2.183l-.749.75-.511.512-1.008 1.045c-.562.557-.891 1.345-.891 2.185 0 1.727 1.404 3.131 3.13 3.131.757 0 1.504-.278 2.104-.784l.064-.055.061-.061 1.512-1.51.75-.749c.688.226 1.421.353 2.184.353 3.859 0 7-3.141 7-7s-3.141-7-7-7zm0 12c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5zM13 7c-2.205 0-4 1.794-4 4s1.795 4 4 4 4-1.794 4-4-1.795-4-4-4zm0 7c-1.656 0-3-1.344-3-3s1.344-3 3-3 3 1.344 3 3-1.344 3-3 3z"
-                />
-            </svg>
-        </a>
+		<a class="btn" id="search-bunch-btn">
+			<svg
+				width="24px"
+				height="24px"
+				viewBox="0 0 24 24"
+				version="1.2"
+				baseProfile="tiny"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M13 4c-3.859 0-7 3.141-7 7 0 .763.127 1.495.354 2.183l-.749.75-.511.512-1.008 1.045c-.562.557-.891 1.345-.891 2.185 0 1.727 1.404 3.131 3.13 3.131.757 0 1.504-.278 2.104-.784l.064-.055.061-.061 1.512-1.51.75-.749c.688.226 1.421.353 2.184.353 3.859 0 7-3.141 7-7s-3.141-7-7-7zm0 12c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5zM13 7c-2.205 0-4 1.794-4 4s1.795 4 4 4 4-1.794 4-4-1.795-4-4-4zm0 7c-1.656 0-3-1.344-3-3s1.344-3 3-3 3 1.344 3 3-1.344 3-3 3z"
+				/>
+			</svg>
+		</a>
 
-        <a href="settings.html" class="btn" id="settings-btn">
-            <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                version="1.2"
-                baseProfile="tiny"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M9.387 17.548l.371 1.482c.133.533.692.97 1.242.97h1c.55 0 1.109-.437 1.242-.97l.371-1.482c.133-.533.675-.846 1.203-.694l1.467.42c.529.151 1.188-.114 1.462-.591l.5-.867c.274-.477.177-1.179-.219-1.562l-1.098-1.061c-.396-.383-.396-1.008.001-1.39l1.096-1.061c.396-.382.494-1.084.22-1.561l-.501-.867c-.275-.477-.933-.742-1.461-.591l-1.467.42c-.529.151-1.07-.161-1.204-.694l-.37-1.48c-.133-.532-.692-.969-1.242-.969h-1c-.55 0-1.109.437-1.242.97l-.37 1.48c-.134.533-.675.846-1.204.695l-1.467-.42c-.529-.152-1.188.114-1.462.59l-.5.867c-.274.477-.177 1.179.22 1.562l1.096 1.059c.395.383.395 1.008 0 1.391l-1.098 1.061c-.395.383-.494 1.085-.219 1.562l.501.867c.274.477.933.742 1.462.591l1.467-.42c.528-.153 1.07.16 1.203.693zm2.113-7.048c1.104 0 2 .895 2 2 0 1.104-.896 2-2 2s-2-.896-2-2c0-1.105.896-2 2-2z"
-                />
-            </svg>
-        </a>
+		<a href="settings.html" class="btn" id="settings-btn">
+			<svg
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				version="1.2"
+				baseProfile="tiny"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M9.387 17.548l.371 1.482c.133.533.692.97 1.242.97h1c.55 0 1.109-.437 1.242-.97l.371-1.482c.133-.533.675-.846 1.203-.694l1.467.42c.529.151 1.188-.114 1.462-.591l.5-.867c.274-.477.177-1.179-.219-1.562l-1.098-1.061c-.396-.383-.396-1.008.001-1.39l1.096-1.061c.396-.382.494-1.084.22-1.561l-.501-.867c-.275-.477-.933-.742-1.461-.591l-1.467.42c-.529.151-1.07-.161-1.204-.694l-.37-1.48c-.133-.532-.692-.969-1.242-.969h-1c-.55 0-1.109.437-1.242.97l-.37 1.48c-.134.533-.675.846-1.204.695l-1.467-.42c-.529-.152-1.188.114-1.462.59l-.5.867c-.274.477-.177 1.179.22 1.562l1.096 1.059c.395.383.395 1.008 0 1.391l-1.098 1.061c-.395.383-.494 1.085-.219 1.562l.501.867c.274.477.933.742 1.462.591l1.467-.42c.528-.153 1.07.16 1.203.693zm2.113-7.048c1.104 0 2 .895 2 2 0 1.104-.896 2-2 2s-2-.896-2-2c0-1.105.896-2 2-2z"
+				/>
+			</svg>
+		</a>
 
-        <button class="scroll-btn hide" id="scroll-back">
-            <svg
-                width="24px"
-                height="24px"
-                viewBox="0 0 24 24"
-                version="1.2"
-                baseProfile="tiny"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"
-                />
-            </svg>
-        </button>
+		<button class="scroll-btn hide" id="scroll-back">
+			<svg
+				width="24px"
+				height="24px"
+				viewBox="0 0 24 24"
+				version="1.2"
+				baseProfile="tiny"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"
+				/>
+			</svg>
+		</button>
 
-        <button class="scroll-btn hide" id="scroll-forward">
-            <svg
-                width="24px"
-                height="24px"
-                viewBox="0 0 24 24"
-                version="1.2"
-                baseProfile="tiny"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M8.586 5.586c-.781.781-.781 2.047 0 2.828l3.585 3.586-3.585 3.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l6.415-6.414-6.415-6.414c-.78-.781-2.048-.781-2.828 0z"
-                />
-            </svg>
-        </button>
+		<button class="scroll-btn hide" id="scroll-forward">
+			<svg
+				width="24px"
+				height="24px"
+				viewBox="0 0 24 24"
+				version="1.2"
+				baseProfile="tiny"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M8.586 5.586c-.781.781-.781 2.047 0 2.828l3.585 3.586-3.585 3.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l6.415-6.414-6.415-6.414c-.78-.781-2.048-.781-2.828 0z"
+				/>
+			</svg>
+		</button>
 
-        <div id="mega-bunch-menu">
-            <a href="" class="undisplay" id="add-to-folder-btn" >Add to Folder</a>
-            <a href="" class="undisplay" id="study-together-btn">Study Together</a>
-        </div>
+		<div id="mega-bunch-menu">
+			<div href="" class="undisplay btn" id="add-to-folder-btn">
+				Add to Folder
+			</div>
+			<div href="" class="undisplay btn" id="study-together-btn">
+				Study Together
+			</div>
+		</div>
 
-        <div class="hide" id="delete-menu">
-            <h3>Are you sure you want to delete this bunch?</h3>
-            <div id="delete-btns-container">
-                <button id="yes-delete">Yes</button>
-                <button id="no-delete">No</button>
-            </div>
-        </div>
+		<div class="hide" id="delete-menu">
+			<h3>Are you sure you want to delete this bunch?</h3>
+			<div id="delete-btns-container">
+				<button id="yes-delete">Yes</button>
+				<button id="no-delete">No</button>
+			</div>
+		</div>
 
-        <div class="container main-container"></div>
+		<div class="container main-container"></div>
 
-        <div id="update-alert" class="undisplay">
-            <div id="update-alert-container">
-                <div id="update-notif">
-                    <p>An update is available</p>
-                    <div class="update-notif-btns">
-                        <button id="update-notif-close">Close</button>
-                        <button id="update-notif-update">Download Now</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div id="update-alert" class="undisplay">
+			<div id="update-alert-container">
+				<div id="update-notif">
+					<p>An update is available</p>
+					<div class="update-notif-btns">
+						<button id="update-notif-close">Close</button>
+						<button id="update-notif-update">Download Now</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <!-- <div id="update-summary">
+		<!-- <div id="update-summary">
             <div id="update-menu">
                 <h3>New in this update</h3>
                 <ul id="update-list">
@@ -146,8 +147,8 @@
             </div>
         </div> -->
 
-        <script src="js/index.js"></script>
-        <script src="js/themeManager.js"></script>
-        <!-- <script src="js/fade.js"></script> -->
-    </body>
+		<script src="js/index.js"></script>
+		<script src="js/themeManager.js"></script>
+		<!-- <script src="js/fade.js"></script> -->
+	</body>
 </html>

@@ -332,6 +332,10 @@ ipcMain.on("folderdata:get", (e) => {
 	e.reply("folderdata:get", folderData);
 });
 
+ipcMain.on("folder:addbunches", (e, folderID, bunchIDs) => {
+	folderManager.addBunches(folderID, bunchIDs);
+});
+
 //#endregion
 
 //#region Settings Requests
@@ -368,6 +372,3 @@ ipcMain.on("globalSettings:resetDefaults", (e) => {
 	e.reply("globalSettings:gettheme", globalSettings.get("theme"));
 });
 //#endregion
-folderManager.addFolder("test1", [2]);
-folderManager.addFolder("test1", [4, 4]);
-folderManager.addFolder("test1", [2, 0, 0, 1, , 5]);
