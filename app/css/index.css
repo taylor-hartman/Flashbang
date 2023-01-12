@@ -145,6 +145,7 @@ a {
   position: absolute;
   bottom: calc(25% - 18px);
 }
+
 .delete-btn:hover {
   cursor: pointer;
 }

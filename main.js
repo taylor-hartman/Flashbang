@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const BunchStorage = require("./bunchStorage");
 const Settings = require("./settings");
+const FolderManager = require("./folderManager");
 const fs = require("fs");
 const fetch = require("electron-fetch").default;
 const dialog = require("electron").dialog;
@@ -22,6 +23,7 @@ const isMac = process.platform === "darwin" ? true : false;
 let mainWindow;
 
 const globalSettings = new Settings("global");
+const folderManager = new FolderManager();
 
 //HACK....this is painful wtf
 //-----------background flash fix------------

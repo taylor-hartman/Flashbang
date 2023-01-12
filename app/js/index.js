@@ -87,7 +87,7 @@ document.getElementById("search-bunch-btn").addEventListener("click", () => {
 });
 
 document.getElementById("search-input").addEventListener("input", () => {
-    //TODO cant have multiple pages rn
+    unselectBunches();
     const value = document.getElementById("search-input").value;
     matchingBunches = [];
     for (x = 0; x < bunches.length; x++) {
@@ -479,6 +479,10 @@ function deleteBunchList(e) {
         .querySelector(".li-no-delete")
         .addEventListener("click", noDeleteList);
 
+    unselectBunches();
+}
+
+function unselectBunches(){
     document.getElementById("study-together-btn").classList.add("undisplay");
     document.getElementById("add-to-folder-btn").classList.add("undisplay");
     const megaBunchChecks = document.getElementsByClassName(
