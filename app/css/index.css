@@ -100,6 +100,37 @@ a {
   justify-content: space-between;
   right: 5px;
 }
+.main-list .folder-menu-li {
+  border: solid 2px var(--highlight, #393e41);
+  border-radius: 3px;
+  margin: 3px 0;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+.main-list .folder-menu-li .folder-display {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 1px 5px;
+  display: inline-block;
+}
+.main-list .folder-menu-li .folder-display:hover {
+  cursor: pointer;
+  background: var(--btn-hover, #9da5a9);
+}
+.main-list .folder-menu-li .folder-display .li-content {
+  width: 100%;
+}
+.main-list .folder-menu-li h3 {
+  -ms-word-break: break-word;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+      hyphens: auto;
+}
 
 .list-create-new-bunch {
   display: flex;
