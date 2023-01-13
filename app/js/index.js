@@ -1,27 +1,56 @@
 const ipcRenderer = require("electron").ipcRenderer;
 var pageNumber = 0;
 var bunches, matchingBunches; //bunches is all bunches; matchingBunches is bunches that match a search result
+var bunchesCurrent = []; //the bunches currently being displayed
 var folders; //data from folders.json
+var bunchesInFolders = [];
 
 ipcRenderer.send("updateMenu", "standard");
 
 window.onload = () => {
-	ipcRenderer.send("bunchdata:get");
-	ipcRenderer.send("folderdata:get");
+	loadPage();
 	setTimeout(() => {
 		document.getElementById("search-input").classList.remove("preload");
 	}, 250);
 };
 
-ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
-	console.log("bunches got");
-	bunches = JSON.parse(JSON.stringify(bunchesData));
-	makeIndexPage();
-});
+function loadPage() {
+	ipcRenderer.send("bunchdata:get");
+	ipcRenderer.send("folderdata:get");
+	const bunchesListener = new Promise((resolve) => {
+		ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
+			console.log("bunches got");
+			bunches = JSON.parse(JSON.stringify(bunchesData));
+			console.log(bunches);
+			resolve([]);
+		});
+	});
 
-ipcRenderer.on("folderdata:get", (e, folderData) => {
-	folders = JSON.parse(JSON.stringify(folderData));
-});
+	const folderListener = new Promise((resolve) => {
+		ipcRenderer.on("folderdata:get", (e, folderData) => {
+			folders = JSON.parse(JSON.stringify(folderData));
+			console.log(folders);
+			bunchesInFolders = [];
+			for (var folderID in folders) {
+				const bunchIDs = folders[folderID]["bunchIDs"];
+				bunchIDs.forEach((id) => {
+					intID = parseInt(id);
+					if (!bunchesInFolders.includes(intID)) {
+						bunchesInFolders.push(parseInt(intID));
+					}
+				});
+			}
+			resolve([]);
+		});
+	});
+
+	// setTimeout(makeIndexPage, 100);
+
+	// both bunch data and folder data have to be recieved b4 making index page
+	Promise.all([bunchesListener, folderListener]).then((values) => {
+		makeIndexPage();
+	});
+}
 
 ipcRenderer.on("index:showUpdateAlert", () => {
 	document.getElementById("update-alert").classList.remove("undisplay");
@@ -60,7 +89,7 @@ function deleteBunch(e) {
 document.getElementById("yes-delete").addEventListener("click", () => {
 	bunchID = document.getElementById("yes-delete").getAttribute("bunch-id");
 	ipcRenderer.send("bunch:delete", bunchID);
-	ipcRenderer.send("bunchdata:get");
+	loadPage();
 	document.getElementById("delete-menu").classList.add("hide");
 });
 
@@ -151,6 +180,18 @@ function makeIndexPage() {
 	} else {
 		bunchesCurrent = matchingBunches;
 	}
+
+	console.log(bunchesCurrent);
+	console.log(bunches);
+	console.log(bunchesInFolders);
+
+	// bunchesCurrent.forEach((bunch) => {
+	// 	console.log(bunch["id"]);
+	// 	if (bunchesInFolders.includes(bunch["id"])) {
+	// 		console.log(bunchesCurrent.indexOf(bunch["id"]));
+	// 		bunchesCurrent.splice(bunchesCurrent.indexOf(bunch["id"]), 1);
+	// 	}
+	// });
 
 	if (sortHomeBy === "lastUsed") {
 		sortByDate(bunchesCurrent);
@@ -479,10 +520,10 @@ function generateFolderMenu() {
 		//format taken from list homepage
 		content += `<li class="folder-menu-li"> 
             <div class="folder-display" folder-id="${folderID}" title="${
-			folders[folderID.toString()]["title"]
+			folders[folderID]["title"]
 		}">
                 <div class="li-content">
-                    <h3>${folders[folderID.toString()]["title"]}</h3> 
+                    <h3>${folders[folderID]["title"]}</h3> 
                     <div>${
 											folders[folderID.toString()]["bunchIDs"].length
 										} Bunches</div>  
@@ -500,7 +541,7 @@ function generateFolderMenu() {
 		folderLIs[x].addEventListener("click", (e) => {
 			const folderID = parseInt(e.currentTarget.getAttribute("folder-id"));
 			ipcRenderer.send("folder:addbunches", folderID, currentBunchIDs);
-			ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
+			loadPage(); //TODO should not request all for one change
 		});
 	}
 }
@@ -534,7 +575,7 @@ function unselectBunches() {
 function yesDeleteList(e) {
 	const bunchID = e.target.closest(".li-bunch").getAttribute("bunch-id");
 	ipcRenderer.send("bunch:delete", bunchID);
-	ipcRenderer.send("bunchdata:get"); //TODO page should not be "reloaded" for 1 bunch delete
+	loadPage(); //TODO page should not be "reloaded" for 1 bunch delete
 	//dont have to deal with display/undisplay bc page is reloaded
 }
 
