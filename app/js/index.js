@@ -180,13 +180,18 @@ function makeIndexPage() {
 
 	let bunchesToSplice = [];
 	for (x = 0; x < bunchesCurrent.length; x++) {
-		console.log(bunchesCurrent[x]["id"]);
 		if (bunchesInFolders.includes(bunchesCurrent[x]["id"])) {
-			bunchesToSplice.push(bunchesCurrent[x]);
+			bunchesToSplice.push(bunchesCurrent[x]); //find bunches that are in folders
 		}
 	}
 	for (x = 0; x < bunchesToSplice.length; x++) {
-		bunchesCurrent.splice(bunchesCurrent.indexOf(bunchesToSplice[x]), 1);
+		bunchesCurrent.splice(bunchesCurrent.indexOf(bunchesToSplice[x]), 1); //remove them from the index page
+	}
+
+	generateFolderDates();
+
+	for (folderID in folders) {
+		bunchesCurrent.push(folders[folderID]);
 	}
 
 	if (sortHomeBy === "lastUsed") {
@@ -539,6 +544,41 @@ function generateFolderMenu() {
 			ipcRenderer.send("folder:addbunches", folderID, currentBunchIDs);
 			loadPage(); //TODO should not request all for one change
 		});
+	}
+}
+
+function generateFolderHtmlHex() {}
+
+function generateFolderHtmlList() {
+	let content = "";
+	for (var folderID in folders) {
+		content += `<li class="folder-menu-li"> 
+		<div class="folder-display" folder-id="${folderID}" title="${
+			folders[folderID]["title"]
+		}">
+				<div class="li-content">
+					<h3>${folders[folderID]["title"]}</h3> 
+					<div>${folders[folderID.toString()]["bunchIDs"].length} Bunches</div>  
+				</div>
+		</div>
+	</li>`;
+	}
+	return content;
+}
+
+function generateFolderDates() {
+	for (var folderID in folders) {
+		const containedBunches = bunches.filter(({ id }) =>
+			folders[folderID]["bunchIDs"].includes(id)
+		);
+		var newestDate = new Date(containedBunches[0].lastUsed);
+		for (x = 0; x < containedBunches.length; x++) {
+			const thisDate = new Date(containedBunches[x].lastUsed);
+			if (newestDate - thisDate < 0) {
+				newestDate = thisDate;
+			}
+		}
+		folders[folderID].lastUsed = newestDate;
 	}
 }
 
