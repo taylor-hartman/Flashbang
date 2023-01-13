@@ -3,7 +3,7 @@ var pageNumber = 0;
 var bunches, matchingBunches; //bunches is all bunches; matchingBunches is bunches that match a search result
 var bunchesCurrent = []; //the bunches currently being displayed
 var folders; //data from folders.json
-var bunchesInFolders = [];
+var bunchesInFolders;
 
 ipcRenderer.send("updateMenu", "standard");
 
@@ -29,22 +29,19 @@ function loadPage() {
 	const folderListener = new Promise((resolve) => {
 		ipcRenderer.on("folderdata:get", (e, folderData) => {
 			folders = JSON.parse(JSON.stringify(folderData));
-			console.log(folders);
 			bunchesInFolders = [];
 			for (var folderID in folders) {
 				const bunchIDs = folders[folderID]["bunchIDs"];
 				bunchIDs.forEach((id) => {
 					intID = parseInt(id);
 					if (!bunchesInFolders.includes(intID)) {
-						bunchesInFolders.push(parseInt(intID));
+						bunchesInFolders.push(intID);
 					}
 				});
 			}
 			resolve([]);
 		});
 	});
-
-	// setTimeout(makeIndexPage, 100);
 
 	// both bunch data and folder data have to be recieved b4 making index page
 	Promise.all([bunchesListener, folderListener]).then((values) => {
@@ -176,22 +173,21 @@ ipcRenderer.on("globalSettings:gethomeStyle", (e, val) => {
 /* -------------------------------------------------------------------------- */
 function makeIndexPage() {
 	if (document.getElementById("search-input").value === "") {
-		bunchesCurrent = bunches;
+		bunchesCurrent = JSON.parse(JSON.stringify(bunches));
 	} else {
 		bunchesCurrent = matchingBunches;
 	}
 
-	console.log(bunchesCurrent);
-	console.log(bunches);
-	console.log(bunchesInFolders);
-
-	// bunchesCurrent.forEach((bunch) => {
-	// 	console.log(bunch["id"]);
-	// 	if (bunchesInFolders.includes(bunch["id"])) {
-	// 		console.log(bunchesCurrent.indexOf(bunch["id"]));
-	// 		bunchesCurrent.splice(bunchesCurrent.indexOf(bunch["id"]), 1);
-	// 	}
-	// });
+	let bunchesToSplice = [];
+	for (x = 0; x < bunchesCurrent.length; x++) {
+		console.log(bunchesCurrent[x]["id"]);
+		if (bunchesInFolders.includes(bunchesCurrent[x]["id"])) {
+			bunchesToSplice.push(bunchesCurrent[x]);
+		}
+	}
+	for (x = 0; x < bunchesToSplice.length; x++) {
+		bunchesCurrent.splice(bunchesCurrent.indexOf(bunchesToSplice[x]), 1);
+	}
 
 	if (sortHomeBy === "lastUsed") {
 		sortByDate(bunchesCurrent);
@@ -514,7 +510,7 @@ function generateFolderMenu() {
 			currentBunchIDs.push(parseInt(checks[x].getAttribute("bunch-id")));
 		}
 	}
-	console.log(currentBunchIDs);
+
 	content = "";
 	for (var folderID in folders) {
 		//format taken from list homepage
