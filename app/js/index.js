@@ -1,13 +1,11 @@
 const ipcRenderer = require("electron").ipcRenderer;
 var pageNumber = 0;
 var bunches, matchingBunches; //bunches is all bunches; matchingBunches is bunches that match a search result
-var folders; //data from folders.json
 
 ipcRenderer.send("updateMenu", "standard");
 
 window.onload = () => {
 	ipcRenderer.send("bunchdata:get");
-	ipcRenderer.send("folderdata:get");
 	setTimeout(() => {
 		document.getElementById("search-input").classList.remove("preload");
 	}, 250);
@@ -17,10 +15,6 @@ ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
 	console.log("bunches got");
 	bunches = JSON.parse(JSON.stringify(bunchesData));
 	makeIndexPage();
-});
-
-ipcRenderer.on("folderdata:get", (e, folderData) => {
-	folders = JSON.parse(JSON.stringify(folderData));
 });
 
 ipcRenderer.on("index:showUpdateAlert", () => {
@@ -475,21 +469,21 @@ function generateFolderMenu() {
 	}
 	console.log(currentBunchIDs);
 	content = "";
-	for (var folderID in folders) {
-		//format taken from list homepage
-		content += `<li class="folder-menu-li"> 
-            <div class="folder-display" folder-id="${folderID}" title="${
-			folders[folderID.toString()]["title"]
-		}">
-                <div class="li-content">
-                    <h3>${folders[folderID.toString()]["title"]}</h3> 
-                    <div>${
-											folders[folderID.toString()]["bunchIDs"].length
-										} Bunches</div>  
-                </div>
-            </div>
-        </li>`;
-	}
+	// for (var folderID in folders) {
+	// 	//format taken from list homepage
+	// 	content += `<li class="folder-menu-li">
+	//         <div class="folder-display" folder-id="${folderID}" title="${
+	// 		folders[folderID.toString()]["title"]
+	// 	}">
+	//             <div class="li-content">
+	//                 <h3>${folders[folderID.toString()]["title"]}</h3>
+	//                 <div>${
+	// 										folders[folderID.toString()]["bunchIDs"].length
+	// 									} Bunches</div>
+	//             </div>
+	//         </div>
+	//     </li>`;
+	// }
 	const main = document.querySelector(".main-container");
 	main.innerHTML = `<div id="folder-menu">${content}<div>`;
 
@@ -499,7 +493,7 @@ function generateFolderMenu() {
 	for (x = 0; x < folderLIs.length; x++) {
 		folderLIs[x].addEventListener("click", (e) => {
 			const folderID = parseInt(e.currentTarget.getAttribute("folder-id"));
-			ipcRenderer.send("folder:addbunches", folderID, currentBunchIDs);
+
 			ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
 		});
 	}
