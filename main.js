@@ -2,6 +2,7 @@ const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const BunchStorage = require("./bunchStorage");
 const Settings = require("./settings");
 const fs = require("fs");
+const { use } = require("builder-util");
 const fetch = require("electron-fetch").default;
 const dialog = require("electron").dialog;
 
@@ -284,17 +285,21 @@ function sendBunchData(e) {
 	if (fs.existsSync(userDataPath + "/bunches")) {
 		try {
 			var data = [];
-			const files = fs.readdirSync(bunchesDir, "utf-8");
-			let re = /^\./i; //excludes hidden files
-			for (x = 0; x < files.length; x++) {
-				if (!re.exec(files[x])) {
-					const jsonString = fs.readFileSync(bunchesDir + "/" + files[x]);
-					const bunch = JSON.parse(jsonString);
-					const title = bunch.title;
-					const lastUsed = bunch.lastUsed;
-					const numTerms = bunch.pairs.length;
-					const id = bunch.id;
-					data.push({ id, title, lastUsed, numTerms });
+			const contents = fs.readdirSync(bunchesDir, {
+				encoding: "utf8",
+			});
+			const re = /^\./i; //excludes hidden files
+			for (const entry of contents) {
+				if (!fs.statSync(bunchesDir + "/" + entry).isDirectory()) {
+					if (!re.exec(entry)) {
+						const jsonString = fs.readFileSync(bunchesDir + "/" + entry);
+						const bunch = JSON.parse(jsonString);
+						const title = bunch.title;
+						const lastUsed = bunch.lastUsed;
+						const numTerms = bunch.pairs.length;
+						const id = bunch.id;
+						data.push({ id, title, lastUsed, numTerms });
+					}
 				}
 			}
 			e.reply("bunchdata:get", data);
@@ -305,6 +310,40 @@ function sendBunchData(e) {
 		}
 	} else {
 		e.reply("bunchdata:get", []); //return 0 if bunches directory dne
+	}
+}
+
+ipcMain.on("folderdata:get", sendFolderData);
+
+function sendFolderData(e) {
+	const userDataPath = app.getPath("userData");
+	const foldersDir = userDataPath + "/folders";
+	const re = /^\./i;
+	var data = [];
+	if (fs.existsSync(foldersDir)) {
+		try {
+			const contents = fs.readdirSync(foldersDir, {
+				encoding: "utf8",
+			});
+			for (const entry of contents) {
+				if (
+					fs.statSync(foldersDir + "/" + entry).isDirectory() &&
+					!re.exec(entry)
+				) {
+					const title = entry;
+					const lastUsed = 1;
+					const numbunches = 1;
+					data.push({ title, lastUsed, numbunches });
+				}
+			}
+			e.reply("folderdata:get", data);
+		} catch {
+			(error) => {
+				console.log(error);
+			};
+		}
+	} else {
+		e.reply("folderdata:get", []);
 	}
 }
 

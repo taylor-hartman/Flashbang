@@ -6,6 +6,7 @@ ipcRenderer.send("updateMenu", "standard");
 
 window.onload = () => {
 	ipcRenderer.send("bunchdata:get");
+	ipcRenderer.send("folderdata:get");
 	setTimeout(() => {
 		document.getElementById("search-input").classList.remove("preload");
 	}, 250);
@@ -15,6 +16,10 @@ ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
 	console.log("bunches got");
 	bunches = JSON.parse(JSON.stringify(bunchesData));
 	makeIndexPage();
+});
+
+ipcRenderer.on("folderdata:get", (e, folderData) => {
+	console.log(JSON.parse(JSON.stringify(folderData)));
 });
 
 ipcRenderer.on("index:showUpdateAlert", () => {
