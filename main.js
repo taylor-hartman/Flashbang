@@ -322,7 +322,7 @@ ipcMain.on("folderdata-usemenu:get", (e) => {
 	sendFolderData(e, "folderdata-usemenu:get");
 });
 
-function sendFolderData(e, replyString) {
+function sendFolderData(e, replyString = "folderdata-usemenu:get") {
 	const userDataPath = app.getPath("userData");
 	const foldersDir = userDataPath + "/folders";
 	const re = /^\./i;
@@ -377,7 +377,7 @@ function getLatestFolderBunch(entry, files) {
 	}
 }
 
-ipcMain.on("folder:add", (e, data) => {
+ipcMain.on("folder:addto", (e, data) => {
 	const userDataPath = app.getPath("userData");
 	const bunchesDir = userDataPath + "/bunches";
 	const foldersDir = userDataPath + "/folders/" + data.folderName;
@@ -388,11 +388,20 @@ ipcMain.on("folder:add", (e, data) => {
 			fs.symlinkSync(bunchesPath, foldersPath); //makes a pointer to the og file in the directory
 		}
 	}
-	sendFolderData(e);
+	sendBunchData(e);
 });
 
 ipcMain.on("folder:open", (e, folderName) => {
 	sendBunchData(e, `folders/${folderName}`);
+});
+
+ipcMain.on("folder:add", (e, folderName) => {
+	const userDataPath = app.getPath("userData");
+	const foldersDir = userDataPath + "/folders/" + folderName;
+	if (!fs.existsSync(foldersDir)) {
+		fs.mkdirSync(foldersDir);
+	}
+	sendFolderData(e);
 });
 
 /* --------------------------------- Set/Delete --------------------------------- */

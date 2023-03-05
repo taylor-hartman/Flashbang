@@ -176,6 +176,44 @@ function makeIndexPage() {
 		generateList(bunchesCurrent);
 	}
 
+	topRightBtn = document.getElementById("new-bunch-btn");
+	topRightBtn.innerHTML = `<svg
+	width="24px"
+	height="24px"
+	viewBox="0 0 24 24"
+	version="1.2"
+	baseProfile="tiny"
+	xmlns="http://www.w3.org/2000/svg"
+>
+	<path
+		d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
+	/>
+</svg>`;
+	topRightBtn.setAttribute("href", "newbunch.html?id=.new_bunch");
+
+	//remove all click events from bottom left btn
+	homeToggleBtn = document.getElementById("folder-btn");
+	const newButton = homeToggleBtn.cloneNode(true);
+	homeToggleBtn.parentNode.replaceChild(newButton, homeToggleBtn);
+	//add new event listener
+	homeToggleBtn = document.getElementById("folder-btn");
+	homeToggleBtn.addEventListener("click", () => {
+		ipcRenderer.send("folderdata-usemenu:get");
+	});
+	//set icon
+	homeToggleBtn.innerHTML = `<svg
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+		version="1.2"
+		baseProfile="tiny"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path
+			d="M18 6h-6c0-1.104-.896-2-2-2h-4c-1.654 0-3 1.346-3 3v10c0 1.654 1.346 3 3 3h12c1.654 0 3-1.346 3-3v-8c0-1.654-1.346-3-3-3zm-12 0h4c0 1.104.896 2 2 2h6c.552 0 1 .448 1 1h-14v-2c0-.552.448-1 1-1zm12 12h-12c-.552 0-1-.448-1-1v-7h14v7c0 .552-.448 1-1 1z"
+		/>
+	</svg>`;
+
 	styleHomepage();
 }
 
@@ -479,6 +517,7 @@ function generateFolderMenu(folders) {
 			currentBunchIDs.push(parseInt(checks[x].getAttribute("bunch-id")));
 		}
 	}
+	unselectBunches();
 	content = "";
 	for (const folder of folders) {
 		//format taken from list homepage
@@ -504,7 +543,7 @@ function addFoldersMenuEventListeners() {
 			//Add to folder functionality
 			const folderName = e.currentTarget.getAttribute("folder-name");
 			const data = { folderName, currentBunchIDs };
-			ipcRenderer.send("folder:add", data);
+			ipcRenderer.send("folder:addto", data);
 			// ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
 		});
 	}
@@ -522,6 +561,21 @@ function useFoldersMenuEventListeners() {
 			// ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
 		});
 	}
+
+	topRightBtn = document.getElementById("new-bunch-btn");
+	topRightBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 6h-6c0-1.104-.896-2-2-2h-4c-1.654 0-3 1.346-3 3v10c0 1.654 1.346 3 3 3h12c1.654 0 3-1.346 3-3v-8c0-1.654-1.346-3-3-3zm0 12h-12c-.552 0-1-.448-1-1v-7h4c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-4v-2c0-.552.448-1 1-1h4c0 1.104.896 2 2 2h6c.552 0 1 .448 1 1h-4c-.275 0-.5.225-.5.5s.225.5.5.5h4v7c0 .552-.448 1-1 1zM15 12h-2v-2c0-.553-.447-1-1-1s-1 .447-1 1v2h-2c-.553 0-1 .447-1 1s.447 1 1 1h2v2c0 .553.447 1 1 1s1-.447 1-1v-2h2c.553 0 1-.447 1-1s-.447-1-1-1z"/></svg>`;
+	topRightBtn.removeAttribute("href");
+
+	//remove all click events from bottom left btn
+	homeToggleBtn = document.getElementById("folder-btn");
+	const newButton = homeToggleBtn.cloneNode(true);
+	homeToggleBtn.parentNode.replaceChild(newButton, homeToggleBtn);
+	//add new event listener
+	homeToggleBtn = document.getElementById("folder-btn");
+	homeToggleBtn.addEventListener("click", () => {
+		ipcRenderer.send("bunchdata:get");
+	});
+	homeToggleBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M19.707 7.293l-4-4c-.187-.188-.441-.293-.707-.293h-8c-1.654 0-3 1.346-3 3v12c0 1.654 1.346 3 3 3h10c1.654 0 3-1.346 3-3v-10c0-.266-.105-.52-.293-.707zm-2.121.707h-1.086c-.827 0-1.5-.673-1.5-1.5v-1.086l2.586 2.586zm-.586 11h-10c-.552 0-1-.448-1-1v-12c0-.552.448-1 1-1h7v1.5c0 1.379 1.121 2.5 2.5 2.5h1.5v9c0 .552-.448 1-1 1z"/></svg>`;
 }
 
 document.getElementById("add-to-folder-btn").addEventListener("click", () => {
@@ -636,10 +690,6 @@ function updateEditIcons() {
 		}
 	}
 }
-
-document.getElementById("folder-btn").addEventListener("click", () => {
-	ipcRenderer.send("folderdata-usemenu:get");
-});
 
 /* ----------------------------- Scroll Buttons ----------------------------- */
 document
