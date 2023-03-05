@@ -17,9 +17,16 @@ ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
 	makeIndexPage();
 });
 
-ipcRenderer.on("folderdata:get", (e, folderData) => {
+ipcRenderer.on("folderdata-addmenu:get", (e, folderData) => {
 	const folders = JSON.parse(JSON.stringify(folderData));
 	generateFolderMenu(folders);
+	addFoldersMenuEventListeners();
+});
+
+ipcRenderer.on("folderdata-usemenu:get", (e, folderData) => {
+	const folders = JSON.parse(JSON.stringify(folderData));
+	generateFolderMenu(folders);
+	useFoldersMenuEventListeners();
 });
 
 ipcRenderer.on("index:showUpdateAlert", () => {
@@ -486,7 +493,9 @@ function generateFolderMenu(folders) {
 	}
 	const main = document.querySelector(".main-container");
 	main.innerHTML = `<div id="folder-menu">${content}<div>`;
+}
 
+function addFoldersMenuEventListeners() {
 	const folderLIs = document
 		.getElementById("folder-menu")
 		.getElementsByClassName("folder-display");
@@ -501,8 +510,22 @@ function generateFolderMenu(folders) {
 	}
 }
 
+function useFoldersMenuEventListeners() {
+	const folderLIs = document
+		.getElementById("folder-menu")
+		.getElementsByClassName("folder-display");
+	for (x = 0; x < folderLIs.length; x++) {
+		folderLIs[x].addEventListener("click", (e) => {
+			//Add to folder functionality
+			const folderName = e.currentTarget.getAttribute("folder-name");
+			ipcRenderer.send("folder:open", folderName);
+			// ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
+		});
+	}
+}
+
 document.getElementById("add-to-folder-btn").addEventListener("click", () => {
-	ipcRenderer.send("folderdata:get");
+	ipcRenderer.send("folderdata-addmenu:get");
 });
 
 function deleteBunchList(e) {
@@ -615,7 +638,7 @@ function updateEditIcons() {
 }
 
 document.getElementById("folder-btn").addEventListener("click", () => {
-	ipcRenderer.send("folderdata:get");
+	ipcRenderer.send("folderdata-usemenu:get");
 });
 
 /* ----------------------------- Scroll Buttons ----------------------------- */

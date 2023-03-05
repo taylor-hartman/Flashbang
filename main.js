@@ -314,9 +314,15 @@ function sendBunchData(e) {
 	}
 }
 
-ipcMain.on("folderdata:get", sendFolderData);
+ipcMain.on("folderdata-addmenu:get", (e) => {
+	sendFolderData(e, "folderdata-addmenu:get");
+});
 
-function sendFolderData(e) {
+ipcMain.on("folderdata-usemenu:get", (e) => {
+	sendFolderData(e, "folderdata-usemenu:get");
+});
+
+function sendFolderData(e, replyString) {
 	const userDataPath = app.getPath("userData");
 	const foldersDir = userDataPath + "/folders";
 	const re = /^\./i;
@@ -338,14 +344,14 @@ function sendFolderData(e) {
 					data.push({ title, lastUsed, numbunches });
 				}
 			}
-			e.reply("folderdata:get", data);
+			e.reply(replyString, data);
 		} catch {
 			(error) => {
 				console.log(error);
 			};
 		}
 	} else {
-		e.reply("folderdata:get", []);
+		e.reply(replyString, []);
 	}
 }
 
