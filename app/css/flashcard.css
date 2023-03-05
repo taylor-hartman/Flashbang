@@ -14,10 +14,6 @@ body {
   color: var(--placeholder, #697277);
 }
 
-:-ms-input-placeholder {
-  color: var(--placeholder, #697277);
-}
-
 ::placeholder {
   color: var(--placeholder, #697277);
 }
@@ -98,7 +94,6 @@ a {
   top: 30px;
   right: 8px;
   width: 175px;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   border-radius: 3px;
@@ -132,7 +127,6 @@ a {
   font-size: 15.6px;
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -180,17 +174,7 @@ a {
 }
 
 #main-container #answer:not(.hide).animate {
-  -webkit-animation: 0.25s unhideAnswer ease-out;
-          animation: 0.25s unhideAnswer ease-out;
-}
-
-@-webkit-keyframes unhideAnswer {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  animation: 0.25s unhideAnswer ease-out;
 }
 
 @keyframes unhideAnswer {
@@ -202,17 +186,7 @@ a {
   }
 }
 #main-separator:not(.hide).animate {
-  -webkit-animation: 0.5s unhideSeparator ease-out;
-          animation: 0.5s unhideSeparator ease-out;
-}
-
-@-webkit-keyframes unhideSeparator {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
+  animation: 0.5s unhideSeparator ease-out;
 }
 
 @keyframes unhideSeparator {
@@ -247,8 +221,7 @@ a {
   -ms-word-break: break-word;
   word-break: break-word;
   -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-      hyphens: auto;
+  hyphens: auto;
 }
 #main-container #pinyin-container {
   width: 83%;
@@ -332,8 +305,7 @@ a {
   -ms-word-break: break-word;
   word-break: break-word;
   -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-      hyphens: auto;
+  hyphens: auto;
 }
 #main-container .typed-answer {
   width: 100%;
@@ -413,7 +385,6 @@ a {
   text-align: center;
   overflow-wrap: break-word;
   -webkit-hyphens: auto;
-      -ms-hyphens: auto;
           hyphens: auto;
 }
 .test-typed .typed-correct-indicator-conatiner {
@@ -521,7 +492,6 @@ a {
   text-align: center;
   overflow-wrap: break-word;
   -webkit-hyphens: auto;
-      -ms-hyphens: auto;
           hyphens: auto;
 }
 

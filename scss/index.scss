@@ -339,6 +339,15 @@ a {
 	}
 }
 
+#folder-btn {
+	position: absolute;
+	bottom: 5px;
+	left: 10px;
+	&:hover {
+		cursor: pointer;
+	}
+}
+
 #search-bunch-btn {
 	position: absolute;
 	top: 5px;

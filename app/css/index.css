@@ -18,10 +18,6 @@ body {
   color: var(--placeholder, #697277);
 }
 
-:-ms-input-placeholder {
-  color: var(--placeholder, #697277);
-}
-
 ::placeholder {
   color: var(--placeholder, #697277);
 }
@@ -89,8 +85,7 @@ a {
   -ms-word-break: break-word;
   word-break: break-word;
   -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-      hyphens: auto;
+  hyphens: auto;
 }
 .main-list .li-bunch .li-edit-icons-container {
   display: flex;
@@ -212,8 +207,7 @@ a {
   -ms-word-break: break-word;
   word-break: break-word;
   -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-      hyphens: auto;
+  hyphens: auto;
 }
 
 #delete-menu {
@@ -299,6 +293,15 @@ a {
   cursor: pointer;
 }
 
+#folder-btn {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+}
+#folder-btn:hover {
+  cursor: pointer;
+}
+
 #search-bunch-btn {
   position: absolute;
   top: 5px;
@@ -315,7 +318,6 @@ a {
   text-align: left;
   padding: 1.3px;
   min-width: 50px;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   border: none;
@@ -326,29 +328,15 @@ a {
 }
 
 #search-input.hide {
-  -webkit-animation: 0.25s SearchContract ease-in;
-          animation: 0.25s SearchContract ease-in;
+  animation: 0.25s SearchContract ease-in;
 }
 
 #search-input:not(.hide) {
-  -webkit-animation: 0.25s SearchExpand ease-out;
-          animation: 0.25s SearchExpand ease-out;
+  animation: 0.25s SearchExpand ease-out;
 }
 
 #search-input.hide.preload {
-  -webkit-animation-duration: 0s !important;
-          animation-duration: 0s !important;
-}
-
-@-webkit-keyframes SearchExpand {
-  from {
-    transform: scaleX(0);
-    visibility: hidden;
-  }
-  to {
-    transform: scaleX(1);
-    visibility: visible;
-  }
+  animation-duration: 0s !important;
 }
 
 @keyframes SearchExpand {
@@ -359,16 +347,6 @@ a {
   to {
     transform: scaleX(1);
     visibility: visible;
-  }
-}
-@-webkit-keyframes SearchContract {
-  from {
-    transform: scaleX(1);
-    visibility: visible;
-  }
-  to {
-    transform: scaleX(0);
-    visibility: hidden;
   }
 }
 @keyframes SearchContract {
@@ -549,7 +527,6 @@ a {
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 

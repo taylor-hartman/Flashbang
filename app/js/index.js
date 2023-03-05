@@ -6,7 +6,6 @@ ipcRenderer.send("updateMenu", "standard");
 
 window.onload = () => {
 	ipcRenderer.send("bunchdata:get");
-	ipcRenderer.send("folderdata:get");
 	setTimeout(() => {
 		document.getElementById("search-input").classList.remove("preload");
 	}, 250);
@@ -19,7 +18,8 @@ ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
 });
 
 ipcRenderer.on("folderdata:get", (e, folderData) => {
-	console.log(JSON.parse(JSON.stringify(folderData)));
+	const folders = JSON.parse(JSON.stringify(folderData));
+	generateFolderMenu(folders);
 });
 
 ipcRenderer.on("index:showUpdateAlert", () => {
@@ -464,7 +464,7 @@ function generateList(bunchList) {
 	}
 }
 
-function generateFolderMenu() {
+function generateFolderMenu(folders) {
 	currentBunchIDs = [];
 	checks = document.getElementsByClassName("mega-bunch-checkbox");
 	for (x = 0; x < checks.length; x++) {
@@ -472,23 +472,18 @@ function generateFolderMenu() {
 			currentBunchIDs.push(parseInt(checks[x].getAttribute("bunch-id")));
 		}
 	}
-	console.log(currentBunchIDs);
 	content = "";
-	// for (var folderID in folders) {
-	// 	//format taken from list homepage
-	// 	content += `<li class="folder-menu-li">
-	//         <div class="folder-display" folder-id="${folderID}" title="${
-	// 		folders[folderID.toString()]["title"]
-	// 	}">
-	//             <div class="li-content">
-	//                 <h3>${folders[folderID.toString()]["title"]}</h3>
-	//                 <div>${
-	// 										folders[folderID.toString()]["bunchIDs"].length
-	// 									} Bunches</div>
-	//             </div>
-	//         </div>
-	//     </li>`;
-	// }
+	for (const folder of folders) {
+		//format taken from list homepage
+		content += `<li class="folder-menu-li">
+	        <div class="folder-display">
+	            <div class="li-content">
+	                <h3>${folder.title}</h3>
+	                <div>${folder.numbunches} Bunches</div>
+	            </div>
+	        </div>
+	    </li>`;
+	}
 	const main = document.querySelector(".main-container");
 	main.innerHTML = `<div id="folder-menu">${content}<div>`;
 
@@ -502,6 +497,21 @@ function generateFolderMenu() {
 			ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
 		});
 	}
+}
+
+function generateFolderHtmlList(folders) {
+	let content = "";
+	for (const folder of folders) {
+		content += `<li class="folder-menu-li"> 
+		<div class="folder-display">
+				<div class="li-content">
+					<h3>${folder.title}</h3> 
+					<div>${folders.numbunches} Bunches</div>  
+				</div>
+		</div>
+	</li>`;
+	}
+	return content;
 }
 
 document
@@ -616,6 +626,10 @@ function updateEditIcons() {
 		}
 	}
 }
+
+document.getElementById("folder-btn").addEventListener("click", () => {
+	ipcRenderer.send("folderdata:get");
+});
 
 /* ----------------------------- Scroll Buttons ----------------------------- */
 document

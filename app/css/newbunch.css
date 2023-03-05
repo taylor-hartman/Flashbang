@@ -10,10 +10,6 @@
   color: var(--placeholder, #697277);
 }
 
-:-ms-input-placeholder {
-  color: var(--placeholder, #697277);
-}
-
 ::placeholder {
   color: var(--placeholder, #697277);
 }
@@ -419,7 +415,6 @@ form {
   font-size: 1.2rem;
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 

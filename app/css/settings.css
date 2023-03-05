@@ -14,10 +14,6 @@ body {
   color: var(--placeholder, #697277);
 }
 
-:-ms-input-placeholder {
-  color: var(--placeholder, #697277);
-}
-
 ::placeholder {
   color: var(--placeholder, #697277);
 }
@@ -195,17 +191,7 @@ a {
 }
 
 .main-container .section .theme-holder .palette .color-box.spin {
-  -webkit-animation: 0.5s SpinColorBox ease-in-out;
-          animation: 0.5s SpinColorBox ease-in-out;
-}
-
-@-webkit-keyframes SpinColorBox {
-  from {
-    transform: rotate(-45deg);
-  }
-  to {
-    transform: rotate(315deg);
-  }
+  animation: 0.5s SpinColorBox ease-in-out;
 }
 
 @keyframes SpinColorBox {
@@ -296,7 +282,6 @@ a {
   font-size: 1.2rem;
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
