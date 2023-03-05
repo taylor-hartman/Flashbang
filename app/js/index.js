@@ -476,7 +476,7 @@ function generateFolderMenu(folders) {
 	for (const folder of folders) {
 		//format taken from list homepage
 		content += `<li class="folder-menu-li">
-	        <div class="folder-display">
+	        <div class="folder-display" folder-name="${folder.title}">
 	            <div class="li-content">
 	                <h3>${folder.title}</h3>
 	                <div>${folder.numbunches} Bunches</div>
@@ -493,14 +493,17 @@ function generateFolderMenu(folders) {
 	for (x = 0; x < folderLIs.length; x++) {
 		folderLIs[x].addEventListener("click", (e) => {
 			//Add to folder functionality
-			ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
+			const folderName = e.currentTarget.getAttribute("folder-name");
+			const data = { folderName, currentBunchIDs };
+			ipcRenderer.send("folder:add", data);
+			// ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
 		});
 	}
 }
 
-document
-	.getElementById("add-to-folder-btn")
-	.addEventListener("click", generateFolderMenu);
+document.getElementById("add-to-folder-btn").addEventListener("click", () => {
+	ipcRenderer.send("folderdata:get");
+});
 
 function deleteBunchList(e) {
 	const parentLI = e.target.closest(".li-bunch");

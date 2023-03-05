@@ -2,6 +2,7 @@ const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const BunchStorage = require("./bunchStorage");
 const Settings = require("./settings");
 const fs = require("fs");
+const path = require("path");
 const { use } = require("builder-util");
 const fetch = require("electron-fetch").default;
 const dialog = require("electron").dialog;
@@ -369,6 +370,20 @@ function getLatestFolderBunch(entry, files) {
 		(error) => console.log(error);
 	}
 }
+
+ipcMain.on("folder:add", (e, data) => {
+	const userDataPath = app.getPath("userData");
+	const bunchesDir = userDataPath + "/bunches";
+	const foldersDir = userDataPath + "/folders/" + data.folderName;
+	for (const bunchID of data.currentBunchIDs) {
+		const foldersPath = path.join(foldersDir, `${bunchID}.json`);
+		if (!fs.existsSync(foldersPath)) {
+			const bunchesPath = path.join(bunchesDir, `${bunchID}.json`);
+			fs.symlinkSync(bunchesPath, foldersPath); //makes a pointer to the og file in the directory
+		}
+	}
+	sendFolderData(e);
+});
 
 /* --------------------------------- Set/Delete --------------------------------- */
 ipcMain.on("bunch:delete", (e, fileName) => {
