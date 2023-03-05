@@ -279,21 +279,21 @@ ipcMain.on("bunchdata:get", sendBunchData);
 
 //used to format index page
 //this has to be done here and not in index becuase index.js cannot access directory
-function sendBunchData(e) {
+function sendBunchData(e, dir = "bunches") {
 	//TODO see if there is a way to stop this from reading all the contents of every json file
 	const userDataPath = app.getPath("userData");
-	const bunchesDir = userDataPath + "/bunches";
-	if (fs.existsSync(userDataPath + "/bunches")) {
+	const fullDir = userDataPath + "/" + dir;
+	if (fs.existsSync(fullDir)) {
 		try {
 			var data = [];
-			const contents = fs.readdirSync(bunchesDir, {
+			const contents = fs.readdirSync(fullDir, {
 				encoding: "utf8",
 			});
 			const re = /^\./i; //excludes hidden files
 			for (const entry of contents) {
-				if (!fs.statSync(bunchesDir + "/" + entry).isDirectory()) {
+				if (!fs.statSync(fullDir + "/" + entry).isDirectory()) {
 					if (!re.exec(entry)) {
-						const jsonString = fs.readFileSync(bunchesDir + "/" + entry);
+						const jsonString = fs.readFileSync(fullDir + "/" + entry);
 						const bunch = JSON.parse(jsonString);
 						const title = bunch.title;
 						const lastUsed = bunch.lastUsed;
@@ -389,6 +389,10 @@ ipcMain.on("folder:add", (e, data) => {
 		}
 	}
 	sendFolderData(e);
+});
+
+ipcMain.on("folder:open", (e, folderName) => {
+	sendBunchData(e, `folders/${folderName}`);
 });
 
 /* --------------------------------- Set/Delete --------------------------------- */
