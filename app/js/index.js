@@ -492,26 +492,10 @@ function generateFolderMenu(folders) {
 		.getElementsByClassName("folder-display");
 	for (x = 0; x < folderLIs.length; x++) {
 		folderLIs[x].addEventListener("click", (e) => {
-			const folderID = parseInt(e.currentTarget.getAttribute("folder-id"));
-
+			//Add to folder functionality
 			ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
 		});
 	}
-}
-
-function generateFolderHtmlList(folders) {
-	let content = "";
-	for (const folder of folders) {
-		content += `<li class="folder-menu-li"> 
-		<div class="folder-display">
-				<div class="li-content">
-					<h3>${folder.title}</h3> 
-					<div>${folders.numbunches} Bunches</div>  
-				</div>
-		</div>
-	</li>`;
-	}
-	return content;
 }
 
 document

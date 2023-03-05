@@ -330,9 +330,10 @@ function sendFolderData(e) {
 					fs.statSync(foldersDir + "/" + entry).isDirectory() &&
 					!re.exec(entry)
 				) {
+					const files = fs.readdirSync(foldersDir + "/" + entry);
 					const title = entry;
-					const lastUsed = 1;
-					const numbunches = 1;
+					const lastUsed = getLatestFolderBunch(entry, files);
+					const numbunches = files.length;
 					data.push({ title, lastUsed, numbunches });
 				}
 			}
@@ -344,6 +345,28 @@ function sendFolderData(e) {
 		}
 	} else {
 		e.reply("folderdata:get", []);
+	}
+}
+
+function getLatestFolderBunch(entry, files) {
+	try {
+		const userDataPath = app.getPath("userData");
+		const foldersDir = userDataPath + "/folders";
+		if (files.length == 0) {
+			return new Date(0);
+		}
+		var latest = new Date(0);
+		for (const file of files) {
+			const jsonString = fs.readFileSync(`${foldersDir}/${entry}/${file}`);
+			const bunch = JSON.parse(jsonString);
+			const bunchDate = new Date(bunch.lastUsed);
+			if (bunchDate > latest) {
+				latest = bunchDate;
+			}
+		}
+		return latest;
+	} catch {
+		(error) => console.log(error);
 	}
 }
 
