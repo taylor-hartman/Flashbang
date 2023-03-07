@@ -217,6 +217,11 @@ function makeIndexPage() {
 		/>
 	</svg>`;
 
+	document.getElementById("edit-bunch-btn").classList.remove("undisplay");
+	document.getElementById("search-bunch-btn").classList.remove("undisplay");
+	document.getElementById("settings-btn").classList.remove("undisplay");
+	document.getElementById("folder-btn").classList.remove("undisplay");
+
 	styleHomepage();
 }
 
@@ -547,9 +552,27 @@ function addFoldersMenuEventListeners() {
 			const folderName = e.currentTarget.getAttribute("folder-name");
 			const data = { folderName, currentBunchIDs };
 			ipcRenderer.send("folder:addto", data);
-			// ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
 		});
 	}
+
+	document.getElementById("edit-bunch-btn").classList.add("undisplay");
+	document.getElementById("folder-btn").classList.add("undisplay");
+	document.getElementById("search-input").classList.add("hide");
+	document.getElementById("search-input").value = "";
+	document.getElementById("search-bunch-btn").classList.add("undisplay");
+	document.getElementById("settings-btn").classList.add("undisplay");
+
+	var topLeftBtn = document.getElementById("new-bunch-btn");
+	// remove event listeners
+	const newTopLeftButton = topLeftBtn.cloneNode(true);
+	topLeftBtn.parentNode.replaceChild(newTopLeftButton, topLeftBtn);
+	//redefine post clone
+	topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn.removeAttribute("href");
+	topLeftBtn.addEventListener("click", (e) => {
+		ipcRenderer.send("bunchdata:get");
+	});
+	topLeftBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"/></svg>`;
 }
 
 function useFoldersMenuEventListeners() {
@@ -561,7 +584,6 @@ function useFoldersMenuEventListeners() {
 			//Add to folder functionality
 			const folderName = e.currentTarget.getAttribute("folder-name");
 			ipcRenderer.send("folder:open", folderName);
-			// ipcRenderer.send("bunchdata:get"); //TODO should not request all for one change
 		});
 	}
 
@@ -584,6 +606,11 @@ function useFoldersMenuEventListeners() {
 		ipcRenderer.send("bunchdata:get");
 	});
 	homeToggleBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M19.707 7.293l-4-4c-.187-.188-.441-.293-.707-.293h-8c-1.654 0-3 1.346-3 3v12c0 1.654 1.346 3 3 3h10c1.654 0 3-1.346 3-3v-10c0-.266-.105-.52-.293-.707zm-2.121.707h-1.086c-.827 0-1.5-.673-1.5-1.5v-1.086l2.586 2.586zm-.586 11h-10c-.552 0-1-.448-1-1v-12c0-.552.448-1 1-1h7v1.5c0 1.379 1.121 2.5 2.5 2.5h1.5v9c0 .552-.448 1-1 1z"/></svg>`;
+
+	document.getElementById("search-input").classList.add("hide");
+	document.getElementById("search-input").value = "";
+	document.getElementById("search-bunch-btn").classList.add("undisplay");
+	document.getElementById("folder-btn").classList.remove("undisplay");
 }
 
 document.getElementById("add-to-folder-btn").addEventListener("click", () => {
