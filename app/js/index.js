@@ -12,9 +12,28 @@ window.onload = () => {
 };
 
 ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
-	console.log("bunches got");
 	bunches = JSON.parse(JSON.stringify(bunchesData));
 	makeIndexPage();
+});
+
+ipcRenderer.on("folderbunchdata:get", (e, bunchesData) => {
+	bunches = JSON.parse(JSON.stringify(bunchesData));
+
+	makeIndexPage();
+
+	var topLeftBtn = document.getElementById("new-bunch-btn");
+	// remove event listeners
+	const newTopLeftButton = topLeftBtn.cloneNode(true);
+	topLeftBtn.parentNode.replaceChild(newTopLeftButton, topLeftBtn);
+	//redefine post clone
+	topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn.removeAttribute("href");
+	topLeftBtn.addEventListener("click", (e) => {
+		ipcRenderer.send("folderdata-usemenu:get");
+	});
+	topLeftBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"/></svg>`;
+
+	document.getElementById("folder-btn").classList.add("undisplay");
 });
 
 ipcRenderer.on("folderdata-addmenu:get", (e, folderData) => {

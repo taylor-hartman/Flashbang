@@ -279,7 +279,7 @@ ipcMain.on("bunchdata:get", sendBunchData);
 
 //used to format index page
 //this has to be done here and not in index becuase index.js cannot access directory
-function sendBunchData(e, dir = "bunches") {
+function sendBunchData(e, dir = "bunches", reply = "bunchdata:get") {
 	//TODO see if there is a way to stop this from reading all the contents of every json file
 	const userDataPath = app.getPath("userData");
 	const fullDir = userDataPath + "/" + dir;
@@ -303,14 +303,14 @@ function sendBunchData(e, dir = "bunches") {
 					}
 				}
 			}
-			e.reply("bunchdata:get", data);
+			e.reply(reply, data);
 		} catch {
 			(error) => {
 				console.log(error);
 			};
 		}
 	} else {
-		e.reply("bunchdata:get", []); //return 0 if bunches directory dne
+		e.reply(reply, []); //return 0 if bunches directory dne
 	}
 }
 
@@ -392,7 +392,7 @@ ipcMain.on("folder:addto", (e, data) => {
 });
 
 ipcMain.on("folder:open", (e, folderName) => {
-	sendBunchData(e, `folders/${folderName}`);
+	sendBunchData(e, `folders/${folderName}`, "folderbunchdata:get");
 });
 
 ipcMain.on("folder:add", (e, folderName) => {
