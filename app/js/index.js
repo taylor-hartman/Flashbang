@@ -176,8 +176,8 @@ function makeIndexPage() {
 		generateList(bunchesCurrent);
 	}
 
-	topRightBtn = document.getElementById("new-bunch-btn");
-	topRightBtn.innerHTML = `<svg
+	topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn.innerHTML = `<svg
 	width="24px"
 	height="24px"
 	viewBox="0 0 24 24"
@@ -189,7 +189,10 @@ function makeIndexPage() {
 		d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
 	/>
 </svg>`;
-	topRightBtn.setAttribute("href", "newbunch.html?id=.new_bunch");
+	// remove event listeners
+	topLeftBtn.setAttribute("href", "newbunch.html?id=.new_bunch");
+	const newTopLeftButton = topLeftBtn.cloneNode(true);
+	topLeftBtn.parentNode.replaceChild(newTopLeftButton, topLeftBtn);
 
 	//remove all click events from bottom left btn
 	homeToggleBtn = document.getElementById("folder-btn");
@@ -562,9 +565,10 @@ function useFoldersMenuEventListeners() {
 		});
 	}
 
-	topRightBtn = document.getElementById("new-bunch-btn");
-	topRightBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 6h-6c0-1.104-.896-2-2-2h-4c-1.654 0-3 1.346-3 3v10c0 1.654 1.346 3 3 3h12c1.654 0 3-1.346 3-3v-8c0-1.654-1.346-3-3-3zm0 12h-12c-.552 0-1-.448-1-1v-7h4c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-4v-2c0-.552.448-1 1-1h4c0 1.104.896 2 2 2h6c.552 0 1 .448 1 1h-4c-.275 0-.5.225-.5.5s.225.5.5.5h4v7c0 .552-.448 1-1 1zM15 12h-2v-2c0-.553-.447-1-1-1s-1 .447-1 1v2h-2c-.553 0-1 .447-1 1s.447 1 1 1h2v2c0 .553.447 1 1 1s1-.447 1-1v-2h2c.553 0 1-.447 1-1s-.447-1-1-1z"/></svg>`;
-	topRightBtn.removeAttribute("href");
+	topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 6h-6c0-1.104-.896-2-2-2h-4c-1.654 0-3 1.346-3 3v10c0 1.654 1.346 3 3 3h12c1.654 0 3-1.346 3-3v-8c0-1.654-1.346-3-3-3zm0 12h-12c-.552 0-1-.448-1-1v-7h4c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-4v-2c0-.552.448-1 1-1h4c0 1.104.896 2 2 2h6c.552 0 1 .448 1 1h-4c-.275 0-.5.225-.5.5s.225.5.5.5h4v7c0 .552-.448 1-1 1zM15 12h-2v-2c0-.553-.447-1-1-1s-1 .447-1 1v2h-2c-.553 0-1 .447-1 1s.447 1 1 1h2v2c0 .553.447 1 1 1s1-.447 1-1v-2h2c.553 0 1-.447 1-1s-.447-1-1-1z"/></svg>`;
+	topLeftBtn.removeAttribute("href");
+	topLeftBtn.addEventListener("click", addNewFolder);
 
 	//remove all click events from bottom left btn
 	homeToggleBtn = document.getElementById("folder-btn");
@@ -580,6 +584,36 @@ function useFoldersMenuEventListeners() {
 
 document.getElementById("add-to-folder-btn").addEventListener("click", () => {
 	ipcRenderer.send("folderdata-addmenu:get");
+});
+
+function addNewFolder() {
+	const main = document.querySelector(".main-container");
+	main.innerHTML = `
+		<form id="new-folder-menu" >
+			<p id="new-folder-error"></p>
+			<input type="text" id="new-folder-input" placeholder="new folder name">
+			<button type="submit" id="new-folder-submit">Submit</button>
+		</form>`;
+
+	document.getElementById("new-folder-menu").addEventListener("submit", (e) => {
+		e.preventDefault();
+		const name = document.getElementById("new-folder-input").value;
+		if (
+			name.includes(".") ||
+			name.includes("/") ||
+			name.includes("\\") ||
+			name.includes("~") ||
+			name.includes(":")
+		) {
+			document.getElementById("new-folder-error").innerText =
+				"Folder name cannot contain .\\/~:";
+		}
+		ipcRenderer.send("folder:add", name);
+	});
+}
+
+ipcRenderer.on("folder:addErr", (e, error) => {
+	document.getElementById("new-folder-error").innerText = error;
 });
 
 function deleteBunchList(e) {

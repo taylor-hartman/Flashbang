@@ -210,6 +210,43 @@ a {
   hyphens: auto;
 }
 
+#new-folder-menu {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#new-folder-menu #new-folder-error {
+  margin-top: 20px;
+}
+#new-folder-menu #new-folder-input {
+  width: 60%;
+  outline: none;
+  border: none;
+  background: none;
+  border-bottom: 2px solid var(--highlight, #393e41);
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+#new-folder-menu button {
+  background: none;
+  border: 2px solid var(--highlight, #393e41);
+  border-radius: 3px;
+  padding: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--highlight, #393e41);
+}
+#new-folder-menu button:hover {
+  cursor: pointer;
+  background: var(--btn-hover, #9da5a9);
+}
+
 #delete-menu {
   position: absolute;
   width: 80%;

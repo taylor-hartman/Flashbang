@@ -400,8 +400,11 @@ ipcMain.on("folder:add", (e, folderName) => {
 	const foldersDir = userDataPath + "/folders/" + folderName;
 	if (!fs.existsSync(foldersDir)) {
 		fs.mkdirSync(foldersDir);
+		sendFolderData(e);
+	} else {
+		const error = "A folder with the provided name already exists";
+		e.reply("folder:addErr", error);
 	}
-	sendFolderData(e);
 });
 
 /* --------------------------------- Set/Delete --------------------------------- */
