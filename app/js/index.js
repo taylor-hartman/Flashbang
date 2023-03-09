@@ -196,6 +196,7 @@ function makeIndexPage() {
 			bunchesCurrent.length - 7 * pageNumber < 7 ? bunchesCurrent.length % 7 : 7
 		);
 		populateHexs(bunchesCurrent.slice(pageNumber * 7, (pageNumber + 1) * 7));
+		// addHexHoverEventListeners();
 		scrollButtonControl();
 	} else {
 		//if (homeStyle == "list") {
@@ -478,6 +479,32 @@ function insertElement(row, index, bunch) {
 		[index].querySelector(".delete-btn")
 		.setAttribute("bunch-id", `${bunch.id}`);
 }
+
+// function addHexHoverEventListeners() {
+// 	const hexes = document.getElementsByClassName("hex-container");
+// 	console.log(hexes);
+// 	for (const hex of hexes) {
+// 		hex.addEventListener("mouseenter", (e) => {
+// 			const iconContainer = e.currentTarget.querySelector(
+// 				".edit-icons-container"
+// 			);
+// 			iconContainer.classList.remove("hide");
+// 			iconContainer
+// 				.getElementsByClassName("delete-btn")[0]
+// 				.addEventListener("click", deleteBunch);
+// 			iconContainer
+// 				.getElementsByClassName("mega-bunch-checkbox")[0]
+// 				.addEventListener("change", megaBunchProcess);
+// 		});
+
+// 		hex.addEventListener("mouseleave", (e) => {
+// 			const iconContainer = e.currentTarget.querySelector(
+// 				".edit-icons-container"
+// 			);
+// 			iconContainer.classList.add("hide");
+// 		});
+// 	}
+// }
 
 function generateList(bunchList) {
 	const main = document.querySelector(".main-container");
