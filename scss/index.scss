@@ -179,6 +179,15 @@ a {
 	}
 }
 
+.folder-delete-btn {
+	&:hover {
+		cursor: pointer;
+	}
+	svg {
+		pointer-events: none;
+	}
+}
+
 #mega-bunch-menu {
 	position: absolute;
 	width: 80%;
@@ -235,8 +244,8 @@ a {
 				background: var(--btn-hover, $btn-hover);
 			}
 
-			.li-content {
-				width: 100%;
+			.folder-content {
+				width: 90%;
 			}
 		}
 
@@ -246,6 +255,15 @@ a {
 			-webkit-hyphens: auto;
 			-moz-hyphens: auto;
 			hyphens: auto;
+		}
+
+		.folder-edit-icons-container {
+			display: flex;
+			flex-direction: row;
+			position: absolute;
+			align-items: center;
+			justify-content: space-between;
+			right: 5px;
 		}
 	}
 }
@@ -328,7 +346,8 @@ a {
 	}
 }
 
-.li-delete-menu {
+.li-delete-menu,
+.folder-delete-menu {
 	text-align: center;
 	padding: 1px 5px;
 	position: absolute;

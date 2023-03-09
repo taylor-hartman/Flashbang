@@ -407,6 +407,15 @@ ipcMain.on("folder:add", (e, folderName) => {
 	}
 });
 
+ipcMain.on("folder:delete", (e, folderName) => {
+	const userDataPath = app.getPath("userData");
+	const folderPath = userDataPath + "/folders/" + folderName;
+	if (fs.existsSync(folderPath)) {
+		fs.rmdirSync(folderPath, { recursive: true });
+	}
+	sendFolderData(e, "folderdata-usemenu:get");
+});
+
 /* --------------------------------- Set/Delete --------------------------------- */
 ipcMain.on("bunch:delete", (e, fileName) => {
 	const userDataPath = app.getPath("userData");

@@ -548,17 +548,34 @@ function generateFolderMenu(folders) {
 	content = "";
 	for (const folder of folders) {
 		//format taken from list homepage
-		content += `<li class="folder-menu-li">
+		content += `<li class="folder-menu-li" folder-name="${folder.title}">
 	        <div class="folder-display" folder-name="${folder.title}">
-	            <div class="li-content">
+	            <div class="folder-content">
 	                <h3>${folder.title}</h3>
 	                <div>${folder.numbunches} Bunches</div>
-	            </div>
+				</div>
 	        </div>
+			<div class="folder-edit-icons-container">
+				<a class="btn folder-delete-btn">
+					<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 7h-1v-1c0-1.104-.896-2-2-2h-7c-1.104 0-2 .896-2 2v1h-1c-.552 0-1 .448-1 1s.448 1 1 1v8c0 2.206 1.794 4 4 4h5c2.206 0 4-1.794 4-4v-8c.552 0 1-.448 1-1s-.448-1-1-1zm-10-1h7v1h-7v-1zm8 11c0 1.104-.896 2-2 2h-5c-1.104 0-2-.896-2-2v-8h9v8zM8.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM10.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM12.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM14.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5z"/></svg>
+				</a>
+			</div>
+			<div class="folder-delete-menu undisplay">
+                    <h3>Are you sure you want to delete this folder?</h3>
+                    <div class="folder-delete-btns-container">
+                        <button class="folder-yes-delete">Yes</button>
+                        <button class="folder-no-delete">No</button>
+                    </div>
+            </div>
 	    </li>`;
 	}
 	const main = document.querySelector(".main-container");
 	main.innerHTML = `<div id="folder-menu">${content}<div>`;
+
+	const deleteBtns = document.getElementsByClassName("folder-delete-btn");
+	for (x = 0; x < deleteBtns.length; x++) {
+		deleteBtns[x].addEventListener("click", deleteFolderList);
+	}
 }
 
 function addFoldersMenuEventListeners() {
@@ -690,6 +707,17 @@ function deleteBunchList(e) {
 	unselectBunches();
 }
 
+function deleteFolderList(e) {
+	const parentLI = e.target.closest(".folder-menu-li");
+	parentLI.querySelector(".folder-delete-menu").classList.remove("undisplay");
+	parentLI
+		.querySelector(".folder-yes-delete")
+		.addEventListener("click", yesDeleteFolderList);
+	parentLI
+		.querySelector(".folder-no-delete")
+		.addEventListener("click", noDeleteFolderList);
+}
+
 function unselectBunches() {
 	document.getElementById("study-together-btn").classList.add("undisplay");
 	document.getElementById("add-to-folder-btn").classList.add("undisplay");
@@ -706,6 +734,13 @@ function yesDeleteList(e) {
 	//dont have to deal with display/undisplay bc page is reloaded
 }
 
+function yesDeleteFolderList(e) {
+	const folderName = e.target
+		.closest(".folder-menu-li")
+		.getAttribute("folder-name");
+	ipcRenderer.send("folder:delete", folderName);
+}
+
 function noDeleteList(e) {
 	const parentLI = e.target.closest(".li-bunch");
 	parentLI.querySelector(".li-delete-menu").classList.add("undisplay");
@@ -714,6 +749,17 @@ function noDeleteList(e) {
 		.removeEventListener("click", noDeleteList);
 	parentLI
 		.querySelector(".li-yes-delete")
+		.addEventListener("click", yesDeleteList);
+}
+
+function noDeleteFolderList(e) {
+	const parentLI = e.target.closest(".folder-menu-li");
+	parentLI.querySelector(".folder-delete-menu").classList.add("undisplay");
+	parentLI
+		.querySelector(".folder-no-delete")
+		.removeEventListener("click", noDeleteList);
+	parentLI
+		.querySelector(".folder-yes-delete")
 		.addEventListener("click", yesDeleteList);
 }
 
