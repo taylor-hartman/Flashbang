@@ -141,10 +141,12 @@ a {
   bottom: calc(25% - 18px);
 }
 
-.delete-btn:hover {
+.delete-btn:hover,
+.minus-btn:hover {
   cursor: pointer;
 }
-.delete-btn svg {
+.delete-btn svg,
+.minus-btn svg {
   pointer-events: none;
 }
 

@@ -303,14 +303,15 @@ function sendBunchData(e, dir = "bunches", reply = "bunchdata:get") {
 					}
 				}
 			}
-			e.reply(reply, data);
+			e.reply(reply, { data, dir });
 		} catch {
 			(error) => {
 				console.log(error);
 			};
 		}
 	} else {
-		e.reply(reply, []); //return 0 if bunches directory dne
+		data = [];
+		e.reply(reply, { data, dir }); //return 0 if bunches directory dne
 	}
 }
 
@@ -351,7 +352,8 @@ function sendFolderData(e, replyString = "folderdata-usemenu:get") {
 			};
 		}
 	} else {
-		e.reply(replyString, []);
+		data = [];
+		e.reply(replyString, data);
 	}
 }
 
@@ -389,6 +391,16 @@ ipcMain.on("folder:addto", (e, data) => {
 		}
 	}
 	sendBunchData(e);
+});
+
+ipcMain.on("folder:removefrom", (e, data) => {
+	const userDataPath = app.getPath("userData");
+	const folderPath = userDataPath + `/${data.folderName}`;
+	const pathToRemove = folderPath + `/${data.bunchID}.json`;
+	if (fs.existsSync(pathToRemove)) {
+		fs.unlink(pathToRemove, () => {});
+	}
+	sendBunchData(e, data.folderName, "folderbunchdata:get");
 });
 
 ipcMain.on("folder:open", (e, folderName) => {

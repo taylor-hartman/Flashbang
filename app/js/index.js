@@ -11,15 +11,23 @@ window.onload = () => {
 	}, 250);
 };
 
-ipcRenderer.on("bunchdata:get", (e, bunchesData) => {
-	bunches = JSON.parse(JSON.stringify(bunchesData));
+ipcRenderer.on("bunchdata:get", (e, response) => {
+	bunches = JSON.parse(JSON.stringify(response.data));
 	makeIndexPage();
 });
 
-ipcRenderer.on("folderbunchdata:get", (e, bunchesData) => {
-	bunches = JSON.parse(JSON.stringify(bunchesData));
+ipcRenderer.on("folderbunchdata:get", (e, response) => {
+	bunches = JSON.parse(JSON.stringify(response.data));
 
 	makeIndexPage();
+
+	deleteToMinus();
+
+	const mainContainer = document.querySelector(".main-container");
+	const dirInfo = document.createElement("div");
+	dirInfo.setAttribute("id", "dir-info");
+	dirInfo.setAttribute("pwd", `${response.dir}`);
+	mainContainer.appendChild(dirInfo);
 
 	var topLeftBtn = document.getElementById("new-bunch-btn");
 	// remove event listeners
@@ -557,7 +565,7 @@ function generateFolderMenu(folders) {
 	        </div>
 			<div class="folder-edit-icons-container">
 				<a class="btn folder-delete-btn">
-					<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 7h-1v-1c0-1.104-.896-2-2-2h-7c-1.104 0-2 .896-2 2v1h-1c-.552 0-1 .448-1 1s.448 1 1 1v8c0 2.206 1.794 4 4 4h5c2.206 0 4-1.794 4-4v-8c.552 0 1-.448 1-1s-.448-1-1-1zm-10-1h7v1h-7v-1zm8 11c0 1.104-.896 2-2 2h-5c-1.104 0-2-.896-2-2v-8h9v8zM8.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM10.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM12.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5zM14.5 10.5c-.275 0-.5.225-.5.5v6c0 .275.225.5.5.5s.5-.225.5-.5v-6c0-.275-.225-.5-.5-.5z"/></svg>
+					<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 6h-6c0-1.104-.896-2-2-2h-4c-1.654 0-3 1.346-3 3v10c0 1.654 1.346 3 3 3h12c1.654 0 3-1.346 3-3v-8c0-1.654-1.346-3-3-3zm-12 0h4c0 1.104.896 2 2 2h6c.552 0 1 .448 1 1h-14v-2c0-.552.448-1 1-1zm12 12h-12c-.552 0-1-.448-1-1v-7h14v7c0 .552-.448 1-1 1zM15 14h-6c-.553 0-1-.447-1-1s.447-1 1-1h6c.553 0 1 .447 1 1s-.447 1-1 1z"/></svg>
 				</a>
 			</div>
 			<div class="folder-delete-menu undisplay">
@@ -749,7 +757,7 @@ function noDeleteList(e) {
 		.removeEventListener("click", noDeleteList);
 	parentLI
 		.querySelector(".li-yes-delete")
-		.addEventListener("click", yesDeleteList);
+		.removeEventListener("click", yesDeleteList);
 }
 
 function noDeleteFolderList(e) {
@@ -760,7 +768,62 @@ function noDeleteFolderList(e) {
 		.removeEventListener("click", noDeleteList);
 	parentLI
 		.querySelector(".folder-yes-delete")
-		.addEventListener("click", yesDeleteList);
+		.removeEventListener("click", yesDeleteList);
+}
+
+function deleteToMinus() {
+	const deleteBtns = document.getElementsByClassName("delete-btn");
+	// const btnArray = Array.from(deleteBtns);
+	//clear all old event listeners and change class name
+	for (const btn of deleteBtns) {
+		const newBtn = btn.cloneNode(true);
+		btn.parentNode.replaceChild(newBtn, btn);
+	}
+
+	const minusBtns = document.getElementsByClassName("delete-btn");
+	for (const btn of minusBtns) {
+		console.log(btn);
+		//chnage icon
+		btn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M19.707 7.293l-4-4c-.187-.188-.441-.293-.707-.293h-8c-1.654 0-3 1.346-3 3v12c0 1.654 1.346 3 3 3h10c1.654 0 3-1.346 3-3v-10c0-.266-.105-.52-.293-.707zm-2.121.707h-1.086c-.827 0-1.5-.673-1.5-1.5v-1.086l2.586 2.586zm-.586 11h-10c-.552 0-1-.448-1-1v-12c0-.552.448-1 1-1h7v1.5c0 1.379 1.121 2.5 2.5 2.5h1.5v9c0 .552-.448 1-1 1zM15 14h-6c-.553 0-1-.447-1-1s.447-1 1-1h6c.553 0 1 .447 1 1s-.447 1-1 1z"/></svg>`;
+		//chnage delete txt
+		const parentLI = btn.closest(".li-bunch");
+		parentLI.querySelector(".li-delete-menu").querySelector("h3").innerText =
+			"Remove this bunch from this folder?";
+
+		btn.addEventListener("click", (e) => {
+			console.log("pee");
+			removeFromFolder(e);
+		});
+	}
+}
+
+function removeFromFolder(e) {
+	console.log("hello");
+	const parentLI = e.target.closest(".li-bunch");
+	parentLI.querySelector(".li-delete-menu").classList.remove("undisplay");
+	parentLI
+		.querySelector(".li-yes-delete")
+		.addEventListener("click", yesRemoveFromFolderList);
+	parentLI
+		.querySelector(".li-no-delete")
+		.addEventListener("click", noRemoveFromFolderList);
+}
+
+function yesRemoveFromFolderList(e) {
+	const folderName = document.getElementById("dir-info").getAttribute("pwd");
+	const bunchID = e.target.closest(".li-bunch").getAttribute("bunch-id");
+	ipcRenderer.send("folder:removefrom", { bunchID, folderName });
+}
+
+function noRemoveFromFolderList(e) {
+	const parentLI = e.target.closest(".li-bunch");
+	parentLI.querySelector(".li-delete-menu").classList.add("undisplay");
+	parentLI
+		.querySelector(".li-no-delete")
+		.removeEventListener("click", noDeleteList);
+	parentLI
+		.querySelector(".li-yes-delete")
+		.removeEventListener("click", yesDeleteList);
 }
 
 function styleHomepage() {
