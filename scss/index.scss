@@ -310,7 +310,8 @@ a {
 	}
 }
 
-#delete-menu {
+#delete-menu,
+#minus-menu {
 	position: absolute;
 	width: 80%;
 	height: 17%;
@@ -327,7 +328,8 @@ a {
 		text-align: center;
 	}
 
-	#delete-btns-container {
+	#delete-btns-container,
+	#minus-btns-container {
 		margin-top: 1.5vh;
 		width: 100%;
 		display: flex;

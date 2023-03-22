@@ -265,7 +265,8 @@ a {
   background: var(--btn-hover, #9da5a9);
 }
 
-#delete-menu {
+#delete-menu,
+#minus-menu {
   position: absolute;
   width: 80%;
   height: 17%;
@@ -276,26 +277,36 @@ a {
   justify-content: center;
   flex-direction: column;
 }
-#delete-menu h3 {
+#delete-menu h3,
+#minus-menu h3 {
   font-size: 13px;
   overflow: hidden;
   text-align: center;
 }
-#delete-menu #delete-btns-container {
+#delete-menu #delete-btns-container,
+#delete-menu #minus-btns-container,
+#minus-menu #delete-btns-container,
+#minus-menu #minus-btns-container {
   margin-top: 1.5vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
-#delete-menu #delete-btns-container button {
+#delete-menu #delete-btns-container button,
+#delete-menu #minus-btns-container button,
+#minus-menu #delete-btns-container button,
+#minus-menu #minus-btns-container button {
   background: none;
   border: solid 2px var(--highlight, #393e41);
   border-radius: 3px;
   width: 10%;
   padding: 1.3px;
 }
-#delete-menu #delete-btns-container button:hover {
+#delete-menu #delete-btns-container button:hover,
+#delete-menu #minus-btns-container button:hover,
+#minus-menu #delete-btns-container button:hover,
+#minus-menu #minus-btns-container button:hover {
   cursor: pointer;
   background: var(--btn-hover, #9da5a9);
 }
