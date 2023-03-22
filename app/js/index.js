@@ -82,18 +82,22 @@ function deleteBunch(e) {
 	deleteMenuText.innerText = `Do you really want to delete "${fileTitle}"?`;
 
 	document.getElementById("delete-menu").classList.remove("hide");
-	document.getElementById("study-together-btn").classList.add("undisplay");
-	document.getElementById("add-to-folder-btn").classList.add("undisplay");
-	const checks = document.getElementsByClassName("mega-bunch-checkbox");
-	for (x = 0; x < checks.length; x++) {
-		checks[x].checked = false;
-	}
+	unselectBunches();
 }
 
 function minusBunch(e) {
 	document
 		.getElementById("yes-minus")
 		.setAttribute("bunch-id", e.target.getAttribute("bunch-id"));
+
+	const fileTitle = e.target.getAttribute("bunch-title");
+	const minusMenuText = document
+		.getElementById("minus-menu")
+		.querySelector("h3");
+	let folderName = document.getElementById("dir-info").getAttribute("pwd");
+	folderName = folderName.split("/")[1];
+
+	minusMenuText.innerText = `Remove "${fileTitle}" from folder "${folderName}"?`;
 
 	document.getElementById("minus-menu").classList.remove("hide");
 
@@ -743,8 +747,9 @@ function addNewFolder() {
 		) {
 			document.getElementById("new-folder-error").innerText =
 				"Folder name cannot contain .\\/~:";
+		} else {
+			ipcRenderer.send("folder:add", name);
 		}
-		ipcRenderer.send("folder:add", name);
 	});
 }
 
@@ -782,6 +787,14 @@ function unselectBunches() {
 	const checks = document.getElementsByClassName("mega-bunch-checkbox");
 	for (x = 0; x < checks.length; x++) {
 		checks[x].checked = false;
+	}
+
+	if (homeStyle == "hexagon") {
+		const editConts = document.getElementsByClassName("edit-icons-container");
+		console.log(editConts);
+		for (const elem of editConts) {
+			elem.classList.add("hide");
+		}
 	}
 }
 
@@ -921,7 +934,7 @@ function megaBunchProcess() {
 	}
 
 	if (numChecks > 1) {
-		document.getElementById("study-together-btn").classList.remove("undisplay");
+		// document.getElementById("study-together-btn").classList.remove("undisplay");
 		document.getElementById("add-to-folder-btn").classList.remove("undisplay");
 		document.getElementById("delete-menu").classList.add("hide");
 	} else if (numChecks > 0) {
