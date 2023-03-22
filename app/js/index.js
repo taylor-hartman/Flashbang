@@ -196,7 +196,7 @@ function makeIndexPage() {
 			bunchesCurrent.length - 7 * pageNumber < 7 ? bunchesCurrent.length % 7 : 7
 		);
 		populateHexs(bunchesCurrent.slice(pageNumber * 7, (pageNumber + 1) * 7));
-		// addHexHoverEventListeners();
+		addHexHoverEventListeners();
 		scrollButtonControl();
 	} else {
 		//if (homeStyle == "list") {
@@ -480,31 +480,33 @@ function insertElement(row, index, bunch) {
 		.setAttribute("bunch-id", `${bunch.id}`);
 }
 
-// function addHexHoverEventListeners() {
-// 	const hexes = document.getElementsByClassName("hex-container");
-// 	console.log(hexes);
-// 	for (const hex of hexes) {
-// 		hex.addEventListener("mouseenter", (e) => {
-// 			const iconContainer = e.currentTarget.querySelector(
-// 				".edit-icons-container"
-// 			);
-// 			iconContainer.classList.remove("hide");
-// 			iconContainer
-// 				.getElementsByClassName("delete-btn")[0]
-// 				.addEventListener("click", deleteBunch);
-// 			iconContainer
-// 				.getElementsByClassName("mega-bunch-checkbox")[0]
-// 				.addEventListener("change", megaBunchProcess);
-// 		});
+function addHexHoverEventListeners() {
+	const hexes = document.getElementsByClassName("hex-container");
+	console.log(hexes);
+	for (const hex of hexes) {
+		hex.addEventListener("mouseenter", (e) => {
+			const iconContainer = e.currentTarget.querySelector(
+				".edit-icons-container"
+			);
+			iconContainer.classList.remove("hide");
+			iconContainer
+				.getElementsByClassName("delete-btn")[0]
+				.addEventListener("click", deleteBunch);
+			iconContainer
+				.getElementsByClassName("mega-bunch-checkbox")[0]
+				.addEventListener("change", megaBunchProcess);
+		});
 
-// 		hex.addEventListener("mouseleave", (e) => {
-// 			const iconContainer = e.currentTarget.querySelector(
-// 				".edit-icons-container"
-// 			);
-// 			iconContainer.classList.add("hide");
-// 		});
-// 	}
-// }
+		hex.addEventListener("mouseleave", (e) => {
+			const iconContainer = e.currentTarget.querySelector(
+				".edit-icons-container"
+			);
+			if (!e.currentTarget.querySelector(".mega-bunch-checkbox").checked) {
+				iconContainer.classList.add("hide");
+			}
+		});
+	}
+}
 
 function generateList(bunchList) {
 	const main = document.querySelector(".main-container");
@@ -682,6 +684,9 @@ function useFoldersMenuEventListeners() {
 	document.getElementById("search-input").value = "";
 	document.getElementById("search-bunch-btn").classList.add("undisplay");
 	document.getElementById("folder-btn").classList.remove("undisplay");
+
+	document.getElementById("scroll-back").classList.add("hide");
+	document.getElementById("scroll-forward").classList.add("hide");
 }
 
 document.getElementById("add-to-folder-btn").addEventListener("click", () => {
@@ -799,28 +804,29 @@ function noDeleteFolderList(e) {
 }
 
 function deleteToMinus() {
-	const deleteBtns = document.getElementsByClassName("delete-btn");
-	// const btnArray = Array.from(deleteBtns);
-	//clear all old event listeners and change class name
-	for (const btn of deleteBtns) {
-		const newBtn = btn.cloneNode(true);
-		btn.parentNode.replaceChild(newBtn, btn);
-	}
+	if (homeStyle == "list") {
+		const deleteBtns = document.getElementsByClassName("delete-btn");
+		// const btnArray = Array.from(deleteBtns);
+		//clear all old event listeners and change class name
+		for (const btn of deleteBtns) {
+			const newBtn = btn.cloneNode(true);
+			btn.parentNode.replaceChild(newBtn, btn);
+		}
 
-	const minusBtns = document.getElementsByClassName("delete-btn");
-	for (const btn of minusBtns) {
-		console.log(btn);
-		//chnage icon
-		btn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M19.707 7.293l-4-4c-.187-.188-.441-.293-.707-.293h-8c-1.654 0-3 1.346-3 3v12c0 1.654 1.346 3 3 3h10c1.654 0 3-1.346 3-3v-10c0-.266-.105-.52-.293-.707zm-2.121.707h-1.086c-.827 0-1.5-.673-1.5-1.5v-1.086l2.586 2.586zm-.586 11h-10c-.552 0-1-.448-1-1v-12c0-.552.448-1 1-1h7v1.5c0 1.379 1.121 2.5 2.5 2.5h1.5v9c0 .552-.448 1-1 1zM15 14h-6c-.553 0-1-.447-1-1s.447-1 1-1h6c.553 0 1 .447 1 1s-.447 1-1 1z"/></svg>`;
-		//chnage delete txt
-		const parentLI = btn.closest(".li-bunch");
-		parentLI.querySelector(".li-delete-menu").querySelector("h3").innerText =
-			"Remove this bunch from this folder?";
+		const minusBtns = document.getElementsByClassName("delete-btn");
+		for (const btn of minusBtns) {
+			console.log(btn);
+			//chnage icon
+			btn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M19.707 7.293l-4-4c-.187-.188-.441-.293-.707-.293h-8c-1.654 0-3 1.346-3 3v12c0 1.654 1.346 3 3 3h10c1.654 0 3-1.346 3-3v-10c0-.266-.105-.52-.293-.707zm-2.121.707h-1.086c-.827 0-1.5-.673-1.5-1.5v-1.086l2.586 2.586zm-.586 11h-10c-.552 0-1-.448-1-1v-12c0-.552.448-1 1-1h7v1.5c0 1.379 1.121 2.5 2.5 2.5h1.5v9c0 .552-.448 1-1 1zM15 14h-6c-.553 0-1-.447-1-1s.447-1 1-1h6c.553 0 1 .447 1 1s-.447 1-1 1z"/></svg>`;
+			//chnage delete txt
+			const parentLI = btn.closest(".li-bunch");
+			parentLI.querySelector(".li-delete-menu").querySelector("h3").innerText =
+				"Remove this bunch from this folder?";
 
-		btn.addEventListener("click", (e) => {
-			console.log("pee");
-			removeFromFolder(e);
-		});
+			btn.addEventListener("click", (e) => {
+				removeFromFolder(e);
+			});
+		}
 	}
 }
 
@@ -855,7 +861,7 @@ function noRemoveFromFolderList(e) {
 
 function styleHomepage() {
 	if (homeStyle == "hexagon") {
-		document.getElementById("edit-bunch-btn").classList.remove("hide");
+		document.getElementById("edit-bunch-btn").classList.add("hide");
 	} else {
 		//if (homeStyle == "list") { //made else just in case settings file corruption
 		document.getElementById("edit-bunch-btn").classList.add("hide");

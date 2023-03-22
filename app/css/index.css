@@ -138,7 +138,7 @@ a {
   justify-content: center;
   align-items: center;
   position: absolute;
-  bottom: calc(25% - 18px);
+  bottom: calc(25% - 16px);
 }
 
 .delete-btn:hover,
@@ -162,7 +162,7 @@ a {
   width: 80%;
   left: 10%;
   text-align: center;
-  bottom: 10px;
+  bottom: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,6 +173,7 @@ a {
   padding: 2px 4px;
   border-radius: 3px;
   margin: 5px;
+  font-size: 16px;
 }
 #mega-bunch-menu .btn:hover {
   cursor: pointer;
@@ -486,7 +487,7 @@ a {
 }
 .hex-content p {
   font-size: 0.75rem;
-  margin-top: 6.5px;
+  margin-top: 4px;
 }
 
 .hex-center:hover {

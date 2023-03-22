@@ -163,7 +163,7 @@ a {
 	justify-content: center;
 	align-items: center;
 	position: absolute;
-	bottom: calc(25% - 18px);
+	bottom: calc(25% - 16px);
 
 	// a {
 	//     // margin: 0 3.9px;
@@ -195,7 +195,7 @@ a {
 	// height: 1%;
 	left: 10%; //centers hortizontally
 	text-align: center;
-	bottom: 10px;
+	bottom: 5px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -206,6 +206,7 @@ a {
 		padding: 2px 4px;
 		border-radius: 3px;
 		margin: 5px;
+		font-size: 16px;
 		&:hover {
 			cursor: pointer;
 			background: var(--btn-hover, $btn-hover);
@@ -575,7 +576,7 @@ a {
 	}
 	p {
 		font-size: 0.75rem;
-		margin-top: 6.5px;
+		margin-top: 4px;
 	}
 }
 
