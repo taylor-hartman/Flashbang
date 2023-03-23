@@ -23,8 +23,6 @@ ipcRenderer.on("folderbunchdata:get", (e, response) => {
 
 	deleteToMinus();
 
-	addRenameListeners();
-
 	const mainContainer = document.querySelector(".main-container");
 	const dirInfo = document.createElement("div");
 	dirInfo.setAttribute("id", "dir-info");
@@ -662,12 +660,22 @@ function addFoldersMenuEventListeners() {
 		});
 	}
 
+	const editIcons = document.getElementsByClassName(
+		"folder-edit-icons-container"
+	);
+	for (const elem of editIcons) {
+		elem.classList.add("hide");
+	}
+
 	document.getElementById("edit-bunch-btn").classList.add("undisplay");
 	document.getElementById("folder-btn").classList.add("undisplay");
 	document.getElementById("search-input").classList.add("hide");
 	document.getElementById("search-input").value = "";
 	document.getElementById("search-bunch-btn").classList.add("undisplay");
 	document.getElementById("settings-btn").classList.add("undisplay");
+
+	document.getElementById("scroll-back").classList.add("hide");
+	document.getElementById("scroll-forward").classList.add("hide");
 
 	var topLeftBtn = document.getElementById("new-bunch-btn");
 	// remove event listeners
