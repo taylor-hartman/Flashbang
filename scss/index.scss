@@ -270,7 +270,8 @@ a {
 	}
 }
 
-#new-folder-menu {
+#new-folder-menu,
+#rename-folder-menu {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -278,11 +279,13 @@ a {
 	align-items: center;
 	flex-direction: column;
 
-	#new-folder-error {
+	#new-folder-error,
+	#rename-folder-error {
 		margin-top: 20px;
 	}
 
-	#new-folder-input {
+	#new-folder-input,
+	#rename-folder-input {
 		width: 60%;
 		outline: none;
 		border: none;

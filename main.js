@@ -419,6 +419,19 @@ ipcMain.on("folder:add", (e, folderName) => {
 	}
 });
 
+ipcMain.on("folder:rename", (e, data) => {
+	const userDataPath = app.getPath("userData");
+	const foldersDir = userDataPath + "/folders/";
+	if (!fs.existsSync(foldersDir + data.newName)) {
+		fs.rename(foldersDir + data.oldName, foldersDir + data.newName, () => {
+			sendFolderData(e);
+		});
+	} else {
+		const error = "A folder with the provided name already exists";
+		e.reply("folder:renameErr", error);
+	}
+});
+
 ipcMain.on("folder:delete", (e, folderName) => {
 	const userDataPath = app.getPath("userData");
 	const folderPath = userDataPath + "/folders/" + folderName;

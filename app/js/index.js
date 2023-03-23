@@ -23,6 +23,8 @@ ipcRenderer.on("folderbunchdata:get", (e, response) => {
 
 	deleteToMinus();
 
+	addRenameListeners();
+
 	const mainContainer = document.querySelector(".main-container");
 	const dirInfo = document.createElement("div");
 	dirInfo.setAttribute("id", "dir-info");
@@ -617,6 +619,9 @@ function generateFolderMenu(folders) {
 				</div>
 	        </div>
 			<div class="folder-edit-icons-container">
+				<a class="btn folder-rename-btn">
+					<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M21.561 5.318l-2.879-2.879c-.293-.293-.677-.439-1.061-.439-.385 0-.768.146-1.061.439l-3.56 3.561h-9c-.552 0-1 .447-1 1v13c0 .553.448 1 1 1h13c.552 0 1-.447 1-1v-9l3.561-3.561c.293-.293.439-.677.439-1.061s-.146-.767-.439-1.06zm-10.061 9.354l-2.172-2.172 6.293-6.293 2.172 2.172-6.293 6.293zm-2.561-1.339l1.756 1.728-1.695-.061-.061-1.667zm7.061 5.667h-11v-11h6l-3.18 3.18c-.293.293-.478.812-.629 1.289-.16.5-.191 1.056-.191 1.47v3.061h3.061c.414 0 1.108-.1 1.571-.29.464-.19.896-.347 1.188-.64l3.18-3.07v6zm2.5-11.328l-2.172-2.172 1.293-1.293 2.171 2.172-1.292 1.293z"/></svg>
+				</a>
 				<a class="btn folder-delete-btn">
 					<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M18 6h-6c0-1.104-.896-2-2-2h-4c-1.654 0-3 1.346-3 3v10c0 1.654 1.346 3 3 3h12c1.654 0 3-1.346 3-3v-8c0-1.654-1.346-3-3-3zm-12 0h4c0 1.104.896 2 2 2h6c.552 0 1 .448 1 1h-14v-2c0-.552.448-1 1-1zm12 12h-12c-.552 0-1-.448-1-1v-7h14v7c0 .552-.448 1-1 1zM15 14h-6c-.553 0-1-.447-1-1s.447-1 1-1h6c.553 0 1 .447 1 1s-.447 1-1 1z"/></svg>
 				</a>
@@ -636,6 +641,11 @@ function generateFolderMenu(folders) {
 	const deleteBtns = document.getElementsByClassName("folder-delete-btn");
 	for (x = 0; x < deleteBtns.length; x++) {
 		deleteBtns[x].addEventListener("click", deleteFolderList);
+	}
+
+	const editBtns = document.getElementsByClassName("folder-rename-btn");
+	for (x = 0; x < editBtns.length; x++) {
+		editBtns[x].addEventListener("click", renameFolderMenu);
 	}
 }
 
@@ -755,8 +765,57 @@ function addNewFolder() {
 	});
 }
 
+function renameFolderMenu(e) {
+	const main = document.querySelector(".main-container");
+	const oldName = e.currentTarget
+		.closest(".folder-menu-li")
+		.getAttribute("folder-name");
+	main.innerHTML = `
+		<form id="rename-folder-menu" >
+			<p id="rename-folder-error"></p>
+			<input type="text" id="rename-folder-input" placeholder="new folder name" value="${oldName}">
+			<button type="submit" id="new-folder-submit">Submit</button>
+		</form>`;
+
+	var topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"/></svg>`;
+	// remove old event listeners
+	const newTopLeftButton = topLeftBtn.cloneNode(true);
+	topLeftBtn.parentNode.replaceChild(newTopLeftButton, topLeftBtn);
+	//set new btn
+	topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn.addEventListener("click", () => {
+		ipcRenderer.send("folderdata-usemenu:get");
+	});
+
+	document
+		.getElementById("rename-folder-menu")
+		.addEventListener("submit", (e) => {
+			e.preventDefault();
+			const newName = document.getElementById("rename-folder-input").value;
+			if (
+				newName.includes(".") ||
+				newName.includes("/") ||
+				newName.includes("\\") ||
+				newName.includes("~") ||
+				newName.includes(":")
+			) {
+				document.getElementById("rename-folder-error").innerText =
+					"Folder name cannot contain .\\/~:";
+			} else {
+				e.Hienfif;
+				data = { oldName: oldName, newName: newName };
+				ipcRenderer.send("folder:rename", data);
+			}
+		});
+}
+
 ipcRenderer.on("folder:addErr", (e, error) => {
 	document.getElementById("new-folder-error").innerText = error;
+});
+
+ipcRenderer.on("folder:renameErr", (e, error) => {
+	document.getElementById("rename-folder-error").innerText = error;
 });
 
 function deleteBunchList(e) {
