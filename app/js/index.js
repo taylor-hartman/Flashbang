@@ -277,7 +277,7 @@ function generateHTML(num) {
 			//Styling is done here not in css file for case 0
 			main.innerHTML = `
             <div class="hex-row">
-                <div class="hex-container">
+                <div class="hex-container" id="no-bunches">
                     <div class="hex">
                         <a href="newbunch.html?id=.new_bunch" class="hex-center">
                             <div class="hex-content no-bunches-hex-content">
@@ -500,21 +500,23 @@ function insertElement(row, index, bunch) {
 function addHexHoverEventListeners() {
 	const hexes = document.getElementsByClassName("hex-container");
 	for (const hex of hexes) {
-		hex.addEventListener("mouseenter", (e) => {
-			const iconContainer = e.currentTarget.querySelector(
-				".edit-icons-container"
-			);
-			iconContainer.classList.remove("hide");
-		});
+		if (hex.getAttribute("id") != "no-bunches") {
+			hex.addEventListener("mouseenter", (e) => {
+				const iconContainer = e.currentTarget.querySelector(
+					".edit-icons-container"
+				);
+				iconContainer.classList.remove("hide");
+			});
 
-		hex.addEventListener("mouseleave", (e) => {
-			const iconContainer = e.currentTarget.querySelector(
-				".edit-icons-container"
-			);
-			if (!e.currentTarget.querySelector(".mega-bunch-checkbox").checked) {
-				iconContainer.classList.add("hide");
-			}
-		});
+			hex.addEventListener("mouseleave", (e) => {
+				const iconContainer = e.currentTarget.querySelector(
+					".edit-icons-container"
+				);
+				if (!e.currentTarget.querySelector(".mega-bunch-checkbox").checked) {
+					iconContainer.classList.add("hide");
+				}
+			});
+		}
 	}
 }
 
@@ -1003,6 +1005,7 @@ function scrollForward() {
 		pageNumber += 1;
 		makeIndexPage();
 	}
+	unselectBunches();
 }
 
 function scrollBack() {
@@ -1010,6 +1013,7 @@ function scrollBack() {
 		pageNumber -= 1;
 		makeIndexPage();
 	}
+	unselectBunches();
 }
 
 document.getElementById("update-notif-close").addEventListener("click", () => {
