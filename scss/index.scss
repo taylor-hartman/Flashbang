@@ -414,6 +414,20 @@ a {
 	}
 }
 
+#folder-title-holder {
+	position: absolute;
+	top: 5px;
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	z-index: -10;
+	#folder-title {
+		max-width: 50%;
+		overflow: none;
+	}
+}
+
 #search-bunch-btn {
 	position: absolute;
 	top: 5px;

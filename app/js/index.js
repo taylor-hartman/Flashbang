@@ -30,6 +30,15 @@ ipcRenderer.on("folderbunchdata:get", (e, response) => {
 
 	deleteToMinus();
 
+	//also append after because it will get deleted during makeIndexPage. TODO: Fix
+	mainContainer.appendChild(dirInfo);
+
+	const folderTitleHolder = document.createElement("div");
+	folderTitleHolder.setAttribute("id", "folder-title-holder");
+	folderTitle = response.dir.split("/")[1];
+	folderTitleHolder.innerHTML = `<h3 id="folder-title">${folderTitle}</h3>`;
+	mainContainer.appendChild(folderTitleHolder);
+
 	var topLeftBtn = document.getElementById("new-bunch-btn");
 	// remove event listeners
 	const newTopLeftButton = topLeftBtn.cloneNode(true);
