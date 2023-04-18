@@ -39,19 +39,19 @@ ipcRenderer.on("folderbunchdata:get", (e, response) => {
 	folderTitleHolder.innerHTML = `<h3 id="folder-title">${folderTitle}</h3>`;
 	mainContainer.appendChild(folderTitleHolder);
 
-	var topLeftBtn = document.getElementById("new-bunch-btn");
+	var topLeftBtn = document.getElementById("folder-btn");
 	// remove event listeners
 	const newTopLeftButton = topLeftBtn.cloneNode(true);
 	topLeftBtn.parentNode.replaceChild(newTopLeftButton, topLeftBtn);
 	//redefine post clone
-	topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn = document.getElementById("folder-btn");
 	topLeftBtn.removeAttribute("href");
 	topLeftBtn.addEventListener("click", (e) => {
 		ipcRenderer.send("folderdata-usemenu:get");
 	});
 	topLeftBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"/></svg>`;
 
-	document.getElementById("folder-btn").classList.add("undisplay");
+	document.getElementById("new-bunch-btn").classList.add("undisplay");
 });
 
 ipcRenderer.on("folderdata-addmenu:get", (e, folderData) => {
@@ -276,6 +276,7 @@ function makeIndexPage() {
 	document.getElementById("search-bunch-btn").classList.remove("undisplay");
 	document.getElementById("settings-btn").classList.remove("undisplay");
 	document.getElementById("folder-btn").classList.remove("undisplay");
+	document.getElementById("new-bunch-btn").classList.remove("undisplay");
 
 	styleHomepage();
 }
@@ -686,7 +687,7 @@ function addFoldersMenuEventListeners() {
 	}
 
 	document.getElementById("edit-bunch-btn").classList.add("undisplay");
-	document.getElementById("folder-btn").classList.add("undisplay");
+	document.getElementById("new-bunch-btn").classList.add("undisplay");
 	document.getElementById("search-input").classList.add("hide");
 	document.getElementById("search-input").value = "";
 	document.getElementById("search-bunch-btn").classList.add("undisplay");
@@ -695,12 +696,12 @@ function addFoldersMenuEventListeners() {
 	document.getElementById("scroll-back").classList.add("hide");
 	document.getElementById("scroll-forward").classList.add("hide");
 
-	var topLeftBtn = document.getElementById("new-bunch-btn");
+	var topLeftBtn = document.getElementById("folder-btn");
 	// remove event listeners
 	const newTopLeftButton = topLeftBtn.cloneNode(true);
 	topLeftBtn.parentNode.replaceChild(newTopLeftButton, topLeftBtn);
 	//redefine post clone
-	topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn = document.getElementById("folder-btn");
 	topLeftBtn.removeAttribute("href");
 	topLeftBtn.addEventListener("click", (e) => {
 		ipcRenderer.send("bunchdata:get");
@@ -744,7 +745,7 @@ function useFoldersMenuEventListeners() {
 	document.getElementById("search-input").value = "";
 	document.getElementById("search-bunch-btn").classList.add("undisplay");
 	document.getElementById("folder-btn").classList.remove("undisplay");
-
+	document.getElementById("new-bunch-btn").classList.remove("undisplay");
 	document.getElementById("scroll-back").classList.add("hide");
 	document.getElementById("scroll-forward").classList.add("hide");
 }
@@ -762,13 +763,13 @@ function addNewFolder() {
 			<button type="submit" id="new-folder-submit">Submit</button>
 		</form>`;
 
-	var topLeftBtn = document.getElementById("new-bunch-btn");
+	var topLeftBtn = document.getElementById("folder-btn");
 	topLeftBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"/></svg>`;
 	// remove old event listeners
 	const newTopLeftButton = topLeftBtn.cloneNode(true);
 	topLeftBtn.parentNode.replaceChild(newTopLeftButton, topLeftBtn);
 	//set new btn
-	topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn = document.getElementById("folder-btn");
 	topLeftBtn.addEventListener("click", () => {
 		ipcRenderer.send("folderdata-usemenu:get");
 	});
@@ -789,6 +790,8 @@ function addNewFolder() {
 			ipcRenderer.send("folder:add", name);
 		}
 	});
+
+	document.getElementById("new-bunch-btn").classList.add("undisplay");
 }
 
 function renameFolderMenu(e) {
@@ -803,13 +806,13 @@ function renameFolderMenu(e) {
 			<button type="submit" id="new-folder-submit">Submit</button>
 		</form>`;
 
-	var topLeftBtn = document.getElementById("new-bunch-btn");
+	var topLeftBtn = document.getElementById("folder-btn");
 	topLeftBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"/></svg>`;
 	// remove old event listeners
 	const newTopLeftButton = topLeftBtn.cloneNode(true);
 	topLeftBtn.parentNode.replaceChild(newTopLeftButton, topLeftBtn);
 	//set new btn
-	topLeftBtn = document.getElementById("new-bunch-btn");
+	topLeftBtn = document.getElementById("folder-btn");
 	topLeftBtn.addEventListener("click", () => {
 		ipcRenderer.send("folderdata-usemenu:get");
 	});
@@ -834,6 +837,8 @@ function renameFolderMenu(e) {
 				ipcRenderer.send("folder:rename", data);
 			}
 		});
+
+	document.getElementById("new-bunch-btn").classList.add("undisplay");
 }
 
 ipcRenderer.on("folder:addErr", (e, error) => {

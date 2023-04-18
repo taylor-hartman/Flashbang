@@ -392,7 +392,7 @@ a {
 
 #new-bunch-btn {
 	position: absolute;
-	top: 5px;
+	bottom: 5px;
 	left: 7px;
 }
 
@@ -407,7 +407,7 @@ a {
 
 #folder-btn {
 	position: absolute;
-	bottom: 5px;
+	top: 5px;
 	left: 10px;
 	&:hover {
 		cursor: pointer;
