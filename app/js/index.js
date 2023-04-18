@@ -14,6 +14,7 @@ window.onload = () => {
 ipcRenderer.on("bunchdata:get", (e, response) => {
 	bunches = JSON.parse(JSON.stringify(response.data));
 	makeIndexPage();
+	homePageButtons();
 });
 
 ipcRenderer.on("folderbunchdata:get", (e, response) => {
@@ -30,14 +31,14 @@ ipcRenderer.on("folderbunchdata:get", (e, response) => {
 
 	deleteToMinus();
 
-	//also append after because it will get deleted during makeIndexPage. TODO: Fix
-	mainContainer.appendChild(dirInfo);
-
 	const folderTitleHolder = document.createElement("div");
 	folderTitleHolder.setAttribute("id", "folder-title-holder");
-	folderTitle = response.dir.split("/")[1];
+	const folderTitle = response.dir.split("/")[1];
 	folderTitleHolder.innerHTML = `<h3 id="folder-title">${folderTitle}</h3>`;
-	mainContainer.appendChild(folderTitleHolder);
+	document.body.appendChild(folderTitleHolder);
+
+	//also append after because it will get deleted during makeIndexPage. TODO: Fix
+	mainContainer.appendChild(dirInfo);
 
 	var topLeftBtn = document.getElementById("folder-btn");
 	// remove event listeners
@@ -47,6 +48,7 @@ ipcRenderer.on("folderbunchdata:get", (e, response) => {
 	topLeftBtn = document.getElementById("folder-btn");
 	topLeftBtn.removeAttribute("href");
 	topLeftBtn.addEventListener("click", (e) => {
+		document.getElementById("folder-title-holder").remove();
 		ipcRenderer.send("folderdata-usemenu:get");
 	});
 	topLeftBtn.innerHTML = `<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M14.414 5.586c-.78-.781-2.048-.781-2.828 0l-6.415 6.414 6.415 6.414c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-3.585-3.586 3.585-3.586c.781-.781.781-2.047 0-2.828z"/></svg>`;
@@ -74,12 +76,6 @@ ipcRenderer.on("index:showUpdateAlert", () => {
 /* -------------------------------------------------------------------------- */
 /*                                   Edit/Delete                              */
 /* -------------------------------------------------------------------------- */
-
-var editShown = false;
-document.getElementById("edit-bunch-btn").addEventListener("click", () => {
-	editShown = !editShown;
-	updateEditIcons();
-});
 
 function deleteBunch(e) {
 	const fileTitle = e.target.getAttribute("bunch-title");
@@ -230,7 +226,9 @@ function makeIndexPage() {
 		//made else incase settings file coruption
 		generateList(bunchesCurrent);
 	}
+}
 
+function homePageButtons() {
 	const topLeftBtn = document.getElementById("new-bunch-btn");
 	topLeftBtn.innerHTML = `<svg
 	width="24px"
@@ -239,11 +237,11 @@ function makeIndexPage() {
 	version="1.2"
 	baseProfile="tiny"
 	xmlns="http://www.w3.org/2000/svg"
->
-	<path
-		d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
-	/>
-</svg>`;
+	>
+		<path
+			d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
+		/>
+	</svg>`;
 
 	topLeftBtn.setAttribute("href", "newbunch.html?id=.new_bunch");
 	// remove event listeners
@@ -272,13 +270,10 @@ function makeIndexPage() {
 		/>
 	</svg>`;
 
-	document.getElementById("edit-bunch-btn").classList.remove("undisplay");
 	document.getElementById("search-bunch-btn").classList.remove("undisplay");
 	document.getElementById("settings-btn").classList.remove("undisplay");
 	document.getElementById("folder-btn").classList.remove("undisplay");
 	document.getElementById("new-bunch-btn").classList.remove("undisplay");
-
-	styleHomepage();
 }
 
 function generateHTML(num) {
@@ -686,7 +681,6 @@ function addFoldersMenuEventListeners() {
 		elem.classList.add("hide");
 	}
 
-	document.getElementById("edit-bunch-btn").classList.add("undisplay");
 	document.getElementById("new-bunch-btn").classList.add("undisplay");
 	document.getElementById("search-input").classList.add("hide");
 	document.getElementById("search-input").value = "";
@@ -1000,15 +994,6 @@ document.getElementById("no-minus").addEventListener("click", () => {
 	document.getElementById("minus-menu").classList.add("hide");
 });
 
-function styleHomepage() {
-	if (homeStyle == "hexagon") {
-		document.getElementById("edit-bunch-btn").classList.add("hide");
-	} else {
-		//if (homeStyle == "list") { //made else just in case settings file corruption
-		document.getElementById("edit-bunch-btn").classList.add("hide");
-	}
-}
-
 //#endregion
 
 //#region Mega Bunch
@@ -1045,29 +1030,6 @@ function megaBunchProcess() {
 /* -------------------------------------------------------------------------- */
 /*                              Button Management                             */
 /* -------------------------------------------------------------------------- */
-function updateEditIcons() {
-	const iconContainers = document.getElementsByClassName(
-		"edit-icons-container"
-	);
-	if (editShown) {
-		//if not shown then show
-		//delete button functionality is only added to btns when the edit btns are shown
-		for (x = 0; x < iconContainers.length; x++) {
-			iconContainers[x].classList.remove("hide");
-			iconContainers[x]
-				.getElementsByClassName("delete-btn")[0]
-				.addEventListener("click", deleteBunch);
-
-			iconContainers[x]
-				.getElementsByClassName("mega-bunch-checkbox")[0]
-				.addEventListener("change", megaBunchProcess);
-		}
-	} else {
-		for (x = 0; x < iconContainers.length; x++) {
-			iconContainers[x].classList.add("hide");
-		}
-	}
-}
 
 /* ----------------------------- Scroll Buttons ----------------------------- */
 document
