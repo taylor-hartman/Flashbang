@@ -19,15 +19,16 @@ ipcRenderer.on("bunchdata:get", (e, response) => {
 ipcRenderer.on("folderbunchdata:get", (e, response) => {
 	bunches = JSON.parse(JSON.stringify(response.data));
 
-	makeIndexPage();
-
-	deleteToMinus();
-
+	//this must be done before make index in order to differentiate between home page and folder page
 	const mainContainer = document.querySelector(".main-container");
 	const dirInfo = document.createElement("div");
 	dirInfo.setAttribute("id", "dir-info");
 	dirInfo.setAttribute("pwd", `${response.dir}`);
 	mainContainer.appendChild(dirInfo);
+
+	makeIndexPage();
+
+	deleteToMinus();
 
 	var topLeftBtn = document.getElementById("new-bunch-btn");
 	// remove event listeners
@@ -274,31 +275,35 @@ function generateHTML(num) {
 	const main = document.querySelector(".main-container");
 	switch (num) {
 		case 0:
-			//Styling is done here not in css file for case 0
-			main.innerHTML = `
-            <div class="hex-row">
-                <div class="hex-container" id="no-bunches">
-                    <div class="hex">
-                        <a href="newbunch.html?id=.new_bunch" class="hex-center">
-                            <div class="hex-content no-bunches-hex-content">
-                                <h3>Create New Bunch</h3>
-                                <svg
-                                    width="24px"
-                                    height="24px"
-                                    viewBox="0 0 24 24"
-                                    version="1.2"
-                                    baseProfile="tiny"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
-                                    />
-                                </svg>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            <div class="hex-row">`;
+			if (document.getElementById("dir-info") !== null) {
+				main.innerHTML = "<h3>This folder is empty</h3>";
+			} else {
+				//Styling is done here not in css file for case 0
+				main.innerHTML = `
+				<div class="hex-row">
+					<div class="hex-container" id="no-bunches">
+						<div class="hex">
+							<a href="newbunch.html?id=.new_bunch" class="hex-center">
+								<div class="hex-content no-bunches-hex-content">
+									<h3>Create New Bunch</h3>
+									<svg
+										width="24px"
+										height="24px"
+										viewBox="0 0 24 24"
+										version="1.2"
+										baseProfile="tiny"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
+										/>
+									</svg>
+								</div>
+							</a>
+						</div>
+					</div>
+				<div class="hex-row">`;
+			}
 			break;
 		case 1:
 			main.innerHTML = `<div class="hex-row">${generateHexs(1)}</div>`;
@@ -535,21 +540,25 @@ function addHexBtnEventListeners() {
 function generateList(bunchList) {
 	const main = document.querySelector(".main-container");
 	if (bunches.length == 0) {
-		main.innerHTML = `<a class="list-create-new-bunch" href="newbunch.html?id=.new_bunch"> 
-                            <h3>Create New Bunch</h3>
-                            <svg
-                                width="24px"
-                                height="24px"
-                                viewBox="0 0 24 24"
-                                version="1.2"
-                                baseProfile="tiny"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
-                                />
-                            </svg>
-                            </a>`;
+		if (document.getElementById("dir-info") !== null) {
+			main.innerHTML = "<h3>This folder is empty</h3>";
+		} else {
+			main.innerHTML = `<a class="list-create-new-bunch" href="newbunch.html?id=.new_bunch"> 
+								<h3>Create New Bunch</h3>
+								<svg
+									width="24px"
+									height="24px"
+									viewBox="0 0 24 24"
+									version="1.2"
+									baseProfile="tiny"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
+									/>
+								</svg>
+								</a>`;
+		}
 	} else {
 		let listContent = "";
 		bunchList.forEach((bunch) => {
