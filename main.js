@@ -410,6 +410,9 @@ ipcMain.on("folder:open", (e, folderName) => {
 ipcMain.on("folder:add", (e, folderName) => {
 	const userDataPath = app.getPath("userData");
 	const foldersDir = userDataPath + "/folders/" + folderName;
+	if (!fs.existsSync(userDataPath + "/folders")) {
+		fs.mkdirSync(userDataPath + "/folders");
+	}
 	if (!fs.existsSync(foldersDir)) {
 		fs.mkdirSync(foldersDir);
 		sendFolderData(e);
