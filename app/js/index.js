@@ -776,10 +776,13 @@ function addNewFolder() {
 			name.includes("/") ||
 			name.includes("\\") ||
 			name.includes("~") ||
-			name.includes(":")
+			name.includes(":") ||
+			name.includes("'") ||
+			name.includes(`"`)
 		) {
-			document.getElementById("new-folder-error").innerText =
-				"Folder name cannot contain .\\/~:";
+			document.getElementById(
+				"new-folder-error"
+			).innerText = `Folder name cannot contain .\\/~:"'`;
 		} else {
 			ipcRenderer.send("folder:add", name);
 		}
