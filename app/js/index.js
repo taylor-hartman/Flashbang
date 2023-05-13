@@ -647,6 +647,9 @@ function generateFolderMenu(folders) {
             </div>
 	    </li>`;
 	}
+	if (folders.length == 0) {
+		content = `<h3 class="no-folder-text">No Folders</h3>`;
+	}
 	const main = document.querySelector(".main-container");
 	main.innerHTML = `<div id="folder-menu">${content}<div>`;
 
