@@ -13,7 +13,8 @@
 		"package-linux": "electron-packager . flashbang --overwrite --platform=linux --arch=x64 --icon=icons/1024x1024.png --prune=true --out=release-builds --ignore=internal_icons --ignore=.gitignore --ignore=scss --ignore=icons --ignore=windows-installer.js --ignore=debian.json --ignore=dist --ignore=README.md --ignore=assets --ignore=entitlements.plist --ignore=notarize.js",
 		"package-all": "npm run package-mac && npm run package-win32 && npm run package-win64 && npm run package-win64arm && npm run package-linux",
 		"notarize-mac": "node notarize.js",
-		"dist": "electron-builder"
+		"dist": "electron-builder",
+		"rpm64": "electron-installer-redhat --src release-builds/flashbang-linux-x64/ --dest release-builds/installers/ --arch x86_64 --icon icons/1024x1024.png"
 	},
 	"build": {
 		"appId": "INSERT_APP_ID",
@@ -63,6 +64,7 @@
 	"dependencies": {
 		"builder-util": "^24.4.0",
 		"electron-fetch": "^1.7.4",
+		"electron-installer-redhat": "^3.4.0",
 		"stat-mode": "0.3.0"
 	}
 }
