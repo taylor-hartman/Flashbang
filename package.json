@@ -17,17 +17,30 @@
 		"rpm64": "electron-installer-redhat --src release-builds/flashbang-linux-x64/ --dest release-builds/installers/ --arch x86_64 --icon icons/1024x1024.png"
 	},
 	"build": {
-		"appId": "INSERT_APP_ID",
+		"appId": "COM.NAME.APP",
 		"mac": {
-			"category": "public.app-category.education",
-			"icon": "icons/icons.icns",
-			"hardenedRuntime": true,
+			"hardenedRuntime": false,
 			"gatekeeperAssess": false,
+			"category": "public.app-category.education",
+			"icon": "build/icons.icns",
+			"type": "distribution",
+			"target": [
+				"pkg",
+				"mas"
+			],
+			"identity": null,
 			"entitlements": "entitlements.plist",
 			"entitlementsInherit": "entitlements.plist",
-			"provisioningProfile": "INSERT_PROVISIONING_PROFILE_PATH"
+			"provisioningProfile": "build/embedded.provisionprofile"
 		},
-		"afterSign": "notarize.js",
+		"mas": {
+			"type": "distribution",
+			"category": "public.app-category.utilities",
+			"entitlements": "build/entitlements.mas.plist",
+			"entitlementsInherit": "build/entitlements.mas.inherit.plist",
+			"hardenedRuntime": false,
+			"gatekeeperAssess": false
+		},
 		"files": [
 			"**/*",
 			"!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
@@ -59,10 +72,12 @@
 		"electron": "^18.3.7",
 		"electron-builder": "^23.0.3",
 		"electron-installer-redhat": "^3.3.0",
-		"electron-notarize": "^1.2.1",
+		"electron-notarize": "^1.2.2",
 		"electron-packager": "^17.1.1"
 	},
 	"dependencies": {
-		"electron-fetch": "^1.7.4"
+		"electron-fetch": "^1.7.4",
+		"electron-osx-sign": "^0.6.0",
+		"nodemon": "^3.0.3"
 	}
 }
