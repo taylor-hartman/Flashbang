@@ -465,7 +465,7 @@ function typedCorrect(userAnswer, answer) {
     let toBeAdded = [];
 
     if (settings.ignoreParenthesis) {
-        const re = /\([^)]*\) */g; //removes parenthesis and text btw them
+        const re = /[()（）][^()（）]*[()（）] */g; //removes parenthesis and text btw them
         for (x = 0; x < answers.length; x++) {
             const val = answers[x].replace(re, "").trim();
             if (!answers.includes(val)) {
