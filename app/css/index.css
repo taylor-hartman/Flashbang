@@ -15,7 +15,7 @@ body {
 }
 
 ::placeholder {
-  color: var(--placeholder, #697277);
+  color: var(--placeholder, rgb(104.6557377049, 113.8360655738, 119.3442622951));
 }
 
 svg {
@@ -72,7 +72,7 @@ a {
 }
 .main-list .li-bunch .standard-li-display:hover {
   cursor: pointer;
-  background: var(--btn-hover, #9da5a9);
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
 }
 .main-list .li-bunch .standard-li-display .li-content {
   width: 88%;
@@ -102,7 +102,7 @@ a {
 }
 .list-create-new-bunch:hover {
   cursor: pointer;
-  background: var(--btn-hover, #9da5a9);
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
 }
 
 .hex-btn {
@@ -114,8 +114,8 @@ a {
 .hex-btn .hex-center {
   top: 2px;
   left: 2px;
-  width: calc(100% - (2px * 2));
-  height: calc(100% - (2px * 2));
+  width: calc(100% - 2px * 2);
+  height: calc(100% - 2px * 2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,16 +168,16 @@ a {
   align-items: center;
   justify-content: space-around;
 }
+#delete-menu #delete-btns-container button:hover {
+  cursor: pointer;
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
+}
 #delete-menu #delete-btns-container button {
   background: none;
   border: solid 2px var(--highlight, #393e41);
   border-radius: 3px;
   width: 10%;
   padding: 1.3px;
-}
-#delete-menu #delete-btns-container button:hover {
-  cursor: pointer;
-  background: var(--btn-hover, #9da5a9);
 }
 
 .li-delete-menu {
@@ -195,16 +195,16 @@ a {
 .li-delete-menu h3 {
   font-size: 17px;
 }
+.li-delete-menu button:hover {
+  cursor: pointer;
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
+}
 .li-delete-menu button {
   background: none;
   border: solid 2px var(--highlight, #393e41);
   border-radius: 3px;
   width: 50px;
   padding: 1px 1.3px;
-}
-.li-delete-menu button:hover {
-  cursor: pointer;
-  background: var(--btn-hover, #9da5a9);
 }
 
 #settings-btn {
@@ -323,8 +323,8 @@ a {
   background-color: var(--primary, #e7e6e1);
   top: 5px;
   left: 5px;
-  width: calc(100% - (5px * 2));
-  height: calc(100% - (5px * 2));
+  width: calc(100% - 5px * 2);
+  height: calc(100% - 5px * 2);
   clip-path: polygon(6.7% 25%, 6.7% 75%, 50% 100%, 93.3% 75%, 93.3% 25%, 50% 0%);
   -webkit-clip-path: polygon(6.7% 25%, 6.7% 75%, 50% 100%, 93.3% 75%, 93.3% 25%, 50% 0%);
   -moz-clip-path: polygon(6.7% 25%, 6.7% 75%, 50% 100%, 93.3% 75%, 93.3% 25%, 50% 0%);
@@ -440,5 +440,7 @@ a {
 }
 #update-alert-container #update-notif .update-notif-btns button:hover {
   cursor: pointer;
-  background: var(--btn-hover, #9da5a9);
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
 }
+
+/*# sourceMappingURL=index.css.map */

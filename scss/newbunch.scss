@@ -107,20 +107,28 @@ input {
         padding: 0.3rem;
     }
 
+    .pair-holder {
+      width: 100%;
+    
     .input-holder {
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-right: 1rem;
+
+        .input-box {
+          width: 46.5%;
+          position: relative;
+        }
 
         input {
             border-bottom: 1px solid var(--highlight, $highlight);
             padding: 0.3rem;
             font-size: 1.2rem;
-            width: 46.5%;
+            width: 100%;
         }
     }
+  }
 }
 
 #submit-add-bar {
@@ -504,3 +512,73 @@ form {
     transform: rotate(45deg);
 }
 //-----------end checkbox stuff-------------
+
+/* Image attachment styles */
+.image-attach-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    background: var(--background, $background);
+    border: none;
+    padding: 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--highlight, $highlight);
+    &:hover {
+        cursor: pointer;
+        background: var(--btn-hover, $btn-hover);
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.image-holder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &.undisplay {
+    display: none;
+  }
+
+  .image-preview {
+      width: 46.5%;
+      height: 80px;
+      margin-top: 0.3rem;
+      border: 1px solid var(--highlight, $highlight);
+      border-radius: 3px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      padding: 0.3rem;
+  }
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 24px;
+    height: 24px;
+    background: var(--background, $background);
+    border: 1px solid var(--highlight, $highlight);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0;
+
+    &:hover {
+        background: var(--btn-hover, $btn-hover);
+    }
+}

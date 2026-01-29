@@ -7,7 +7,7 @@
 }
 
 ::placeholder {
-  color: var(--placeholder, #697277);
+  color: var(--placeholder, rgb(104.6557377049, 113.8360655738, 119.3442622951));
 }
 
 svg {
@@ -99,18 +99,24 @@ input {
 .pair p {
   padding: 0.3rem;
 }
-.pair .input-holder {
+.pair .pair-holder {
+  width: 100%;
+}
+.pair .pair-holder .input-holder {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-right: 1rem;
 }
-.pair .input-holder input {
+.pair .pair-holder .input-holder .input-box {
+  width: 46.5%;
+  position: relative;
+}
+.pair .pair-holder .input-holder input {
   border-bottom: 1px solid var(--highlight, #393e41);
   padding: 0.3rem;
   font-size: 1.2rem;
-  width: 46.5%;
+  width: 100%;
 }
 
 #submit-add-bar {
@@ -131,7 +137,7 @@ input {
 }
 #submit-add-bar button:hover {
   cursor: pointer;
-  background: var(--btn-hover, #9da5a9);
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
 }
 #submit-add-bar .btn-holder {
   display: flex;
@@ -194,13 +200,13 @@ input {
   cursor: pointer;
 }
 
+#top-right-btn:hover {
+  cursor: pointer;
+}
 #top-right-btn {
   position: fixed;
   top: 5px;
   right: 5px;
-}
-#top-right-btn:hover {
-  cursor: pointer;
 }
 
 form {
@@ -310,6 +316,9 @@ form {
 #export-menu textarea:focus {
   outline: none;
 }
+#export-menu #export-label {
+  margin-bottom: 0.75rem;
+}
 #export-menu #export-text {
   width: 80%;
   height: 60%;
@@ -378,16 +387,16 @@ form {
   align-items: center;
   justify-content: space-around;
 }
+#delete-menu #delete-btns-container button:hover {
+  cursor: pointer;
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
+}
 #delete-menu #delete-btns-container button {
   background: none;
   border: solid 2px var(--highlight, #393e41);
   border-radius: 3px;
   width: 10%;
   padding: 0.1rem;
-}
-#delete-menu #delete-btns-container button:hover {
-  cursor: pointer;
-  background: var(--btn-hover, #9da5a9);
 }
 
 .hide {
@@ -456,3 +465,70 @@ form {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+/* Image attachment styles */
+.image-attach-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: var(--background, #e7e6e1);
+  border: none;
+  padding: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--highlight, #393e41);
+}
+.image-attach-btn:hover {
+  cursor: pointer;
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
+}
+.image-attach-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.image-holder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.image-holder.undisplay {
+  display: none;
+}
+.image-holder .image-preview {
+  width: 46.5%;
+  height: 80px;
+  margin-top: 0.3rem;
+  border: 1px solid var(--highlight, #393e41);
+  border-radius: 3px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  padding: 0.3rem;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 24px;
+  height: 24px;
+  background: var(--background, #e7e6e1);
+  border: 1px solid var(--highlight, #393e41);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0;
+}
+.remove-image-btn:hover {
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
+}
+
+/*# sourceMappingURL=newbunch.css.map */

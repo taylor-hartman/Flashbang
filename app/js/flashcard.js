@@ -405,6 +405,7 @@ function showAnswer() {
     if (bunchSettings.questionType.flashcard) {
         document.querySelector("#main-separator").classList.remove("hide");
         document.getElementById("answer").classList.remove("hide");
+        document.getElementById("answer-image-container").classList.remove("hide");
         document.getElementById("bottom-text").innerText =
             "Incorrect: Press 1 \n Correct: Press 2 or Space";
         answerShown = true;
@@ -623,18 +624,20 @@ function updateHTML() {
     } else {
         if (bunchSettings.questionType.flashcard) {
             document.getElementById("main-container").innerHTML = `
-            <div id="prompt-container"> 
+            <div id="prompt-container">
                 <div id="pinyin-container">
                     <p class="hide" id="pinyin-text"></p>
                 </div>
                 <h2 class="" id="prompt"></h2>
+                <div id="prompt-image-container" class="study-image-container"></div>
             </div>
             <div class="hide ${
                 settings.animateStudy ? "animate" : ""
             }" id="main-separator"></div>
             <h2 class="hide ${
                 settings.animateStudy ? "animate" : ""
-            }" id="answer"></h2>`;
+            }" id="answer"></h2>
+            <div id="answer-image-container" class="study-image-container hide"></div>`;
 
             document.getElementById("main-container").style.paddingBottom =
                 "10vh";
@@ -645,17 +648,19 @@ function updateHTML() {
             pinyinTypedAndFlashcardHTML();
         } else if (bunchSettings.questionType.typed) {
             document.getElementById("main-container").innerHTML = `
-            <div id="prompt-container"> 
+            <div id="prompt-container">
                 <div id="pinyin-container">
                     <p class="hide" id="pinyin-text"></p>
                 </div>
                 <h2 id="prompt">Lorem</h2>
+                <div id="prompt-image-container" class="study-image-container"></div>
             </div>
             <div id="typed-container">
                     <input type="text" id="answer-input"/>
                     <span id="answer-input-span"></span>
                     <div class="hide" id="status-block">&#10004</div>
                     <h2 class="hide typed-answer" id="answer">Lorem</h2>
+                    <div id="answer-image-container" class="study-image-container hide"></div>
                     <div class="hide" id="iwr-btn-container">
                         <button id="iwr-btn">I was right</button>
                     </div>
@@ -1340,6 +1345,9 @@ function displayCard() {
         updatePromptPinyin();
         sayChecked(currentReversed ? "answer" : "prompt");
 
+        // Display images
+        displayCardImages();
+
         answerShown = false;
     }
 }
@@ -1354,6 +1362,7 @@ function styleAnswer(correct) {
         statusBlock.classList.remove("hide");
     } else {
         document.getElementById("answer").classList.remove("hide");
+        document.getElementById("answer-image-container").classList.remove("hide");
         if (settings.showIwr) {
             document
                 .getElementById("iwr-btn-container")
@@ -1375,6 +1384,7 @@ function resetHTML() {
     if (bunchSettings.questionType.flashcard) {
         document.querySelector("#main-separator").classList.add("hide");
         document.getElementById("answer").classList.add("hide");
+        document.getElementById("answer-image-container").classList.add("hide");
         document.getElementById("bottom-text").innerText =
             "Press Space to Reveal Answer";
     } else if (bunchSettings.questionType.typed) {
@@ -1387,6 +1397,7 @@ function resetHTML() {
         input.style.textDecoration = "none";
         document.getElementById("status-block").classList.add("hide");
         document.getElementById("answer").classList.add("hide");
+        document.getElementById("answer-image-container").classList.add("hide");
         document.getElementById("iwr-btn-container").classList.add("hide");
         document.getElementById("bottom-text").innerText =
             "Press Enter to Answer";
@@ -1435,6 +1446,48 @@ function updateRemainingText() {
             "remaining-text"
         ).innerText = `${remainingCount} remaining`;
     }
+}
+
+function displayCardImages() {
+    if (bunchSettings.questionType.flashcard || bunchSettings.questionType.typed) {
+        const promptImageContainer = document.getElementById("prompt-image-container");
+        const answerImageContainer = document.getElementById("answer-image-container");
+
+        // Clear existing images
+        if (promptImageContainer) {
+            promptImageContainer.innerHTML = "";
+        }
+        if (answerImageContainer) {
+            answerImageContainer.innerHTML = "";
+        }
+
+        // Get the correct image filenames based on direction
+        const promptImageFilename = currentReversed ? currentPair.answerImage : currentPair.promptImage;
+        const answerImageFilename = currentReversed ? currentPair.promptImage : currentPair.answerImage;
+
+        // Load prompt image
+        if (promptImageFilename && promptImageContainer) {
+            loadStudyImage(promptImageFilename, promptImageContainer);
+        }
+
+        // Load answer image
+        if (answerImageFilename && answerImageContainer) {
+            loadStudyImage(answerImageFilename, answerImageContainer);
+        }
+    }
+}
+
+function loadStudyImage(filename, container) {
+    ipcRenderer.send("image:get", filename);
+
+    ipcRenderer.once(`image:get:${filename}`, (e, imageData) => {
+        if (imageData) {
+            const img = document.createElement("img");
+            img.src = imageData;
+            img.classList.add("study-image");
+            container.appendChild(img);
+        }
+    });
 }
 //#endregion
 

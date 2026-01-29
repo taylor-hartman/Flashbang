@@ -11,7 +11,7 @@ body {
 }
 
 ::placeholder {
-  color: var(--placeholder, #697277);
+  color: var(--placeholder, rgb(104.6557377049, 113.8360655738, 119.3442622951));
 }
 
 svg {
@@ -168,7 +168,7 @@ a {
 }
 .main-container button:hover {
   cursor: pointer;
-  background: var(--btn-hover, #9da5a9);
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
 }
 .main-container #end-bar {
   width: 100%;
@@ -326,3 +326,5 @@ a {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+/*# sourceMappingURL=settings.css.map */

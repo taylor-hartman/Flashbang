@@ -2,6 +2,7 @@ const {app, BrowserWindow, Menu, ipcMain} = require('electron');
 const BunchStorage = require('./bunchStorage');
 const Settings = require('./settings');
 const fs = require('fs');
+const path = require('path');
 const fetch = require('electron-fetch').default;
 const dialog = require('electron').dialog;
 
@@ -322,6 +323,80 @@ ipcMain.on('bunch:set', (e, id, input) => {
   const bunchStorage = new BunchStorage({fileName: id});
   bunchStorage.set(input.key, input.value);
 });
+// #endregion
+
+// #region Image Requests
+/* -------------------------------------------------------------------------- */
+/*                               Image Requests                               */
+/* -------------------------------------------------------------------------- */
+
+/* ---------------------------------- Save ---------------------------------- */
+ipcMain.on('image:save', (e, data) => {
+  const userDataPath = app.getPath('userData');
+  const imagesDir = path.join(userDataPath, 'images');
+
+  // Ensure images directory exists
+  if (!fs.existsSync(imagesDir)) {
+    fs.mkdirSync(imagesDir, {recursive: true});
+  }
+
+  const imagePath = path.join(imagesDir, data.filename);
+
+  // Extract base64 data from data URL
+  const base64Data = data.data.replace(/^data:image\/\w+;base64,/, '');
+  const buffer = Buffer.from(base64Data, 'base64');
+
+  fs.writeFile(imagePath, buffer, (err) => {
+    if (err) {
+      console.error('Error saving image:', err);
+    }
+  });
+});
+
+/* ----------------------------------- Get ---------------------------------- */
+ipcMain.on('image:get', (e, filename) => {
+  const userDataPath = app.getPath('userData');
+  const imagesDir = path.join(userDataPath, 'images');
+  const imagePath = path.join(imagesDir, filename);
+
+  if (fs.existsSync(imagePath)) {
+    fs.readFile(imagePath, (err, data) => {
+      if (err) {
+        console.error('Error reading image:', err);
+        e.reply(`image:get:${filename}`, null);
+      } else {
+        // Detect image type from extension
+        const ext = path.extname(filename).toLowerCase();
+        let mimeType = 'image/jpeg';
+        if (ext === '.png') mimeType = 'image/png';
+        else if (ext === '.gif') mimeType = 'image/gif';
+        else if (ext === '.webp') mimeType = 'image/webp';
+
+        const base64 = data.toString('base64');
+        const dataUrl = `data:${mimeType};base64,${base64}`;
+        e.reply(`image:get:${filename}`, dataUrl);
+      }
+    });
+  } else {
+    e.reply(`image:get:${filename}`, null);
+  }
+});
+
+/* --------------------------------- Delete --------------------------------- */
+ipcMain.on('image:delete', (e, filename) => {
+  const userDataPath = app.getPath('userData');
+  const imagesDir = path.join(userDataPath, 'images');
+  const imagePath = path.join(imagesDir, filename);
+
+  if (fs.existsSync(imagePath)) {
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error('Error deleting image:', err);
+      }
+    });
+  }
+});
+
 // #endregion
 
 // #region Settings Requests

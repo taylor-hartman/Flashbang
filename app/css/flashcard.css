@@ -11,7 +11,7 @@ body {
 }
 
 ::placeholder {
-  color: var(--placeholder, #697277);
+  color: var(--placeholder, rgb(104.6557377049, 113.8360655738, 119.3442622951));
 }
 
 svg {
@@ -534,7 +534,7 @@ a {
 }
 .test-bottom-btn:hover {
   cursor: pointer;
-  background: var(--btn-hover, #9da5a9);
+  background: var(--btn-hover, rgb(156.9672131148, 164.5081967213, 169.0327868852));
 }
 
 .test-error-msg {
@@ -564,3 +564,23 @@ a {
 .undisplay {
   display: none;
 }
+
+/* Study image styles */
+.study-image-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.study-image {
+  max-width: 80%;
+  max-height: 300px;
+  object-fit: contain;
+  border: 2px solid var(--highlight, #393e41);
+  border-radius: 6px;
+}
+
+/*# sourceMappingURL=flashcard.css.map */

@@ -626,3 +626,21 @@ a {
 .undisplay {
     display: none;
 }
+
+/* Study image styles */
+.study-image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.study-image {
+    max-width: 80%;
+    max-height: 300px;
+    object-fit: contain;
+    border: 2px solid var(--highlight, $highlight);
+    border-radius: 6px;
+}
