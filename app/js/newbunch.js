@@ -373,38 +373,42 @@ document.getElementById("plus").addEventListener("click", (e) => {
 	newPair.setAttribute("answer-image", "");
 
 	newPair.innerHTML = `
-        <p class="index">${idNum}</p>
-        <div class="input-holder">
-        <div class="input-with-image">
-            <input
-                class="prompt"
-                type="text"
-                placeholder="Prompt"
-                name=""
-                id=""
-            />
-            <button type="button" class="image-attach-btn prompt-image-btn" title="Attach image to prompt">
-                <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 4v16c0 1.654-1.346 3-3 3h-16c-1.654 0-3-1.346-3-3v-16c0-1.654 1.346-3 3-3h16c1.654 0 3 1.346 3 3zm-2 0c0-.551-.448-1-1-1h-16c-.552 0-1 .449-1 1v10.172l3.293-3.293c.391-.391 1.024-.391 1.414 0l2.293 2.293 6.293-6.293c.391-.391 1.024-.391 1.414 0l3.293 3.293v-6.172zm0 13.414l-4.707-4.707-6.293 6.293-2.293-2.293-4.707 4.707v.586c0 .551.448 1 1 1h16c.552 0 1-.449 1-1v-.586z"/></svg>
-            </button>
-            <div class="image-preview prompt-image-preview hide"></div>
-        </div>
-        <div class="input-with-image">
-            <input
-                class="answer"
-                type="text"
-                placeholder="Answer"
-                name=""
-                id=""
-            />
-            <button type="button" class="image-attach-btn answer-image-btn" title="Attach image to answer">
-                <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 4v16c0 1.654-1.346 3-3 3h-16c-1.654 0-3-1.346-3-3v-16c0-1.654 1.346-3 3-3h16c1.654 0 3 1.346 3 3zm-2 0c0-.551-.448-1-1-1h-16c-.552 0-1 .449-1 1v10.172l3.293-3.293c.391-.391 1.024-.391 1.414 0l2.293 2.293 6.293-6.293c.391-.391 1.024-.391 1.414 0l3.293 3.293v-6.172zm0 13.414l-4.707-4.707-6.293 6.293-2.293-2.293-4.707 4.707v.586c0 .551.448 1 1 1h16c.552 0 1-.449 1-1v-.586z"/></svg>
-            </button>
-            <div class="image-preview answer-image-preview hide"></div>
-        </div>
-        <a class="pair-delete-btn undisplay">
-                <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
-        </a>
-        </div>`;
+            <p class="index">${idNum}</p>
+            <div class="pair-holder">
+                <div class="input-holder">
+                    <div class="input-box">
+                        <input
+                            class="prompt"
+                            type="text"
+                            placeholder="Prompt"
+                            name=""
+                            id="",
+                        />
+                        <button type="button" class="image-attach-btn prompt-image-btn" title="Add image to prompt">
+                            <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 4v16c0 1.654-1.346 3-3 3h-16c-1.654 0-3-1.346-3-3v-16c0-1.654 1.346-3 3-3h16c1.654 0 3 1.346 3 3zm-2 0c0-.551-.448-1-1-1h-16c-.552 0-1 .449-1 1v10.172l3.293-3.293c.391-.391 1.024-.391 1.414 0l2.293 2.293 6.293-6.293c.391-.391 1.024-.391 1.414 0l3.293 3.293v-6.172zm0 13.414l-4.707-4.707-6.293 6.293-2.293-2.293-4.707 4.707v.586c0 .551.448 1 1 1h16c.552 0 1-.449 1-1v-.586z"/></svg>
+                        </button>
+                    </div>
+                    <div class="input-box">
+                        <input
+                            class="answer"
+                            type="text"
+                            placeholder="Answer"
+                            name=""
+                            id="",
+                        />
+                        <button type="button" class="image-attach-btn answer-image-btn" title="Add image to answer">
+                            <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 4v16c0 1.654-1.346 3-3 3h-16c-1.654 0-3-1.346-3-3v-16c0-1.654 1.346-3 3-3h16c1.654 0 3 1.346 3 3zm-2 0c0-.551-.448-1-1-1h-16c-.552 0-1 .449-1 1v10.172l3.293-3.293c.391-.391 1.024-.391 1.414 0l2.293 2.293 6.293-6.293c.391-.391 1.024-.391 1.414 0l3.293 3.293v-6.172zm0 13.414l-4.707-4.707-6.293 6.293-2.293-2.293-4.707 4.707v.586c0 .551.448 1 1 1h16c.552 0 1-.449 1-1v-.586z"/></svg>
+                        </button>
+                    </div>
+                    <a class="pair-delete-btn undisplay">
+                        <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 6.586c-.78-.781-2.048-.781-2.828 0l-2.586 2.586-2.586-2.586c-.78-.781-2.048-.781-2.828 0-.781.781-.781 2.047 0 2.828l2.585 2.586-2.585 2.586c-.781.781-.781 2.047 0 2.828.39.391.902.586 1.414.586s1.024-.195 1.414-.586l2.586-2.586 2.586 2.586c.39.391.902.586 1.414.586s1.024-.195 1.414-.586c.781-.781.781-2.047 0-2.828l-2.585-2.586 2.585-2.586c.781-.781.781-2.047 0-2.828z"/></svg>
+                    </a>
+                </div>
+                <div class="undisplay image-holder">
+                    <div class="image-preview prompt-image-preview hide"></div>
+                    <div class="image-preview answer-image-preview hide"></div>
+                </div>
+            </div>`;
 
 	if (document.getElementById("auto-pinyin-prompt").checked) {
 		addPinyinInputListener(newPair.getElementsByClassName("prompt")[0]);
@@ -973,7 +977,10 @@ function removeImage(pairElement, side) {
 		// Hide image-holder if both images are now empty
 		const promptImage = pairElement.getAttribute("prompt-image");
 		const answerImage = pairElement.getAttribute("answer-image");
-		if ((!promptImage || promptImage === "") && (!answerImage || answerImage === "")) {
+		if (
+			(!promptImage || promptImage === "") &&
+			(!answerImage || answerImage === "")
+		) {
 			const imageHolder = pairElement.querySelector(".image-holder");
 			if (imageHolder) {
 				imageHolder.classList.add("undisplay");
