@@ -405,7 +405,11 @@ a {
     position: relative;
 
     .test-typed-prompt {
-        max-width: 45%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 45%;
         overflow-wrap: break-word;
     }
 
@@ -487,13 +491,21 @@ a {
     .test-TF-prompt {
         width: 43%;
         max-width: 43%;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
         overflow-wrap: break-word;
+        text-align: center;
     }
 
     .test-TF-answer {
         width: 43%;
         max-width: 43%;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
         overflow-wrap: break-word;
+        text-align: center;
     }
 
     .test-TF-button {
@@ -538,6 +550,7 @@ a {
             border: 2px solid var(--highlight, $highlight);
             border-radius: 3px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background: none;
