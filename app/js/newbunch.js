@@ -907,7 +907,7 @@ function saveImage(file, pairElement, side) {
 		const timestamp = Date.now();
 		const randomStr = Math.random().toString(36).substring(7);
 		const ext = path.extname(file.name);
-		const filename = `${id}_${timestamp}_${randomStr}${ext}`;
+		const filename = `${timestamp}_${randomStr}${ext}`;
 
 		// Save via IPC
 		ipcRenderer.send("image:save", {

@@ -316,7 +316,51 @@ function sendBunchData(e) {
 ipcMain.on('bunch:delete', (e, fileName) => {
   const userDataPath = app.getPath('userData');
   var filePath = userDataPath + '/bunches/' + fileName + '.json';
-  fs.unlink(filePath, () => {});
+
+  // Read the bunch file to get image references before deleting
+  try {
+    if (fs.existsSync(filePath)) {
+      const bunchData = fs.readFileSync(filePath, 'utf-8');
+      const bunch = JSON.parse(bunchData);
+
+      // Collect all image filenames from the bunch
+      const imageFilenames = new Set();
+      if (bunch.pairs && Array.isArray(bunch.pairs)) {
+        bunch.pairs.forEach(pair => {
+          if (pair.promptImage) {
+            imageFilenames.add(pair.promptImage);
+          }
+          if (pair.answerImage) {
+            imageFilenames.add(pair.answerImage);
+          }
+        });
+      }
+
+      // Delete the bunch file
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting bunch file:', err);
+        }
+      });
+
+      // Delete associated images
+      const imagesDir = path.join(userDataPath, 'images');
+      imageFilenames.forEach(filename => {
+        const imagePath = path.join(imagesDir, filename);
+        if (fs.existsSync(imagePath)) {
+          fs.unlink(imagePath, (err) => {
+            if (err) {
+              console.error(`Error deleting image ${filename}:`, err);
+            }
+          });
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error processing bunch deletion:', error);
+    // Still try to delete the bunch file even if parsing fails
+    fs.unlink(filePath, () => {});
+  }
 });
 
 ipcMain.on('bunch:set', (e, id, input) => {
