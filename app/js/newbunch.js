@@ -69,7 +69,7 @@ document.addEventListener("keypress", function (e) {
 					(
 						document.querySelector("input.prompt:focus") ||
 						document.querySelector("input.answer:focus")
-					).parentNode.parentNode.querySelector("p.index").innerText -
+					).closest(".pair").querySelector("p.index").innerText -
 					1;
 			}
 
@@ -159,7 +159,7 @@ function generatePairsHTML() {
                             id="",
                             value="${pairs[x].prompt.replaceAll('"', "&quot;")}"
                         />
-                        <button type="button" class="image-attach-btn prompt-image-btn" title="Add image to prompt">
+                        <button type="button" class="image-attach-btn prompt-image-btn" title="Add image to prompt" tabindex="-1">
                             <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 4v16c0 1.654-1.346 3-3 3h-16c-1.654 0-3-1.346-3-3v-16c0-1.654 1.346-3 3-3h16c1.654 0 3 1.346 3 3zm-2 0c0-.551-.448-1-1-1h-16c-.552 0-1 .449-1 1v10.172l3.293-3.293c.391-.391 1.024-.391 1.414 0l2.293 2.293 6.293-6.293c.391-.391 1.024-.391 1.414 0l3.293 3.293v-6.172zm0 13.414l-4.707-4.707-6.293 6.293-2.293-2.293-4.707 4.707v.586c0 .551.448 1 1 1h16c.552 0 1-.449 1-1v-.586z"/></svg>
                         </button>
                     </div>
@@ -172,7 +172,7 @@ function generatePairsHTML() {
                             id="",
                             value="${pairs[x].answer.replaceAll('"', "&quot;")}"
                         />
-                        <button type="button" class="image-attach-btn answer-image-btn" title="Add image to answer">
+                        <button type="button" class="image-attach-btn answer-image-btn" title="Add image to answer" tabindex="-1">
                             <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 4v16c0 1.654-1.346 3-3 3h-16c-1.654 0-3-1.346-3-3v-16c0-1.654 1.346-3 3-3h16c1.654 0 3 1.346 3 3zm-2 0c0-.551-.448-1-1-1h-16c-.552 0-1 .449-1 1v10.172l3.293-3.293c.391-.391 1.024-.391 1.414 0l2.293 2.293 6.293-6.293c.391-.391 1.024-.391 1.414 0l3.293 3.293v-6.172zm0 13.414l-4.707-4.707-6.293 6.293-2.293-2.293-4.707 4.707v.586c0 .551.448 1 1 1h16c.552 0 1-.449 1-1v-.586z"/></svg>
                         </button>
                     </div>
@@ -384,7 +384,7 @@ document.getElementById("plus").addEventListener("click", (e) => {
                             name=""
                             id="",
                         />
-                        <button type="button" class="image-attach-btn prompt-image-btn" title="Add image to prompt">
+                        <button type="button" class="image-attach-btn prompt-image-btn" title="Add image to prompt" tabindex="-1">
                             <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 4v16c0 1.654-1.346 3-3 3h-16c-1.654 0-3-1.346-3-3v-16c0-1.654 1.346-3 3-3h16c1.654 0 3 1.346 3 3zm-2 0c0-.551-.448-1-1-1h-16c-.552 0-1 .449-1 1v10.172l3.293-3.293c.391-.391 1.024-.391 1.414 0l2.293 2.293 6.293-6.293c.391-.391 1.024-.391 1.414 0l3.293 3.293v-6.172zm0 13.414l-4.707-4.707-6.293 6.293-2.293-2.293-4.707 4.707v.586c0 .551.448 1 1 1h16c.552 0 1-.449 1-1v-.586z"/></svg>
                         </button>
                     </div>
@@ -396,7 +396,7 @@ document.getElementById("plus").addEventListener("click", (e) => {
                             name=""
                             id="",
                         />
-                        <button type="button" class="image-attach-btn answer-image-btn" title="Add image to answer">
+                        <button type="button" class="image-attach-btn answer-image-btn" title="Add image to answer" tabindex="-1">
                             <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 4v16c0 1.654-1.346 3-3 3h-16c-1.654 0-3-1.346-3-3v-16c0-1.654 1.346-3 3-3h16c1.654 0 3 1.346 3 3zm-2 0c0-.551-.448-1-1-1h-16c-.552 0-1 .449-1 1v10.172l3.293-3.293c.391-.391 1.024-.391 1.414 0l2.293 2.293 6.293-6.293c.391-.391 1.024-.391 1.414 0l3.293 3.293v-6.172zm0 13.414l-4.707-4.707-6.293 6.293-2.293-2.293-4.707 4.707v.586c0 .551.448 1 1 1h16c.552 0 1-.449 1-1v-.586z"/></svg>
                         </button>
                     </div>
@@ -939,6 +939,7 @@ function saveImage(file, pairElement, side) {
 			removeBtn.type = "button";
 			removeBtn.innerHTML = "×";
 			removeBtn.title = "Remove image";
+			removeBtn.tabIndex = -1;
 			removeBtn.addEventListener("click", (e) => {
 				e.stopPropagation();
 				removeImage(pairElement, side);
@@ -1029,6 +1030,7 @@ function loadImagePreview(pairElement, side, filename) {
 				removeBtn.type = "button";
 				removeBtn.innerHTML = "×";
 				removeBtn.title = "Remove image";
+				removeBtn.tabIndex = -1;
 				removeBtn.addEventListener("click", (e) => {
 					e.stopPropagation();
 					removeImage(pairElement, side);
