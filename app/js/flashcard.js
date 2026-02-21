@@ -468,7 +468,7 @@ function typedCorrect(userAnswer, answer) {
 	let toBeAdded = [];
 
 	if (settings.ignoreParenthesis) {
-		const re = /\([^)]*\) */g; //removes parenthesis and text btw them
+		const re = /[（(][^()（）]*[）)] */g; //removes parenthesis and text btw them
 		for (x = 0; x < answers.length; x++) {
 			const val = answers[x].replace(re, "").trim();
 			if (!answers.includes(val)) {
@@ -554,7 +554,7 @@ function sayChecked(type) {
 			string = currentPair.answer;
 		}
 
-		const rmp = /\(.*?\)/g; //removes parenthesis and text btw them
+		const rmp = /[（(][^()（）]*[）)] */g; //removes parenthesis and text btw them
 		string = settings.ignoreParenthesis
 			? string.replace(rmp, "").trim()
 			: string;
@@ -1424,13 +1424,13 @@ function displayCard() {
 		if (currentReversed) {
 			document.getElementById("prompt").innerText =
 				bunchSettings.showPinyin || bunchSettings.hideParaText
-					? currentPair.answer.replace(/\(.*?\)/g, "")
+					? currentPair.answer.replace(/[（(].*?[）)]/g, "")
 					: currentPair.answer;
 			document.getElementById("answer").innerText = currentPair.prompt;
 		} else {
 			document.getElementById("prompt").innerText =
 				bunchSettings.showPinyin || bunchSettings.hideParaText
-					? currentPair.prompt.replace(/\(.*?\)/g, "")
+					? currentPair.prompt.replace(/[（(].*?[）)]/g, "")
 					: currentPair.prompt;
 			document.getElementById("answer").innerText = currentPair.answer;
 		}

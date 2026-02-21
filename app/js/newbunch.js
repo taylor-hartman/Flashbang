@@ -335,9 +335,7 @@ function adjustEditing() {
 		for (x = 0; x < deletePairBtns.length; x++) {
 			deletePairBtns[x].classList.remove("undisplay");
 			deletePairBtns[x].addEventListener("click", (e) => {
-				// e.target is possible because of pointer-events: none; on svg in css
-				// file
-				e.target.parentElement.parentElement.remove();
+				e.currentTarget.closest(".pair").remove();
 				refactorIndicies();
 			});
 		}
@@ -424,9 +422,8 @@ document.getElementById("plus").addEventListener("click", (e) => {
 		deleteBtn.classList.remove("undisplay");
 
 		deleteBtn.addEventListener("click", (e) => {
-			// e.target is possible because of pointer-events: none; on svg in css
-			// file
-			e.target.parentElement.parentElement.remove();
+			e.currentTarget.closest(".pair").remove();
+			refactorIndicies();
 		});
 	}
 
