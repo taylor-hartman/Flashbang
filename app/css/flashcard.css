@@ -52,6 +52,7 @@ a {
 .flashcard-main-container {
   width: 100vw;
   height: 100vh;
+  padding-bottom: 10vh;
 }
 
 .test-main-container {
@@ -209,6 +210,16 @@ a {
 }
 #main-container #prompt-container {
   width: 83%;
+  max-height: 50%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#main-container #answer-container {
+  width: 83%;
+  max-height: 50%;
   text-align: center;
   display: flex;
   align-items: center;
@@ -242,11 +253,12 @@ a {
   width: 40vw;
   min-width: 40vw;
   max-width: 70vw;
+  max-height: 50%;
   position: relative;
 }
 #main-container #answer-input {
   width: 100%;
-  margin-top: 5vh;
+  margin-top: 2vh;
   border: 2px solid var(--highlight, #393e41);
   border-radius: 3px;
   padding: 3.9px;
@@ -269,7 +281,7 @@ a {
 }
 #main-container #status-block {
   position: absolute;
-  margin-top: calc(5vh + 6.9px);
+  margin-top: calc(2vh + 6.9px);
   margin-left: calc(-1 * (1rem + 8.9px));
   height: calc(1rem + 3.9px);
   width: calc(1rem + 3.9px);
@@ -581,6 +593,7 @@ a {
 /* Study image styles */
 .study-image-container {
   width: 100%;
+  height: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -590,7 +603,9 @@ a {
 
 .study-image {
   max-width: 80%;
-  max-height: 35vh;
+  max-height: 100%;
+  width: auto;
+  height: auto;
   object-fit: contain;
   border: 2px solid var(--highlight, #393e41);
   border-radius: 6px;

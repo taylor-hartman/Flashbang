@@ -58,6 +58,7 @@ a {
 .flashcard-main-container {
     width: 100vw;
     height: 100vh;
+    padding-bottom: 10vh;
 }
 
 .test-main-container {
@@ -231,6 +232,17 @@ a {
 
     #prompt-container {
         width: 83%;
+        max-height: 50%;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #answer-container {
+        width: 83%;
+        max-height: 50%;
         text-align: center;
         display: flex;
         align-items: center;
@@ -268,12 +280,13 @@ a {
         width: 40vw;
         min-width: 40vw;
         max-width: 70vw;
+        max-height: 50%;
         position: relative;
     }
 
     #answer-input {
         width: 100%;
-        margin-top: 5vh;
+        margin-top: 2vh;
         border: 2px solid var(--highlight, $highlight);
         border-radius: 3px;
         padding: 3.9px;
@@ -298,7 +311,7 @@ a {
 
     #status-block {
         position: absolute;
-        margin-top: calc(5vh + 6.9px); //margin + border of answer-inpit
+        margin-top: calc(2vh + 6.9px); //margin + border of answer-inpit
         margin-left: calc(
             -1 * (1rem + 8.9px)
         ); // neagtive margin + border of answer-input, then added 2 px so not touching border
@@ -643,6 +656,7 @@ a {
 /* Study image styles */
 .study-image-container {
     width: 100%;
+    height: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -652,7 +666,9 @@ a {
 
 .study-image {
     max-width: 80%;
-    max-height: 35vh;
+    max-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
     border: 2px solid var(--highlight, $highlight);
     border-radius: 6px;

@@ -636,13 +636,12 @@ function updateHTML() {
             <div class="hide ${
 				settings.animateStudy ? "animate" : ""
 			}" id="main-separator"></div>
-            <h2 class="hide ${
-				settings.animateStudy ? "animate" : ""
-			}" id="answer"></h2>
-            <div id="answer-image-container" class="study-image-container hide"></div>`;
-
-			document.getElementById("main-container").style.paddingBottom =
-				"10vh";
+            <div id="answer-container">
+                <h2 class="hide ${
+					settings.animateStudy ? "animate" : ""
+				}" id="answer"></h2>
+                <div id="answer-image-container" class="study-image-container hide"></div>
+            </div>`;
 
 			changeDisplayTypedAndFlashcard();
 			initBottomContainer();
@@ -667,9 +666,6 @@ function updateHTML() {
                         <button id="iwr-btn">I was right</button>
                     </div>
             </div>`;
-
-			document.getElementById("main-container").style.paddingBottom =
-				"5vh";
 
 			document
 				.getElementById("iwr-btn")
